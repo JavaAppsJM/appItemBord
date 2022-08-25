@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <!--
+        <item
+            android:id="@+id/menu_instellingen"
+            android:title="@string/instellingen" />
+    -->
+
+    <item
+        android:id="@+id/menu_beheer_rubrieken"
+        android:title="Beheer Rubrieken" />
+
+    <item
+        android:id="@+id/menu_logboek"
+        android:title="Logboek" />
+
+    <!--
+        <item
+            android:id="@+id/menu_beheer_parameters"
+            android:title="Beheer Parameters" />
+    -->
+
+</menu>

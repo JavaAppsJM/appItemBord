@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditOpvolgingsitem">
+
+    <TextView
+        android:id="@+id/instructionEditItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/instructionEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/labelItemRubriek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/labelRubriek"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/instructionEditItem" />
+
+    <TextView
+        android:id="@+id/valueItemRubriek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text=""
+        app:layout_constraintBaseline_toBaselineOf="@+id/labelItemRubriek"
+        app:layout_constraintStart_toEndOf="@id/labelItemRubriek" />
+
+    <TextView
+        android:id="@+id/labelItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Naam:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelItemRubriek" />
+
+    <EditText
+        android:id="@+id/editNameItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="Opvolgingsitem naam"
+        android:inputType="textPersonName"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/labelItemName"
+        app:layout_constraintStart_toEndOf="@+id/labelItemRubriek" />
+
+    <TextView
+        android:id="@+id/labelItemFreqa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Frequentie:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelItemNamePast" />
+
+    <TextView
+        android:id="@+id/labelItemFrequ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Eenheid:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelItemFreqa" />
+
+    <TextView
+        android:id="@+id/labelItemLatestDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Laatste opvolging:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelItemFrequ" />
+
+    <EditText
+        android:id="@+id/editItemFreqa"
+        android:layout_width="56dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="16dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="Frequentie"
+        android:inputType="number"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/labelItemFreqa"
+        app:layout_constraintStart_toEndOf="@+id/labelItemFreqa" />
+
+    <EditText
+        android:id="@+id/editItemLatestDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="Datum"
+        android:inputType="date"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/labelItemLatestDate"
+        app:layout_constraintStart_toEndOf="@+id/labelItemLatestDate" />
+
+    <RadioGroup
+        android:layout_width="312dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@+id/labelItemFrequ"
+        app:layout_constraintTop_toBottomOf="@+id/labelItemFreqa">
+
+        <LinearLayout
+            android:layout_width="220dp"
+            android:layout_height="22dp"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="178dp">
+
+            <RadioButton
+                android:id="@+id/radioButtonFreqDag"
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:hint="Opvolgingsitem uitgevoerd"
+                android:text="d" />
+
+            <RadioButton
+                android:id="@+id/radioButtonFreqWeek"
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:text="w" />
+
+            <RadioButton
+                android:id="@+id/radioButtonFreqMaand"
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:text="m" />
+
+            <RadioButton
+                android:id="@+id/radioButtonFreqJaar"
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:text="j" />
+        </LinearLayout>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/buttonSaveItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/labelBewaren"
+        app:layout_constraintBaseline_toBaselineOf="@+id/labelItemRubriek"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/labelItemLogboek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/labelLogboek"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelItemLatestDate" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_edit_item"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelItemLogboek"
+        tools:listitem="@layout/list_manage_entity_item" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_edit_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="todo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_baseline_add_24" />
+
+    <TextView
+        android:id="@+id/labelItemNamePast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Naam uitgevoerd:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelItemName" />
+
+    <EditText
+        android:id="@+id/editItemNamePast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:ems="10"
+        android:hint="Opvolgingsitem uitgevoerd"
+        android:inputType="textPersonName"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/labelItemNamePast"
+        app:layout_constraintStart_toEndOf="@+id/labelItemNamePast"
+        android:autofillHints="" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

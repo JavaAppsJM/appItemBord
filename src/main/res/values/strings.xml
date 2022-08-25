@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Item Bord</string>
+    <string name="instructionEdit">Vul gegevens in of pas gegevens aan en druk op bewaren</string>
+    <string name="labelRubriek">Rubriek</string>
+    <string name="labelBewaren">Bewaren</string>
+    <string name="labelOpvolgingsitem">Opvolgingsitem</string>
+    <string name="labelLogboek">Logboek</string>
+    <string name="labelHoofdrubriek">Hoofdrubriek</string>
+    <string name="labelDate">Datum</string>
+    <string name="labelBeschrijving">Beschrijving</string>
+    <string name="hintLogDescription">Beschrijf het logitem...</string>
+</resources>
