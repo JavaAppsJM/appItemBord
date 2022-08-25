@@ -22,4 +22,11 @@ public class SpecificData {
     public static final String ID_RUBRIEK = "rubriek ID";
     public static final String ID_OPVOLGINGSITEM = "opvolgingsitem ID";
     public static final String ID_LOG = "log ID";
+
+    public static String setFirstLetterCapital(String name){
+        String nameCapitalized = name.toUpperCase();
+
+        return nameCapitalized.substring(0,1).concat(name.substring(1));
+    }
+
 }

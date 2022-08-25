@@ -1,5 +1,6 @@
 package be.hvwebsites.itembord.entities;
 
+import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
@@ -49,7 +50,8 @@ public class Rubriek {
     }
 
     public void setEntityName(String entityName) {
-        this.entityName = entityName;
+        this.entityName = SpecificData.setFirstLetterCapital(entityName);
+        boolean debug = true;
     }
 
     public void convertFromFileLine(String fileLine) {

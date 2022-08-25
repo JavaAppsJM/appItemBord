@@ -317,31 +317,12 @@ public class EditOpvolgingsitem extends AppCompatActivity
                         // Voorstellen om een log aan te maken
                         opvolgingsitemPastProcess.setOpvolgingsitem(newOItem);
                         createLogSaveDialog();
-                        // is frequentie ingevuld
-                        if ((newOItem.getFrequentieNbr() > 0) &&
-                                (newOItem.getFrequentieUnit() != null)){
-                            // Vraag stellen om in agenda te registreren en van daaruit eventId invullen
-                            // Methode gebruiken voor event alert!!
-                            createEventSaveDialog();
-                        }
                     }
                 }
-                // Bewaren opvolgingsitems en evt log item
+                // Bewaren opvolgingsitems
                 viewModel.storeItems();
-/*
-                //TODO: Moet er hier nog een log aangemaakt worden ?
-                if (newLog != null){
-                    viewModel.getLogList().add(newLog);
-                    viewModel.storeLogs();
-                }
-*/
+
                 // Teruggaan nr EditRubriek weggehaald
-/*
-                Intent replyIntent = new Intent(EditOpvolgingsitem.this, be.hvwebsites.followupbord.EditRubriek.class);
-                replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
-                replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
-                startActivity(replyIntent);
-*/
             }
         });
     }
@@ -373,11 +354,11 @@ public class EditOpvolgingsitem extends AppCompatActivity
 
     private void createLogSaveDialog(){
         // Create an instance of the dialog fragment and show it
-        FlexDialogFragment dialog = new FlexDialogFragment();
-        dialog.setSubjectDialog("Log");
-        dialog.setTitleDialog("Wenst u een log aan te maken ?");
-        dialog.setMsgDialog("Click JA of NEE: ");
-        dialog.show(getSupportFragmentManager(), "LogDialogFragment");
+        FlexDialogFragment logDialog = new FlexDialogFragment();
+        logDialog.setSubjectDialog("Log");
+        logDialog.setTitleDialog("Wenst u een log aan te maken ?");
+        logDialog.setMsgDialog("Click JA of NEE: ");
+        logDialog.show(getSupportFragmentManager(), "LogDialogFragment");
     }
 
     // The dialog fragment receives a reference to this Activity through the
@@ -387,11 +368,11 @@ public class EditOpvolgingsitem extends AppCompatActivity
     public void onLogDialogPositiveClick(DialogFragment dialogFragment) {
         // Maak alvast de log aan
         newLog = new Log(viewModel.getBasedir(), false);
-        newLog.setLogDate(opvolgingsitemToUpdate.getLatestDate());
+        newLog.setLogDate(opvolgingsitemPastProcess.getLatestDate());
         // entityNamePAst gebruiken om log aan te maken
-        newLog.setLogDescription(opvolgingsitemToUpdate.getEntityNamePast());
-        newLog.setRubriekId(opvolgingsitemToUpdate.getRubriekId());
-        newLog.setItemId(opvolgingsitemToUpdate.getEntityId());
+        newLog.setLogDescription(opvolgingsitemPastProcess.getEntityNamePast());
+        newLog.setRubriekId(opvolgingsitemPastProcess.getRubriekId());
+        newLog.setItemId(opvolgingsitemPastProcess.getEntityId());
         // de log moet bewaard worden !
         viewModel.getLogList().add(newLog);
         viewModel.storeLogs();
@@ -399,11 +380,13 @@ public class EditOpvolgingsitem extends AppCompatActivity
         Toast.makeText(getApplicationContext(), "Pressed JA",
                 Toast.LENGTH_SHORT).show();
 
-        // Teruggaan nr EditRubriek
-        Intent replyIntent = new Intent(EditOpvolgingsitem.this, EditRubriek.class);
-        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
-        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
-        startActivity(replyIntent);
+        // is frequentie ingevuld
+        if ((opvolgingsitemPastProcess.getFrequentieNbr() > 0) &&
+                (opvolgingsitemPastProcess.getFrequentieUnit() != null)) {
+            // Vraag stellen om in agenda te registreren,
+            // let op eventId in opvolgingsitem moet nog aangepast wordeninvullen
+            createEventSaveDialog();
+        }
     }
 
     @Override
@@ -415,27 +398,22 @@ public class EditOpvolgingsitem extends AppCompatActivity
         // In dialogfragment zit niets bruikbaar
 
         // is frequentie ingevuld
-        if ((opvolgingsitemToUpdate.getFrequentieNbr() > 0) &&
-                (opvolgingsitemToUpdate.getFrequentieUnit() != null)){
+        if ((opvolgingsitemPastProcess.getFrequentieNbr() > 0) &&
+                (opvolgingsitemPastProcess.getFrequentieUnit() != null)){
             // Vraag stellen om in agenda te registreren,
             // let op eventId in opvolgingsitem moet nog aangepast wordeninvullen
             createEventSaveDialog();
         }
 
-        // Teruggaan nr EditRubriek
-        Intent replyIntent = new Intent(EditOpvolgingsitem.this, EditRubriek.class);
-        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
-        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
-        startActivity(replyIntent);
     }
 
     private void createEventSaveDialog(){
         // Create an instance of the dialog fragment and show it
-        FlexDialogFragment dialog = new FlexDialogFragment();
-        dialog.setSubjectDialog("Event");
-        dialog.setTitleDialog("Wenst u een event in de agenda aan te maken ?");
-        dialog.setMsgDialog("Click JA of NEE: ");
-        dialog.show(getSupportFragmentManager(), "EventDialogFragment");
+        FlexDialogFragment eventDialog = new FlexDialogFragment();
+        eventDialog.setSubjectDialog("Event");
+        eventDialog.setTitleDialog("Wenst u een event in de agenda aan te maken ?");
+        eventDialog.setMsgDialog("Click JA of NEE: ");
+        eventDialog.show(getSupportFragmentManager(), "EventDialogFragment");
     }
 
     @Override
@@ -469,6 +447,12 @@ public class EditOpvolgingsitem extends AppCompatActivity
 
         Toast.makeText(getApplicationContext(), "Pressed JA",
                 Toast.LENGTH_SHORT).show();
+
+        // Teruggaan nr EditRubriek
+        Intent replyIntent = new Intent(EditOpvolgingsitem.this, EditRubriek.class);
+        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
+        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
+        startActivity(replyIntent);
     }
 
     @Override
@@ -476,6 +460,12 @@ public class EditOpvolgingsitem extends AppCompatActivity
         // User clicked NEE button, er moet niets gebeuren
         Toast.makeText(getApplicationContext(), "Pressed NEE",
                 Toast.LENGTH_SHORT).show();
+
+        // Teruggaan nr EditRubriek
+        Intent replyIntent = new Intent(EditOpvolgingsitem.this, EditRubriek.class);
+        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
+        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
+        startActivity(replyIntent);
     }
 
     public void onRadioButtonClicked(View view) {

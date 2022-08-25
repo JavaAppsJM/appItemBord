@@ -1,6 +1,7 @@
 package be.hvwebsites.itembord.entities;
 
 import be.hvwebsites.itembord.constants.FrequentieDateUnit;
+import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 
@@ -135,7 +136,7 @@ public class Opvolgingsitem {
     }
 
     public void setEntityNamePast(String entityNamePast) {
-        this.entityNamePast = entityNamePast;
+        this.entityNamePast = SpecificData.setFirstLetterCapital(entityNamePast);
     }
 
     public DateString getLatestDate() {
@@ -159,7 +160,7 @@ public class Opvolgingsitem {
     }
 
     public void setEntityName(String entityName) {
-        this.entityName = entityName;
+        this.entityName = SpecificData.setFirstLetterCapital(entityName);
     }
 
     public void convertFromFileLine(String fileLine) {

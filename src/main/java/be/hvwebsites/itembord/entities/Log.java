@@ -1,5 +1,6 @@
 package be.hvwebsites.itembord.entities;
 
+import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
@@ -60,7 +61,7 @@ public class Log {
     }
 
     public void setLogDescription(String logDescription) {
-        this.logDescription = logDescription;
+        this.logDescription = SpecificData.setFirstLetterCapital(logDescription);
     }
 
     public IDNumber getRubriekId() {
