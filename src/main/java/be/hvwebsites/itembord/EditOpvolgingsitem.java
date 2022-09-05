@@ -137,6 +137,14 @@ public class EditOpvolgingsitem extends AppCompatActivity
             }
         });
 
+        opvolgingsitemNameV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                // Suggestie voor name past
+                opvolgingsitemNamePastV.setText(opvolgingsitemNameV.getText() + " uitgevoerd");
+            }
+        });
+
         // Vul Scherm in vlgns new/update
         switch (action) {
             case StaticData.ACTION_NEW:
@@ -321,6 +329,8 @@ public class EditOpvolgingsitem extends AppCompatActivity
                 }
                 // Bewaren opvolgingsitems
                 viewModel.storeItems();
+                Toast.makeText(getApplicationContext(), "Opvolgingsitem bewaard !",
+                        Toast.LENGTH_SHORT).show();
 
                 // Teruggaan nr EditRubriek weggehaald
             }
