@@ -401,7 +401,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
 
     @Override
     public void onLogDialogNegativeClick(DialogFragment dialogFragment) {
-        // User clicked NEE button, er moet niets gebeuren
+        // User clicked NEE button, er moet geen log aangemaakt worden
         Toast.makeText(getApplicationContext(), "Pressed NEE",
                 Toast.LENGTH_SHORT).show();
 
@@ -411,7 +411,6 @@ public class EditOpvolgingsitem extends AppCompatActivity
         if ((opvolgingsitemPastProcess.getFrequentieNbr() > 0) &&
                 (opvolgingsitemPastProcess.getFrequentieUnit() != null)){
             // Vraag stellen om in agenda te registreren,
-            // let op eventId in opvolgingsitem moet nog aangepast wordeninvullen
             createEventSaveDialog();
         }
 
@@ -428,7 +427,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
 
     @Override
     public void onEventDialogPositiveClick(DialogFragment dialogFragment) {
-        // User clicked JA button, er wordt een event aangemaakt
+        // User clicked JA button, er wordt een event aangemaakt in de agenda
         ContentResolver cr = getContentResolver();
         // Bepaal MyCalendarID
         long calID = calenderService.getMyCalendarId(
@@ -467,7 +466,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
 
     @Override
     public void onEventDialogNegativeClick(DialogFragment dialogFragment) {
-        // User clicked NEE button, er moet niets gebeuren
+        // User clicked NEE button, er moet geen event in de agenda worden gezet
         Toast.makeText(getApplicationContext(), "Pressed NEE",
                 Toast.LENGTH_SHORT).show();
 
