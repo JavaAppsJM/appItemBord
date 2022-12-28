@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import java.util.List;
 import be.hvwebsites.itembord.adapters.TextItemListAdapter;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Rubriek;
+import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.helpers.ListItemHelper;
@@ -42,6 +44,8 @@ public class EditRubriek extends AppCompatActivity {
     private TextView labelLogboekView;
     private String listEntityType;
     private IDNumber parentRubriekId = StaticData.IDNUMBER_NOT_FOUND;
+    // Device
+    private final String deviceModel = Build.MODEL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,19 +53,16 @@ public class EditRubriek extends AppCompatActivity {
         setContentView(R.layout.activity_edit_rubriek);
         parentRubriekView = findViewById(R.id.nameHoofrubriek);
 
+        // Creer een filebase service (bevat file base en file base directory) obv device en package name
+        FileBaseService fileBaseService = new FileBaseService(deviceModel, getPackageName());
+
         // Get a viewmodel from the viewmodelproviders
         viewModel = new ViewModelProvider(this).get(EntitiesViewModel.class);
         // Basis directory definitie
-        String baseDir = getBaseContext().getExternalFilesDir(null).getAbsolutePath();
+        String baseDir = fileBaseService.getFileBaseDir();
         // Initialize viewmodel mt basis directory (data wordt opgehaald in viewmodel)
         ReturnInfo viewModelStatus = viewModel.initializeViewModel(baseDir);
-        if (viewModelStatus.getReturnCode() == 0) {
-            // Files gelezen
-        } else if (viewModelStatus.getReturnCode() == 100) {
-            Toast.makeText(EditRubriek.this,
-                    viewModelStatus.getReturnMessage(),
-                    Toast.LENGTH_LONG).show();
-        } else {
+        if (viewModelStatus.getReturnCode() != 0) {
             Toast.makeText(EditRubriek.this,
                     "Ophalen data is mislukt",
                     Toast.LENGTH_LONG).show();

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,7 @@ import be.hvwebsites.itembord.fragments.FlexDialogFragment;
 import be.hvwebsites.itembord.interfaces.DatePickerInterface;
 import be.hvwebsites.itembord.interfaces.FlexDialogInterface;
 import be.hvwebsites.itembord.services.CalenderService;
+import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
@@ -56,6 +58,9 @@ public class EditOpvolgingsitem extends AppCompatActivity
     private Log newLog;
     private CalenderService calenderService;
     private boolean continueFlag = false;
+    // Device
+    private final String deviceModel = Build.MODEL;
+
     // Declareer rubriek van opvolgingsitem
     Rubriek rubriekOpvolgingsitem = new Rubriek();
     // Declareer opvolgingsitem to update
@@ -81,19 +86,16 @@ public class EditOpvolgingsitem extends AppCompatActivity
         frequencyYearV = findViewById(R.id.radioButtonFreqJaar);
         opvolgingsitemLatestDateV = findViewById(R.id.editItemLatestDate);
 
+        // Creer een filebase service (bevat file base en file base directory) obv device en package name
+        FileBaseService fileBaseService = new FileBaseService(deviceModel, getPackageName());
+
         // Get a viewmodel from the viewmodelproviders
         viewModel = new ViewModelProvider(this).get(EntitiesViewModel.class);
         // Basis directory definitie
-        String baseDir = getBaseContext().getExternalFilesDir(null).getAbsolutePath();
+        String baseDir = fileBaseService.getFileBaseDir();
         // Initialize viewmodel mt basis directory (data wordt opgehaald in viewmodel)
         ReturnInfo viewModelStatus = viewModel.initializeViewModel(baseDir);
-        if (viewModelStatus.getReturnCode() == 0) {
-            // Files gelezen
-        } else if (viewModelStatus.getReturnCode() == 100) {
-            Toast.makeText(EditOpvolgingsitem.this,
-                    viewModelStatus.getReturnMessage(),
-                    Toast.LENGTH_LONG).show();
-        } else {
+        if (viewModelStatus.getReturnCode() != 0) {
             Toast.makeText(EditOpvolgingsitem.this,
                     "Ophalen data is mislukt",
                     Toast.LENGTH_LONG).show();

@@ -36,6 +36,8 @@ public class EntitiesViewModel extends AndroidViewModel {
     private List<Log> logList = new ArrayList<>();
     // Spinner selecties om te onthouden
     private String spinnerSelection = "";
+    // Lijst om messages door te geven
+    private List<String> viewModelMsgs = new ArrayList<>();
 
 
     public EntitiesViewModel(@NonNull Application application) {
@@ -55,20 +57,20 @@ public class EntitiesViewModel extends AndroidViewModel {
         if (rubriekList.size() == 0){
             returnInfo.setReturnCode(100);
             returnInfo.setReturnMessage(SpecificData.NO_RUBRIEKEN_YET);
+            viewModelMsgs.add(SpecificData.NO_RUBRIEKEN_YET);
         } else {
             // Ophalen opvolgingsitems
             repository = new FlexiRepository(itemFile);
             itemList.addAll(getItemsFromDataList(repository.getDataList()));
             if (itemList.size() == 0){
-                returnInfo.setReturnCode(100);
-                returnInfo.setReturnMessage(SpecificData.NO_OPVOLGINGSITEMS_YET);
+                viewModelMsgs.add(SpecificData.NO_OPVOLGINGSITEMS_YET);
             }
+
             // Ophalen logs
             repository = new FlexiRepository(logFile);
             logList.addAll(getLogsFromDataList(repository.getDataList()));
-            if (logList.size() == 0) {
-                returnInfo.setReturnCode(100);
-                returnInfo.setReturnMessage(SpecificData.NO_LOGS_YET);
+            if (logList.size() == 0){
+                viewModelMsgs.add(SpecificData.NO_LOGS_YET);
             }
         }
         return returnInfo;
@@ -504,6 +506,14 @@ public class EntitiesViewModel extends AndroidViewModel {
             // Bewaar nieuwe toestand
             storeLogs();
         }
+    }
+
+    public List<String> getViewModelMsgs() {
+        return viewModelMsgs;
+    }
+
+    public void clrViewModelMsgs() {
+        this.viewModelMsgs.clear();
     }
 
     public String getBasedir() {

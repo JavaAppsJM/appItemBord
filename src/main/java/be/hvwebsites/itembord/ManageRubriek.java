@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import be.hvwebsites.itembord.adapters.TextItemListAdapter;
 import be.hvwebsites.itembord.constants.SpecificData;
+import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.helpers.ListItemHelper;
@@ -29,6 +31,8 @@ public class ManageRubriek extends AppCompatActivity {
     // Activiteit om rubrieken te beheren (toevoegen, aanpassen, deleten)
     private EntitiesViewModel viewModel;
     private List<ListItemHelper> itemList = new ArrayList<>();
+    // Device
+    private final String deviceModel = Build.MODEL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +52,14 @@ public class ManageRubriek extends AppCompatActivity {
             }
         });
 
+        // Creer een filebase service (bevat file base en file base directory) obv device en package name
+        FileBaseService fileBaseService = new FileBaseService(deviceModel, getPackageName());
+
         // Data ophalen
         // Get a viewmodel from the viewmodelproviders
         viewModel = new ViewModelProvider(this).get(EntitiesViewModel.class);
         // Basis directory definitie
-        String baseDir = getBaseContext().getExternalFilesDir(null).getAbsolutePath(); // external files
+        String baseDir = fileBaseService.getFileBaseDir();
         // String baseDir = getBaseContext().getFilesDir().getAbsolutePath(); // internal files
         // Initialize viewmodel mt basis directory (data wordt opgehaald in viewmodel)
         ReturnInfo viewModelStatus = viewModel.initializeViewModel(baseDir);

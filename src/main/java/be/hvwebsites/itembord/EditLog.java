@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import be.hvwebsites.itembord.entities.Opvolgingsitem;
 import be.hvwebsites.itembord.entities.Rubriek;
 import be.hvwebsites.itembord.fragments.DatePickerFragment;
 import be.hvwebsites.itembord.interfaces.DatePickerInterface;
+import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
@@ -37,6 +39,8 @@ public class EditLog extends AppCompatActivity implements DatePickerInterface {
     private String callingActivity = SpecificData.ENTITY_TYPE_RUBRIEK;
     private EditText logitemDateV;
     private Log newLog;
+    // Device
+    private final String deviceModel = Build.MODEL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,19 +64,16 @@ public class EditLog extends AppCompatActivity implements DatePickerInterface {
 
         logitemDateV = findViewById(R.id.editItemLogDate);
 
+        // Creer een filebase service (bevat file base en file base directory) obv device en package name
+        FileBaseService fileBaseService = new FileBaseService(deviceModel, getPackageName());
+
         // Get a viewmodel from the viewmodelproviders
         viewModel = new ViewModelProvider(this).get(EntitiesViewModel.class);
         // Basis directory definitie
-        String baseDir = getBaseContext().getExternalFilesDir(null).getAbsolutePath();
+        String baseDir = fileBaseService.getFileBaseDir();
         // Initialize viewmodel mt basis directory (data wordt opgehaald in viewmodel)
         ReturnInfo viewModelStatus = viewModel.initializeViewModel(baseDir);
-        if (viewModelStatus.getReturnCode() == 0) {
-            // Files gelezen
-        } else if (viewModelStatus.getReturnCode() == 100) {
-            Toast.makeText(EditLog.this,
-                    viewModelStatus.getReturnMessage(),
-                    Toast.LENGTH_LONG).show();
-        } else {
+        if (viewModelStatus.getReturnCode() != 0) {
             Toast.makeText(EditLog.this,
                     "Ophalen data is mislukt",
                     Toast.LENGTH_LONG).show();

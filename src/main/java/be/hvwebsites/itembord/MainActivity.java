@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,10 +19,13 @@ import be.hvwebsites.itembord.adapters.StatusbordItemListAdapter;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Opvolgingsitem;
 import be.hvwebsites.itembord.helpers.ListItemStatusbordHelper;
+import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
 
 public class MainActivity extends AppCompatActivity {
+    // Device
+    private final String deviceModel = Build.MODEL;
     private EntitiesViewModel viewModel;
     private List<ListItemStatusbordHelper> itemList = new ArrayList<>();
 
@@ -30,23 +34,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Creer een filebase service (bevat file base en file base directory) obv device en package name
+        FileBaseService fileBaseService = new FileBaseService(deviceModel, getPackageName());
+
         // Data ophalen
         // Get a viewmodel from the viewmodelproviders
         viewModel = new ViewModelProvider(this).get(EntitiesViewModel.class);
         // Basis directory definitie
-        String baseDir = getBaseContext().getExternalFilesDir(null).getAbsolutePath();
+        String baseDir = fileBaseService.getFileBaseDir();
         // Initialize viewmodel mt basis directory (data wordt opgehaald in viewmodel)
         ReturnInfo viewModelStatus = viewModel.initializeViewModel(baseDir);
-        if (viewModelStatus.getReturnCode() == 0) {
-            // Files gelezen
-        } else if (viewModelStatus.getReturnCode() == 100) {
-            Toast.makeText(MainActivity.this,
-                    viewModelStatus.getReturnMessage(),
-                    Toast.LENGTH_LONG).show();
-        } else {
+        if (viewModelStatus.getReturnCode() != 0) {
             Toast.makeText(MainActivity.this,
                     "Ophalen data is mislukt",
                     Toast.LENGTH_LONG).show();
+        } else if (viewModel.getViewModelMsgs().size() > 0){
+            for (int i = 0; i < viewModel.getViewModelMsgs().size(); i++) {
+                Toast.makeText(MainActivity.this,
+                        viewModel.getViewModelMsgs().get(i),
+                        Toast.LENGTH_SHORT).show();
+            }
+            viewModel.clrViewModelMsgs();
         }
 
         // Recyclerview definieren
