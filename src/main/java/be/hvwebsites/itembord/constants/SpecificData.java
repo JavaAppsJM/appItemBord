@@ -23,6 +23,11 @@ public class SpecificData {
     public static final String ID_OPVOLGINGSITEM = "opvolgingsitem ID";
     public static final String ID_LOG = "log ID";
 
+    public static final String DISPLAY_SMALL = "display small";
+    public static final String DISPLAY_LARGE = "display large";
+
+    public static final String NO_PARENT_RUBRIEK = "Geen hoofdrubriek";
+
     public static String setFirstLetterCapital(String name){
         String nameCapitalized = name.toUpperCase();
 

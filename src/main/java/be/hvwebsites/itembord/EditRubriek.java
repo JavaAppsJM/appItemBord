@@ -38,12 +38,12 @@ import be.hvwebsites.libraryandroid4.repositories.Cookie;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
-public class EditRubriek extends AppCompatActivity {
+public class EditRubriek extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private EntitiesViewModel viewModel;
     private List<ListItemHelper> itemList = new ArrayList<>();
     private int iDToUpdate = StaticData.ITEM_NOT_FOUND;
     private String action = StaticData.ACTION_NEW;
-    private TextView parentRubriekView;
+    //private TextView parentRubriekView;
     private TextView labelSubrubriekView;
     private TextView labelOpvolgingsitemView;
     private TextView labelLogboekView;
@@ -78,49 +78,35 @@ public class EditRubriek extends AppCompatActivity {
             action = editIntent.getStringExtra(StaticData.EXTRA_INTENT_KEY_ACTION);
         }
 
-        // Hoofdrubriek Spinner
+        // Hoofdrubriek Spinner en adapter definieren
         Spinner hoofdRubriekSpinner = (Spinner) findViewById(R.id.spinnerParentRubriek);
         // rubriekItemAdapter obv ListItemHelper
         ArrayAdapter<ListItemHelper> rubriekItemAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item);
         rubriekItemAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Adapter vullen met rubrieken mr niet rubriek inkwestie
-        rubriekItemAdapter.addAll(viewModel.getItemsFromList(viewModel.getShopList()));
-        rubriekItemAdapter.add(new ListItemHelper(SpecificData.NO_FILTER,
-                "",
-                StaticData.IDNUMBER_NOT_FOUND));
-        // vr de nieuwe shopfilteradapter
-        hoofdRubriekSpinner.setAdapter(new NothingSelectedSpinnerAdapter(
-                rubriekItemAdapter, R.layout.contact_spinner_row_nothing_selected, this
-        ));
 
-        hoofdRubriekSpinner.setAdapter(rubriekItemAdapter);
-        // animate parameter moet false staan om het onnodig afvuren vd spinner tegen te gaan
-        if (shopFilterString.equals(SpecificData.NO_FILTER)){
-            //int positionAA = shopFilterAdapter.getCount()-1;
-            int positionAA = shopItemAdapter.getCount()-1;
-            shopFilterSpinner.setSelection(positionAA, false);
-        }else {
-            shopFilterSpinner.setSelection(viewModel.getIndexById(viewModel.getShopList(),
-                    shopFilter.getEntityId()), false);
-        }
-    }
-    // selection listener activeren, moet gebueren nadat de adapter gekoppeld is aan de spinner !!
-        shopFilterSpinner.setOnItemSelectedListener(this);
-
-
-        // Als parentId in intent zit ...
-        parentRubriekView = findViewById(R.id.nameHoofrubriek);
-        if (editIntent.hasExtra(SpecificData.ID_RUBRIEK)) {
-            parentRubriekId = new IDNumber(editIntent.getIntExtra(SpecificData.ID_RUBRIEK, 0));
-            //TODO: Hoofdrubriek moet aanpasbaar gemaakt worden met een spinner ?
-            parentRubriekView.setText(viewModel.getRubriekById(parentRubriekId).getEntityName());
-        }
 
         // Vul Scherm in vlgns new/update
         switch (action) {
             case StaticData.ACTION_NEW:
                 setTitle(SpecificData.TITLE_NEW_RUBRIEK);
+                // Spinner vullen met alle rubrieken
+                rubriekItemAdapter.addAll(viewModel.getItemsFromList(viewModel.getRubriekList(), null));
+                rubriekItemAdapter.add(new ListItemHelper(SpecificData.NO_PARENT_RUBRIEK,
+                        "",
+                        StaticData.IDNUMBER_NOT_FOUND));
+                hoofdRubriekSpinner.setAdapter(rubriekItemAdapter);
+                // Als parentId in intent zit ...
+                // parentRubriekView = findViewById(R.id.nameHoofrubriek);
+                if (editIntent.hasExtra(SpecificData.ID_RUBRIEK)) {
+                    parentRubriekId = new IDNumber(editIntent.getIntExtra(SpecificData.ID_RUBRIEK, 0));
+                    hoofdRubriekSpinner.setSelection(
+                            viewModel.getIndexById(
+                                    viewModel.getRubriekList(),
+                                    parentRubriekId),
+                            false);
+                }
+
                 break;
             case StaticData.ACTION_UPDATE:
                 setTitle(SpecificData.TITLE_UPDATE_RUBRIEK);
@@ -131,12 +117,33 @@ public class EditRubriek extends AppCompatActivity {
                 rubriekToUpdate.setRubriek(viewModel.getRubriekById(new IDNumber(iDToUpdate)));
                 EditText nameView = findViewById(R.id.editNameRubriek);
                 nameView.setText(rubriekToUpdate.getEntityName());
+
+                // Spinner vullen met rubrieken behalve rubriek in kwestie
+                List<ListItemHelper> potentialRubrieken = viewModel.getItemsFromList(viewModel.getRubriekList(), rubriekToUpdate);
+                rubriekItemAdapter.addAll(potentialRubrieken);
+                rubriekItemAdapter.add(new ListItemHelper(SpecificData.NO_PARENT_RUBRIEK,
+                        "",
+                        StaticData.IDNUMBER_NOT_FOUND));
+                hoofdRubriekSpinner.setAdapter(rubriekItemAdapter);
+
                 // Enkel indien rubriek gekend is
                 // ParentId bepalen als die er is
+                // Spinner invullen met parentrubriek
                 if (rubriekToUpdate.getParentId().getId() != StaticData.IDNUMBER_NOT_FOUND.getId()){
+                    // Er is een parentrubriek
                     parentRubriekId = rubriekToUpdate.getParentId();
-                    parentRubriekView.setText(viewModel.getRubriekById(parentRubriekId).getEntityName());
+                    //parentRubriekView.setText(viewModel.getRubriekById(parentRubriekId).getEntityName());
+                    hoofdRubriekSpinner.setSelection(
+                            viewModel.getIndexItemHelperById(
+                                    potentialRubrieken,
+                                    rubriekToUpdate.getParentId()),
+                            false);
+                }else {
+                    // Er is geen parentrubriek, spinner positioneren van boven
+                    int positionAA = rubriekItemAdapter.getCount() - 1;
+                    hoofdRubriekSpinner.setSelection(positionAA, false);
                 }
+
                 // Recyclerview voor opvolgingsitems/logboek definieren
                 RecyclerView recyclerView = findViewById(R.id.recycler_edit_rubriek);
                 final TextItemListAdapter adapter = new TextItemListAdapter(this);
@@ -311,7 +318,18 @@ public class EditRubriek extends AppCompatActivity {
                     }
                 });
                 break;
+            default:
         }
+
+        // selection listener activeren, moet gebueren nadat de adapter gekoppeld is aan de spinner !!
+        hoofdRubriekSpinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
+/*
+        // vr de nieuwe shopfilteradapter
+        hoofdRubriekSpinner.setAdapter(new NothingSelectedSpinnerAdapter(
+                rubriekItemAdapter, R.layout.contact_spinner_row_nothing_selected, this
+        ));
+*/
+
         Button saveButton = findViewById(R.id.buttonSaveRubriek);
         // Als button ingedrukt wordt...
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -337,40 +355,31 @@ public class EditRubriek extends AppCompatActivity {
         });
     }
 
-    // Als er een shop geselecteerd is in de spinner
+    // Als er iets geselecteerd is in de spinner
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getItemAtPosition(position) != null){
-            Toast.makeText(A4ShoppingListActivity.this,
-                    "Hersamenstellen artikels ...",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(EditRubriek.this,
+                    "Hoofdrubriek gekozen ...",
+                    Toast.LENGTH_SHORT).show();
             // Bepalen wat geselecteerd is
-            ListItemHelper selecShop = (ListItemHelper) parent.getItemAtPosition(position);
-            if (selecShop.getItemID().getId() == StaticData.IDNUMBER_NOT_FOUND.getId()){
-                // Alle artikels
-                shopFilterString = SpecificData.NO_FILTER;
-                shopFilter = null;
-            }else {
-                // Bepaal Shop om te filteren ==> nieuwe shopfilter
-                shopFilter = viewModel.getShopByID(selecShop.getItemID());
-                shopFilterString = shopFilter.getEntityName();
-            }
-            //shopFilterString = String.valueOf(parent.getItemAtPosition(position));
-            // TODO: Shopfilter bewaren als Cookie ; de shopfilterId moet bewaard worden
+            ListItemHelper selecRubriek = (ListItemHelper) parent.getItemAtPosition(position);
+            parentRubriekId = selecRubriek.getItemID();
+
+            // ParentrubriekId bewaren als Cookie
             cookieRepository.addCookie(new Cookie(SpecificData.SHOP_FILTER, shopFilterString));
-/*
+
             // bepaal shop voor herbepalen checkboxlist
             if (!shopFilterString.equals(SpecificData.NO_FILTER)){
                 shopFilter = viewModel.getShopByShopName(shopFilterString);
             }else {
                 shopFilter = null;
             }
-*/
+
             // spinner refreshen hoeft niet
 //            parent.setAdapter(shopFilterAdapter);
 //            parent.setSelection(viewModel.getShopIndexById(shopFilter.getEntityId()));
             // Refresh recyclerview met aangepaste checkboxlist
-            composeCheckboxList();
             cbListAdapter.setCheckboxList(checkboxList);
         }
     }

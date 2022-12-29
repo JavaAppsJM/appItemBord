@@ -27,4 +27,8 @@ public class SuperItem {
         return "";
     }
 
+    public String getEntityName(){
+        return "";
+    }
+
 }

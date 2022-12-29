@@ -52,6 +52,10 @@ public class Log extends SuperItem{
         return logDescription;
     }
 
+    public String getEntityName() {
+        return logDescription;
+    }
+
     public void setLogDescription(String logDescription) {
         this.logDescription = SpecificData.setFirstLetterCapital(logDescription);
     }

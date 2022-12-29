@@ -13,6 +13,7 @@ import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Log;
 import be.hvwebsites.itembord.entities.Opvolgingsitem;
 import be.hvwebsites.itembord.entities.Rubriek;
+import be.hvwebsites.itembord.entities.SuperItem;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.helpers.ListItemHelper;
 import be.hvwebsites.libraryandroid4.repositories.Cookie;
@@ -76,7 +77,16 @@ public class EntitiesViewModel extends AndroidViewModel {
 
     /** Flexi methodes */
 
-    public int getIndexById(List<? extends ShoppingEntity> inList, IDNumber inID){
+    private List<String> convertEntityListinDataList(List<? extends SuperItem> inList){
+        // Converteert een SuperItemlist in een datalist voor bewaard te worden in een bestand
+        List<String> lineList = new ArrayList<>();
+        for (int i = 0; i < inList.size(); i++) {
+            lineList.add(inList.get(i).convertToFileLine());
+        }
+        return lineList;
+    }
+
+    public int getIndexById(List<? extends SuperItem> inList, IDNumber inID){
         // Bepaalt de index vh element met een opgegeven IDNumber
         for (int i = 0; i < inList.size(); i++) {
             if (inList.get(i).getEntityId().getId() == inID.getId()){
@@ -86,16 +96,50 @@ public class EntitiesViewModel extends AndroidViewModel {
         return StaticData.ITEM_NOT_FOUND;
     }
 
-    private List<String> convertEntityListinDataList(List<? extends ShoppingEntity> shopEntityList){
-        // Converteert een shopentitylist in een datalist voor bewaard te worden in een bestand
-        List<String> lineList = new ArrayList<>();
-        for (int i = 0; i < shopEntityList.size(); i++) {
-            lineList.add(shopEntityList.get(i).convertToFileLine());
+    public int getIndexItemHelperById(List<ListItemHelper> inList, IDNumber inID){
+        // Bepaalt de index vh element met een opgegeven IDNumber
+        for (int i = 0; i < inList.size(); i++) {
+            if (inList.get(i).getItemID().getId() == inID.getId()){
+                return i;
+            }
         }
-        return lineList;
+        return StaticData.ITEM_NOT_FOUND;
     }
 
-    public List<String> getNameListFromList(List<? extends ShoppingEntity> inList, int indisplay){
+    public List<ListItemHelper> getItemsFromList(List<? extends SuperItem> inList, SuperItem neglectItem){
+        // bepaalt een lijst met ListItemHelpers obv inlist
+        List<ListItemHelper> nameList = new ArrayList<>();
+        for (int i = 0; i < inList.size(); i++) {
+            if ((neglectItem != null) &&
+                    (inList.get(i).getEntityId().getId() != neglectItem.getEntityId().getId())){
+                nameList.add(new ListItemHelper(inList.get(i).getEntityName(),
+                        "",
+                        inList.get(i).getEntityId()));
+            }else {
+                nameList.add(new ListItemHelper(inList.get(i).getEntityName(),
+                        "",
+                        inList.get(i).getEntityId()));
+            }
+            nameList.add(new ListItemHelper(inList.get(i).getEntityName(),
+                    "",
+                    inList.get(i).getEntityId()));
+        }
+        return nameList;
+    }
+
+    public String getNameByIdFromList(List<? extends SuperItem> inList, int inId){
+        // bepaalt de entitynaam obv inlist en inId
+        String name = "";
+        for (int i = 0; i < inList.size(); i++) {
+            if (inList.get(i).getEntityId().getId() == inId){
+                return inList.get(i).getEntityName();
+            }
+        }
+        return null;
+    }
+
+    /*
+    public List<String> getNameListFromList(List<? extends SuperItem> inList, int indisplay){
         // bepaalt een lijst met entitynamen obv inlist
         List<String> nameList = new ArrayList<>();
         for (int i = 0; i < inList.size(); i++) {
@@ -113,29 +157,6 @@ public class EntitiesViewModel extends AndroidViewModel {
         return nameList;
     }
 
-    public List<ListItemHelper> getItemsFromList(List<? extends ShoppingEntity> inList){
-        // bepaalt een lijst met ListItemHelpers obv inlist
-        List<ListItemHelper> nameList = new ArrayList<>();
-        for (int i = 0; i < inList.size(); i++) {
-            nameList.add(new ListItemHelper(inList.get(i).getEntityName(),
-                    "",
-                    inList.get(i).getEntityId()));
-        }
-        return nameList;
-    }
-
-    public String getNameByIdFromList(List<? extends ShoppingEntity> inList, int inId){
-        // bepaalt de entitynaam obv inlist en inId
-        String name = "";
-        for (int i = 0; i < inList.size(); i++) {
-            if (inList.get(i).getEntityId().getId() == inId){
-                return inList.get(i).getEntityName();
-            }
-        }
-        return null;
-    }
-
-    /*
     public int getIndexByIdsFromCList(List<? extends SuperCombination> inList,
                                       IDNumber firstID,
                                       IDNumber secondID){
