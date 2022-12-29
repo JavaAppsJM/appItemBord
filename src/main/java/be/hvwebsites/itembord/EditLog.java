@@ -72,11 +72,11 @@ public class EditLog extends AppCompatActivity implements DatePickerInterface {
         // Basis directory definitie
         String baseDir = fileBaseService.getFileBaseDir();
         // Initialize viewmodel mt basis directory (data wordt opgehaald in viewmodel)
-        ReturnInfo viewModelStatus = viewModel.initializeViewModel(baseDir);
-        if (viewModelStatus.getReturnCode() != 0) {
+        List<ReturnInfo> viewModelRetInfo = viewModel.initializeViewModel(baseDir);
+        for (int i = 0; i < viewModelRetInfo.size(); i++) {
             Toast.makeText(EditLog.this,
-                    "Ophalen data is mislukt",
-                    Toast.LENGTH_LONG).show();
+                    viewModelRetInfo.get(i).getReturnMessage(),
+                    Toast.LENGTH_SHORT).show();
         }
 
         // Intent bekijken vr action en evt rubriek en/of opvolgingsitem (indien new logitem)

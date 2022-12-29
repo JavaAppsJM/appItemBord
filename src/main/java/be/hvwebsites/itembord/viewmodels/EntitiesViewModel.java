@@ -22,6 +22,10 @@ import be.hvwebsites.libraryandroid4.statics.StaticData;
 public class EntitiesViewModel extends AndroidViewModel {
     private FlexiRepository repository;
     private String basedir;
+    // Lijsten om data in te zetten
+    private List<Rubriek> rubriekList = new ArrayList<>();
+    private List<Opvolgingsitem> itemList = new ArrayList<>();
+    private List<Log> logList = new ArrayList<>();
     // File declaraties
     File rubriekFile;
     File itemFile;
@@ -30,22 +34,16 @@ public class EntitiesViewModel extends AndroidViewModel {
     public static final String RUBRIEK_FILE = "rubriek.txt";
     public static final String ITEM_FILE = "item.txt";
     public static final String LOG_FILE = "log.txt";
-    // Lijsten om data in te zetten
-    private List<Rubriek> rubriekList = new ArrayList<>();
-    private List<Opvolgingsitem> itemList = new ArrayList<>();
-    private List<Log> logList = new ArrayList<>();
     // Spinner selecties om te onthouden
     private String spinnerSelection = "";
-    // Lijst om messages door te geven
-    private List<String> viewModelMsgs = new ArrayList<>();
 
 
     public EntitiesViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public ReturnInfo initializeViewModel(String basedir){
-        ReturnInfo returnInfo = new ReturnInfo(0);
+    public List<ReturnInfo> initializeViewModel(String basedir){
+        List<ReturnInfo> returninfo = new ArrayList<>();
         this.basedir = basedir;
         // Filedefinities
         rubriekFile = new File(basedir, RUBRIEK_FILE);
@@ -55,25 +53,23 @@ public class EntitiesViewModel extends AndroidViewModel {
         repository = new FlexiRepository(rubriekFile);
         rubriekList.addAll(getRubriekenFromDataList(repository.getDataList()));
         if (rubriekList.size() == 0){
-            returnInfo.setReturnCode(100);
-            returnInfo.setReturnMessage(SpecificData.NO_RUBRIEKEN_YET);
-            viewModelMsgs.add(SpecificData.NO_RUBRIEKEN_YET);
+            returninfo.add(new ReturnInfo(100, SpecificData.NO_RUBRIEKEN_YET));
         } else {
             // Ophalen opvolgingsitems
             repository = new FlexiRepository(itemFile);
             itemList.addAll(getItemsFromDataList(repository.getDataList()));
             if (itemList.size() == 0){
-                viewModelMsgs.add(SpecificData.NO_OPVOLGINGSITEMS_YET);
+                returninfo.add(new ReturnInfo(100, SpecificData.NO_OPVOLGINGSITEMS_YET));
             }
 
             // Ophalen logs
             repository = new FlexiRepository(logFile);
             logList.addAll(getLogsFromDataList(repository.getDataList()));
             if (logList.size() == 0){
-                viewModelMsgs.add(SpecificData.NO_LOGS_YET);
+                returninfo.add(new ReturnInfo(100, SpecificData.NO_LOGS_YET));
             }
         }
-        return returnInfo;
+        return returninfo;
     }
 
     public List<ListItemHelper> getRubriekItemList(){
@@ -345,13 +341,11 @@ public class EntitiesViewModel extends AndroidViewModel {
         return StaticData.ITEM_NOT_FOUND;
     }
 
-    public ReturnInfo storeRubrieken(){
+    public void storeRubrieken(){
         // Bewaart de rubrieklist
         // Eerst de rubrieklist alfabetisch sorteren
         sortRubriekList(rubriekList);
-        ReturnInfo returnInfo = new ReturnInfo(0);
         repository.storeData(rubriekFile, convertRubriekListinDataList(rubriekList));
-        return returnInfo;
     }
 
     private void sortRubriekList(List<Rubriek> rubList){
@@ -406,13 +400,11 @@ public class EntitiesViewModel extends AndroidViewModel {
         }
     }
 
-    public ReturnInfo storeItems(){
+    public void storeItems(){
         // Bewaart de opvolgingsitems
         // Eerst alfabetisch sorteren
         sortItemList(itemList);
-        ReturnInfo returnInfo = new ReturnInfo(0);
         repository.storeData(itemFile, convertItemListinDataList(itemList));
-        return returnInfo;
     }
 
     private void sortItemList(List<Opvolgingsitem> inItemList){
@@ -458,16 +450,13 @@ public class EntitiesViewModel extends AndroidViewModel {
         }
     }
 
-    public ReturnInfo storeLogs(){
+    public void storeLogs(){
         // Bewaart de loglist
-        ReturnInfo returnInfo = new ReturnInfo(0);
-
         // logs omgekeerd chronologisch sorteren
         if (logList.size() > 1){
             sortLogs();
         }
         repository.storeData(logFile, convertLogListinDataList(logList));
-        return returnInfo;
     }
 
     private void sortLogs(){
@@ -506,14 +495,6 @@ public class EntitiesViewModel extends AndroidViewModel {
             // Bewaar nieuwe toestand
             storeLogs();
         }
-    }
-
-    public List<String> getViewModelMsgs() {
-        return viewModelMsgs;
-    }
-
-    public void clrViewModelMsgs() {
-        this.viewModelMsgs.clear();
     }
 
     public String getBasedir() {

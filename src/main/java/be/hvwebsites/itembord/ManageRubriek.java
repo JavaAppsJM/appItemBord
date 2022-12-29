@@ -62,17 +62,11 @@ public class ManageRubriek extends AppCompatActivity {
         String baseDir = fileBaseService.getFileBaseDir();
         // String baseDir = getBaseContext().getFilesDir().getAbsolutePath(); // internal files
         // Initialize viewmodel mt basis directory (data wordt opgehaald in viewmodel)
-        ReturnInfo viewModelStatus = viewModel.initializeViewModel(baseDir);
-        if (viewModelStatus.getReturnCode() == 0) {
-            // Files gelezen
-        } else if (viewModelStatus.getReturnCode() == 100) {
+        List<ReturnInfo> viewModelRetInfo = viewModel.initializeViewModel(baseDir);
+        for (int i = 0; i < viewModelRetInfo.size(); i++) {
             Toast.makeText(ManageRubriek.this,
-                    viewModelStatus.getReturnMessage(),
-                    Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(ManageRubriek.this,
-                    "Ophalen data is mislukt",
-                    Toast.LENGTH_LONG).show();
+                    viewModelRetInfo.get(i).getReturnMessage(),
+                    Toast.LENGTH_SHORT).show();
         }
 
         // Recyclerview definieren

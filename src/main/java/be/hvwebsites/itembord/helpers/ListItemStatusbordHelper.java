@@ -8,7 +8,11 @@ public class ListItemStatusbordHelper {
     private String itemStyle;
     private IDNumber itemID;
 
-    public ListItemStatusbordHelper(String itemtext1, String itemtext2, String inStyle, IDNumber inID) {
+    public ListItemStatusbordHelper(
+            String itemtext1,
+            String itemtext2,
+            String inStyle,
+            IDNumber inID) {
         this.itemTextLine1 = itemtext1;
         this.itemTextLine2 = itemtext2;
         this.itemStyle = inStyle;

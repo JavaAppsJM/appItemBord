@@ -22,8 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/labelRubriek"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelHoofdrubriek" />
@@ -114,12 +113,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="Hoofdrubriek:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/instructionEditRubriek" />
 
+    <Spinner
+        android:id="@+id/spinnerParentRubriek"
+        android:layout_width="180dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/labelHoofdrubriek"
+        app:layout_constraintTop_toBottomOf="@+id/instructionEditRubriek"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+<!--
     <TextView
         android:id="@+id/nameHoofrubriek"
         android:layout_width="wrap_content"
@@ -129,5 +140,6 @@
         android:text="@string/labelHoofdrubriek"
         app:layout_constraintBaseline_toBaselineOf="@+id/labelHoofdrubriek"
         app:layout_constraintStart_toEndOf="@+id/labelHoofdrubriek" />
+-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

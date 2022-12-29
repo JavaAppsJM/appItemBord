@@ -13,8 +13,11 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +31,10 @@ import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Rubriek;
 import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
+import be.hvwebsites.libraryandroid4.adapters.NothingSelectedSpinnerAdapter;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.helpers.ListItemHelper;
+import be.hvwebsites.libraryandroid4.repositories.Cookie;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
@@ -51,7 +56,6 @@ public class EditRubriek extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_rubriek);
-        parentRubriekView = findViewById(R.id.nameHoofrubriek);
 
         // Creer een filebase service (bevat file base en file base directory) obv device en package name
         FileBaseService fileBaseService = new FileBaseService(deviceModel, getPackageName());
@@ -61,11 +65,11 @@ public class EditRubriek extends AppCompatActivity {
         // Basis directory definitie
         String baseDir = fileBaseService.getFileBaseDir();
         // Initialize viewmodel mt basis directory (data wordt opgehaald in viewmodel)
-        ReturnInfo viewModelStatus = viewModel.initializeViewModel(baseDir);
-        if (viewModelStatus.getReturnCode() != 0) {
+        List<ReturnInfo> viewModelRetInfo = viewModel.initializeViewModel(baseDir);
+        for (int i = 0; i < viewModelRetInfo.size(); i++) {
             Toast.makeText(EditRubriek.this,
-                    "Ophalen data is mislukt",
-                    Toast.LENGTH_LONG).show();
+                    viewModelRetInfo.get(i).getReturnMessage(),
+                    Toast.LENGTH_SHORT).show();
         }
 
         // Intent bekijken vr action
@@ -73,7 +77,40 @@ public class EditRubriek extends AppCompatActivity {
         if (editIntent.hasExtra(StaticData.EXTRA_INTENT_KEY_ACTION)){
             action = editIntent.getStringExtra(StaticData.EXTRA_INTENT_KEY_ACTION);
         }
+
+        // Hoofdrubriek Spinner
+        Spinner hoofdRubriekSpinner = (Spinner) findViewById(R.id.spinnerParentRubriek);
+        // rubriekItemAdapter obv ListItemHelper
+        ArrayAdapter<ListItemHelper> rubriekItemAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item);
+        rubriekItemAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Adapter vullen met rubrieken
+        rubriekItemAdapter.addAll(viewModel.getItemsFromList(viewModel.getShopList()));
+        rubriekItemAdapter.add(new ListItemHelper(SpecificData.NO_FILTER,
+                "",
+                StaticData.IDNUMBER_NOT_FOUND));
+        // vr de nieuwe shopfilteradapter
+        hoofdRubriekSpinner.setAdapter(new NothingSelectedSpinnerAdapter(
+                rubriekItemAdapter, R.layout.contact_spinner_row_nothing_selected, this
+        ));
+
+        hoofdRubriekSpinner.setAdapter(rubriekItemAdapter);
+        // animate parameter moet false staan om het onnodig afvuren vd spinner tegen te gaan
+        if (shopFilterString.equals(SpecificData.NO_FILTER)){
+            //int positionAA = shopFilterAdapter.getCount()-1;
+            int positionAA = shopItemAdapter.getCount()-1;
+            shopFilterSpinner.setSelection(positionAA, false);
+        }else {
+            shopFilterSpinner.setSelection(viewModel.getIndexById(viewModel.getShopList(),
+                    shopFilter.getEntityId()), false);
+        }
+    }
+    // selection listener activeren, moet gebueren nadat de adapter gekoppeld is aan de spinner !!
+        shopFilterSpinner.setOnItemSelectedListener(this);
+
+
         // Als parentId in intent zit ...
+        parentRubriekView = findViewById(R.id.nameHoofrubriek);
         if (editIntent.hasExtra(SpecificData.ID_RUBRIEK)) {
             parentRubriekId = new IDNumber(editIntent.getIntExtra(SpecificData.ID_RUBRIEK, 0));
             //TODO: Hoofdrubriek moet aanpasbaar gemaakt worden met een spinner ?
@@ -299,4 +336,48 @@ public class EditRubriek extends AppCompatActivity {
             }
         });
     }
+
+    // Als er een shop geselecteerd is in de spinner
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (parent.getItemAtPosition(position) != null){
+            Toast.makeText(A4ShoppingListActivity.this,
+                    "Hersamenstellen artikels ...",
+                    Toast.LENGTH_LONG).show();
+            // Bepalen wat geselecteerd is
+            ListItemHelper selecShop = (ListItemHelper) parent.getItemAtPosition(position);
+            if (selecShop.getItemID().getId() == StaticData.IDNUMBER_NOT_FOUND.getId()){
+                // Alle artikels
+                shopFilterString = SpecificData.NO_FILTER;
+                shopFilter = null;
+            }else {
+                // Bepaal Shop om te filteren ==> nieuwe shopfilter
+                shopFilter = viewModel.getShopByID(selecShop.getItemID());
+                shopFilterString = shopFilter.getEntityName();
+            }
+            //shopFilterString = String.valueOf(parent.getItemAtPosition(position));
+            // TODO: Shopfilter bewaren als Cookie ; de shopfilterId moet bewaard worden
+            cookieRepository.addCookie(new Cookie(SpecificData.SHOP_FILTER, shopFilterString));
+/*
+            // bepaal shop voor herbepalen checkboxlist
+            if (!shopFilterString.equals(SpecificData.NO_FILTER)){
+                shopFilter = viewModel.getShopByShopName(shopFilterString);
+            }else {
+                shopFilter = null;
+            }
+*/
+            // spinner refreshen hoeft niet
+//            parent.setAdapter(shopFilterAdapter);
+//            parent.setSelection(viewModel.getShopIndexById(shopFilter.getEntityId()));
+            // Refresh recyclerview met aangepaste checkboxlist
+            composeCheckboxList();
+            cbListAdapter.setCheckboxList(checkboxList);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+
 }

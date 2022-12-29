@@ -1,5 +1,6 @@
 package be.hvwebsites.itembord;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -22,12 +24,13 @@ import be.hvwebsites.itembord.helpers.ListItemStatusbordHelper;
 import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
+import be.hvwebsites.libraryandroid4.statics.StaticData;
 
 public class MainActivity extends AppCompatActivity {
-    // Device
-    private final String deviceModel = Build.MODEL;
     private EntitiesViewModel viewModel;
     private List<ListItemStatusbordHelper> itemList = new ArrayList<>();
+    // Device
+    private final String deviceModel = Build.MODEL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +46,12 @@ public class MainActivity extends AppCompatActivity {
         // Basis directory definitie
         String baseDir = fileBaseService.getFileBaseDir();
         // Initialize viewmodel mt basis directory (data wordt opgehaald in viewmodel)
-        ReturnInfo viewModelStatus = viewModel.initializeViewModel(baseDir);
-        if (viewModelStatus.getReturnCode() != 0) {
+        List<ReturnInfo> viewModelRetInfo = viewModel.initializeViewModel(baseDir);
+        // Display return msg(s)
+        for (int i = 0; i < viewModelRetInfo.size(); i++) {
             Toast.makeText(MainActivity.this,
-                    "Ophalen data is mislukt",
-                    Toast.LENGTH_LONG).show();
-        } else if (viewModel.getViewModelMsgs().size() > 0){
-            for (int i = 0; i < viewModel.getViewModelMsgs().size(); i++) {
-                Toast.makeText(MainActivity.this,
-                        viewModel.getViewModelMsgs().get(i),
-                        Toast.LENGTH_SHORT).show();
-            }
-            viewModel.clrViewModelMsgs();
+                    viewModelRetInfo.get(i).getReturnMessage(),
+                    Toast.LENGTH_SHORT).show();
         }
 
         // Recyclerview definieren
@@ -67,11 +64,21 @@ public class MainActivity extends AppCompatActivity {
         itemList.clear();
         itemList.addAll(buildStatusbordList());
         adapter.setItemList(itemList);
-        if (itemList == null){
+        if (itemList.size() == 0){
             Toast.makeText(this,
                     SpecificData.NO_STATUSBORDITEMS_YET,
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     private List<ListItemStatusbordHelper> buildStatusbordList(){
@@ -98,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                         opvolgingsitem.calculateNextDate().getFormatDate() +
                         " Vorige: " +
                         opvolgingsitem.getLatestDate().getFormatDate();
+                // Creer statusborditem en steek in statusbordlist
                 statusbordList.add(new ListItemStatusbordHelper(item1,
                         item2,
                         "",
@@ -131,5 +139,14 @@ public class MainActivity extends AppCompatActivity {
                 // Do nothing
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Bewaar Instance State (bvb: fileBase, smsStatus, entityType, enz..)
+        outState.putString(StaticData.FILE_BASE_DIR, viewModel.getBasedir());
+
     }
 }
