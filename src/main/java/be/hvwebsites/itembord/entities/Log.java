@@ -5,8 +5,7 @@ import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
-public class Log {
-    private IDNumber entityId;
+public class Log extends SuperItem{
     private DateString logDate;
     private String logDescription;
     public static final String ENTITY_LATEST_ID = "loglatestid";
@@ -14,10 +13,11 @@ public class Log {
     private IDNumber itemId;
 
     public Log() {
+        super();
     }
 
     public Log(String basedir, boolean b) {
-        entityId = new IDNumber(basedir, ENTITY_LATEST_ID);
+        super(new IDNumber(basedir, ENTITY_LATEST_ID));
         logDate = new DateString("ahjgk/jg");
         logDate.setDateToday();
         this.rubriekId = StaticData.IDNUMBER_NOT_FOUND;
@@ -38,14 +38,6 @@ public class Log {
 
     public String getDisplayLog(){
         return logDate.getFormatDate() + " " + logDescription;
-    }
-
-    public IDNumber getEntityId() {
-        return entityId;
-    }
-
-    public void setEntityId(IDNumber entityId) {
-        this.entityId = entityId;
     }
 
     public DateString getLogDate() {

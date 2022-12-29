@@ -5,8 +5,7 @@ import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 
-public class Opvolgingsitem {
-    private IDNumber entityId;
+public class Opvolgingsitem extends SuperItem{
     private String entityName;
     private String entityNamePast;
     private int frequentieNbr;
@@ -17,10 +16,11 @@ public class Opvolgingsitem {
     private IDNumber rubriekId;
 
     public Opvolgingsitem() {
+        super();
     }
 
     public Opvolgingsitem(String basedir, boolean b) {
-        entityId = new IDNumber(basedir, ENTITY_LATEST_ID);
+        super(new IDNumber(basedir, ENTITY_LATEST_ID));
         entityName = "";
         entityNamePast = "";
         latestDate = new DateString(DateString.EMPTY_DATESTRING);
@@ -145,14 +145,6 @@ public class Opvolgingsitem {
 
     public void setLatestDate(DateString latestDate) {
         this.latestDate = latestDate;
-    }
-
-    public IDNumber getEntityId() {
-        return entityId;
-    }
-
-    public void setEntityId(IDNumber entityId) {
-        this.entityId = entityId;
     }
 
     public String getEntityName() {

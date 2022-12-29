@@ -84,7 +84,7 @@ public class EditRubriek extends AppCompatActivity {
         ArrayAdapter<ListItemHelper> rubriekItemAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item);
         rubriekItemAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Adapter vullen met rubrieken
+        // Adapter vullen met rubrieken mr niet rubriek inkwestie
         rubriekItemAdapter.addAll(viewModel.getItemsFromList(viewModel.getShopList()));
         rubriekItemAdapter.add(new ListItemHelper(SpecificData.NO_FILTER,
                 "",

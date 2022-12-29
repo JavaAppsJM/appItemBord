@@ -4,17 +4,17 @@ import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
-public class Rubriek {
-    private IDNumber entityId;
+public class Rubriek extends SuperItem{
     private String entityName;
     private IDNumber parentId;
     public static final String ENTITY_LATEST_ID = "rubrieklatestid";
 
     public Rubriek() {
+        super();
     }
 
     public Rubriek(String basedir, boolean b) {
-        entityId = new IDNumber(basedir, ENTITY_LATEST_ID);
+        super(new IDNumber(basedir, ENTITY_LATEST_ID));
         entityName = "";
         parentId = StaticData.IDNUMBER_NOT_FOUND;
     }
@@ -35,14 +35,6 @@ public class Rubriek {
         setEntityId(inRub.getEntityId());
         setEntityName(inRub.getEntityName());
         setParentId(inRub.getParentId());
-    }
-
-    public IDNumber getEntityId() {
-        return entityId;
-    }
-
-    public void setEntityId(IDNumber entityId) {
-        this.entityId = entityId;
     }
 
     public String getEntityName() {
