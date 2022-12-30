@@ -30,6 +30,7 @@ public class Log extends SuperItem{
 
     public void setLog(Log inLog){
         setEntityId(inLog.getEntityId());
+        setEntityName(inLog.getEntityName());
         setLogDate(inLog.getLogDate());
         setLogDescription(inLog.getLogDescription());
         setRubriekId(inLog.getRubriekId());

@@ -6,7 +6,6 @@ import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 
 public class Opvolgingsitem extends SuperItem{
-    private String entityName;
     private String entityNamePast;
     private int frequentieNbr;
     private FrequentieDateUnit frequentieUnit;
@@ -21,7 +20,7 @@ public class Opvolgingsitem extends SuperItem{
 
     public Opvolgingsitem(String basedir, boolean b) {
         super(new IDNumber(basedir, ENTITY_LATEST_ID));
-        entityName = "";
+        setEntityName("");
         entityNamePast = "";
         latestDate = new DateString(DateString.EMPTY_DATESTRING);
     }
@@ -73,7 +72,7 @@ public class Opvolgingsitem extends SuperItem{
     }
 
     public String getDisplayOpvolgingsitem(){
-        return entityName +
+        return getEntityName() +
                 " (" +
                 frequentieNbr +
                 frequentieUnit.getLetter() +
@@ -147,12 +146,8 @@ public class Opvolgingsitem extends SuperItem{
         this.latestDate = latestDate;
     }
 
-    public String getEntityName() {
-        return entityName;
-    }
-
     public void setEntityName(String entityName) {
-        this.entityName = SpecificData.setFirstLetterCapital(entityName);
+        setEntityName(SpecificData.setFirstLetterCapital(entityName));
     }
 
     public void convertFromFileLine(String fileLine) {

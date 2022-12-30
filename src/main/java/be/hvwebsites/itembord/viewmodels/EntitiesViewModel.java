@@ -157,29 +157,6 @@ public class EntitiesViewModel extends AndroidViewModel {
         return nameList;
     }
 
-    public int getIndexByIdsFromCList(List<? extends SuperCombination> inList,
-                                      IDNumber firstID,
-                                      IDNumber secondID){
-        // Bepaalt de index vh element voor opgegeven IDNumbers in SuperCombination list
-        for (int i = 0; i < inList.size(); i++) {
-            if ((inList.get(i).getFirstID().getId() == firstID.getId()) &&
-                    (inList.get(i).getSecondID().getId() == secondID.getId())){
-                return i;
-            }
-        }
-        return StaticData.ITEM_NOT_FOUND;
-    }
-
-    public List<String> convertCombinListinDataList(List<? extends SuperCombination> itemList){
-        // Converteert een SuperCombinationList in een datalist voor bewaard te worden in een bestand
-        List<String> lineList = new ArrayList<>();
-        for (int i = 0; i < itemList.size(); i++) {
-            lineList.add(itemList.get(i).convertCombinInFileLine());
-        }
-        return lineList;
-    }
-
-*/
 /*
     private void correctHighestID(String entity,
                                   List<? extends ShoppingEntity> inList){
@@ -212,96 +189,6 @@ public class EntitiesViewModel extends AndroidViewModel {
     }
 */
 
-
-/*
-    public List<Integer> getFirstIdsBySecondId(List<? extends SuperCombination> inList, int secondId){
-        // Bepaalt een lijst met first integer Id's obv een second integer Id
-        List<Integer> resultIds = new ArrayList<>();
-        for (int i = 0; i < inList.size(); i++) {
-            if (inList.get(i).getSecondID().getId() == secondId){
-                resultIds.add(inList.get(i).getFirstID().getId());
-            }
-        }
-        return resultIds;
-    }
-
-    public List<Integer> getSecondIdsByFirstId(List<? extends SuperCombination> inList, int firstId){
-        // Bepaalt een lijst met second integer Id's obv een first integer Id
-        List<Integer> resultIds = new ArrayList<>();
-        for (int i = 0; i < inList.size(); i++) {
-            if (inList.get(i).getFirstID().getId() == firstId){
-                resultIds.add(inList.get(i).getSecondID().getId());
-            }
-        }
-        return resultIds;
-    }
-
-    public List<String> getNamesByCombinEntityId(List<? extends SuperCombination> inCList,
-                                                 IDNumber inID,
-                                                 List<? extends ShoppingEntity> inSList){
-        // Bepaalt de namen die een combinatie hebben met het opgegeven CombinEntity
-        List<String> shopsForProduct = new ArrayList<>();
-        List<Integer> shopIds = getFirstIdsBySecondId(inCList, inID.getId());
-
-        for (int i = 0; i < shopIds.size(); i++) {
-            String foundName = getNameByIdFromList(inSList, shopIds.get(i));
-            // opvangen indien id niet bestaat
-            if (foundName != null){
-                shopsForProduct.add(foundName);
-            }
-        }
-        return shopsForProduct;
-    }
-
-    public int getFirstPartnerIndexfromId(List<? extends SuperCombination> inList,
-                                          IDNumber inID,
-                                          boolean first){
-        for (int i = 0; i < inList.size(); i++) {
-            if ((inList.get(i).getFirstID().getId() == inID.getId()) && (first)){
-                return i;
-            }else if ((inList.get(i).getSecondID().getId() == inID.getId()) && !(first)){
-                return i;
-            }
-        }
-        return StaticData.ITEM_NOT_FOUND;
-    }
-
-    public void deleteCombinById(List<? extends SuperCombination> inList,
-                                 IDNumber inID,
-                                 boolean first){
-        // Verwijdert de combinaties voor een first of second opgegeven ID
-        int position = getFirstPartnerIndexfromId(inList, inID, first);
-        while (position != StaticData.ITEM_NOT_FOUND){
-            inList.remove(position);
-            position = getFirstPartnerIndexfromId(inList, inID, first);
-        }
-    }
-
-    public List<ShoppingEntity> sortShopEntityList(List<? extends ShoppingEntity> inList){
-        // Sorteert een list op entityname alfabetisch
-        ShoppingEntity tempEntity;
-        List<ShoppingEntity> outList = new ArrayList<>();
-        // Werkt niet met ShoppingEntity !!
-        //outList.addAll(inList);
-*/
-/*
-        for (int i = inList.size() ; i > 0; i--) {
-            for (int j = 1; j < i ; j++) {
-                if (inList.get(j).getEntityName().compareToIgnoreCase(inList.get(j-1).getEntityName()) < 0){
-                    tempEntity = inList.get(j);
-                    inList.get(j) = inList.get(j-1);
-                    inList.set(j, inList.get(j-1));
-                    inList.set(j-1, tempEntity);
-                }
-            }
-        }
-*//*
-
-        return outList;
-    }
-*/
-
-
     public List<ListItemHelper> getRubriekItemList(){
         // bepaalt een lijst met rubriek namen en ID's obv rubrieklist
         List<ListItemHelper> displayList = new ArrayList<>();
@@ -328,36 +215,6 @@ public class EntitiesViewModel extends AndroidViewModel {
         return displayList;
     }
 
-    /*
-        public List<String> getLocationNameList(){
-            // bepaalt een lijst met location namen obv locationlist voor spinners !!!
-            List<String> displayList = new ArrayList<>();
-            for (int i = 0; i < locationList.size(); i++) {
-                displayList.add(locationList.get(i).getEntityName());
-            }
-            return displayList;
-        }
-
-        public Location getLocationByName(String inName){
-            // bepaalt een locatie obv entityname
-            for (int i = 0; i < locationList.size(); i++) {
-                if (locationList.get(i).getEntityName().equals(inName)){
-                    return locationList.get(i);
-                }
-            }
-            return null;
-        }
-
-        public int getLocationIndexByName(String inName){
-            // bepaalt een locatie index obv entityname
-            for (int i = 0; i < locationList.size(); i++) {
-                if (locationList.get(i).getEntityName().equals(inName)){
-                    return i;
-                }
-            }
-            return StaticData.ITEM_NOT_FOUND;
-        }
-    */
     private List<Rubriek> getRubriekenFromDataList(List<String> dataList){
         // Converteert een datalist met rubrieken in een rubrieklist
         List<Rubriek> rubriekList = new ArrayList<>();
@@ -379,34 +236,7 @@ public class EntitiesViewModel extends AndroidViewModel {
     public Rubriek getRubriekById(IDNumber rubriekId){
         return rubriekList.get(getRubriekIndexById(rubriekId));
     }
-/*
-    public List<String> getMeterNameList(Location inLoc){
-        // bepaalt een lijst met meter namen obv meterlist en een location
-        List<String> displayList = new ArrayList<>();
-        for (int i = 0; i < meterList.size(); i++) {
-            if (meterList.get(i).getMeterLocationId().getId() ==
-                    inLoc.getEntityId().getId()){
-                displayList.add(meterList.get(i).getEntityName());
-            }
-        }
-        return displayList;
-    }
 
-    public List<ListItemHelper> getMeterItemList(Location inloc){
-        // bepaalt een lijst met meter namen en ID's obv meterlist
-        List<ListItemHelper> displayList = new ArrayList<>();
-        for (int i = 0; i < meterList.size(); i++) {
-            if (meterList.get(i).getMeterLocationId().getId() ==
-                    inloc.getEntityId().getId()){
-                displayList.add(new ListItemHelper(
-                        meterList.get(i).getEntityName(), "",
-                        meterList.get(i).getEntityId()
-                ));
-            }
-        }
-        return displayList;
-    }
-*/
     private List<Opvolgingsitem> getItemsFromDataList(List<String> dataList){
         // Converteert een datalist met opvolgingsitems in een opvolgingsitemlist
         List<Opvolgingsitem> opvolgingsitems = new ArrayList<>();

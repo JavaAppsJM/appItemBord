@@ -5,7 +5,6 @@ import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
 public class Rubriek extends SuperItem{
-    private String entityName;
     private IDNumber parentId;
     public static final String ENTITY_LATEST_ID = "rubrieklatestid";
 
@@ -15,7 +14,7 @@ public class Rubriek extends SuperItem{
 
     public Rubriek(String basedir, boolean b) {
         super(new IDNumber(basedir, ENTITY_LATEST_ID));
-        entityName = "";
+        setEntityName("");
         parentId = StaticData.IDNUMBER_NOT_FOUND;
     }
 
@@ -37,12 +36,8 @@ public class Rubriek extends SuperItem{
         setParentId(inRub.getParentId());
     }
 
-    public String getEntityName() {
-        return entityName;
-    }
-
     public void setEntityName(String entityName) {
-        this.entityName = SpecificData.setFirstLetterCapital(entityName);
+        setEntityName(SpecificData.setFirstLetterCapital(entityName));
         boolean debug = true;
     }
 

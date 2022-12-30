@@ -4,12 +4,17 @@ import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 
 public class SuperItem {
     private IDNumber entityId;
+    private String entityName;
 
     public SuperItem() {
     }
 
     public SuperItem(IDNumber entityId) {
         this.entityId = entityId;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
     public IDNumber getEntityId() {
