@@ -37,7 +37,7 @@ public class Rubriek extends SuperItem{
     }
 
     public void setEntityName(String entityName) {
-        setEntityName(SpecificData.setFirstLetterCapital(entityName));
+        super.setEntityName(SpecificData.setFirstLetterCapital(entityName));
         boolean debug = true;
     }
 

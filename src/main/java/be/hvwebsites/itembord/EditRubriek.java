@@ -41,6 +41,7 @@ import be.hvwebsites.libraryandroid4.statics.StaticData;
 public class EditRubriek extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private EntitiesViewModel viewModel;
     private List<ListItemHelper> itemList = new ArrayList<>();
+    private Rubriek rubriekInEdit;
     private int iDToUpdate = StaticData.ITEM_NOT_FOUND;
     private String action = StaticData.ACTION_NEW;
     //private TextView parentRubriekView;
@@ -128,7 +129,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
 
                 // Enkel indien rubriek gekend is
                 // ParentId bepalen als die er is
-                // Spinner invullen met parentrubriek
+                // Spinner selectie invullen met parentrubriek
                 if (rubriekToUpdate.getParentId().getId() != StaticData.IDNUMBER_NOT_FOUND.getId()){
                     // Er is een parentrubriek
                     parentRubriekId = rubriekToUpdate.getParentId();
@@ -150,6 +151,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 itemList.clear();
+
                 // om te kunnen swipen in de recyclerview ; swippen == deleten
                 ItemTouchHelper helper = new ItemTouchHelper(
                         new ItemTouchHelper.SimpleCallback(0,
@@ -366,21 +368,13 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
             ListItemHelper selecRubriek = (ListItemHelper) parent.getItemAtPosition(position);
             parentRubriekId = selecRubriek.getItemID();
 
-            // ParentrubriekId bewaren als Cookie
-            cookieRepository.addCookie(new Cookie(SpecificData.SHOP_FILTER, shopFilterString));
-
-            // bepaal shop voor herbepalen checkboxlist
-            if (!shopFilterString.equals(SpecificData.NO_FILTER)){
-                shopFilter = viewModel.getShopByShopName(shopFilterString);
-            }else {
-                shopFilter = null;
-            }
+            // Bepaal rubriek in kwestie in de rubrieklist en vul parent id in
+            viewModel.getRubriekById(new IDNumber(iDToUpdate))
+                    .setParentId(parentRubriekId);
 
             // spinner refreshen hoeft niet
 //            parent.setAdapter(shopFilterAdapter);
 //            parent.setSelection(viewModel.getShopIndexById(shopFilter.getEntityId()));
-            // Refresh recyclerview met aangepaste checkboxlist
-            cbListAdapter.setCheckboxList(checkboxList);
         }
     }
 

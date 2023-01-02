@@ -146,8 +146,12 @@ public class Opvolgingsitem extends SuperItem{
         this.latestDate = latestDate;
     }
 
-    public void setEntityName(String entityName) {
-        setEntityName(SpecificData.setFirstLetterCapital(entityName));
+    public void setEntityName(String entName) {
+        if (!entName.equals("")){
+            super.setEntityName(SpecificData.setFirstLetterCapital(entName));
+        }else {
+            super.setEntityName("");
+        }
     }
 
     public void convertFromFileLine(String fileLine) {

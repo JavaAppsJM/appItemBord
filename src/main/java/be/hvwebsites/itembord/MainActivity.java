@@ -71,16 +71,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
     private List<ListItemStatusbordHelper> buildStatusbordList(){
         List<ListItemStatusbordHelper> statusbordList = new ArrayList<>();
         String item1;
