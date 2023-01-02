@@ -29,9 +29,12 @@ public class SpecificData {
     public static final String NO_PARENT_RUBRIEK = "Geen hoofdrubriek";
 
     public static String setFirstLetterCapital(String name){
-        String nameCapitalized = name.toUpperCase();
-
-        return nameCapitalized.substring(0,1).concat(name.substring(1));
+        if (!name.equals("")){
+            String nameCapitalized = name.toUpperCase();
+            return nameCapitalized.substring(0,1).concat(name.substring(1));
+        }else {
+            return "";
+        }
     }
 
 }

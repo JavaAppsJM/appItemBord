@@ -18,6 +18,7 @@
         <activity
             android:name=".EditLog"
             android:label="Beheer Log Item"
+            android:windowSoftInputMode="stateHidden"
             android:parentActivityName=".ManageRubriek">
             <!--            Moet nog aangepast worden nr logboek-->
             <meta-data
@@ -27,6 +28,7 @@
         <activity
             android:name=".EditOpvolgingsitem"
             android:label="Beheer Opvolgingsitem"
+            android:windowSoftInputMode="stateHidden"
             android:parentActivityName=".ManageRubriek">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -35,6 +37,7 @@
         <activity
             android:name=".EditRubriek"
             android:label="Beheer Rubriek"
+            android:windowSoftInputMode="stateHidden"
             android:parentActivityName=".ManageRubriek">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

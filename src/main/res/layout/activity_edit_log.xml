@@ -97,15 +97,15 @@
 
     <EditText
         android:id="@+id/editLogDescription"
-        android:layout_width="256dp"
-        android:layout_height="101dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/hintLogDescription"
         android:inputType="textPersonName"
         android:singleLine="false"
-        android:textAlignment="viewStart"
+        android:textAlignment="textStart"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@id/labelLogDescription"
         app:layout_constraintTop_toTopOf="@+id/labelLogDescription" />

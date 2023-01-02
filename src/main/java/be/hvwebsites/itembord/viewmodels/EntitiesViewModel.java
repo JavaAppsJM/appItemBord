@@ -110,19 +110,12 @@ public class EntitiesViewModel extends AndroidViewModel {
         // bepaalt een lijst met ListItemHelpers obv inlist
         List<ListItemHelper> nameList = new ArrayList<>();
         for (int i = 0; i < inList.size(); i++) {
-            if ((neglectItem != null) &&
-                    (inList.get(i).getEntityId().getId() != neglectItem.getEntityId().getId())){
-                nameList.add(new ListItemHelper(inList.get(i).getEntityName(),
-                        "",
-                        inList.get(i).getEntityId()));
-            }else {
+            if ((neglectItem == null) || ((neglectItem != null) &&
+                    (inList.get(i).getEntityId().getId() != neglectItem.getEntityId().getId()))){
                 nameList.add(new ListItemHelper(inList.get(i).getEntityName(),
                         "",
                         inList.get(i).getEntityId()));
             }
-            nameList.add(new ListItemHelper(inList.get(i).getEntityName(),
-                    "",
-                    inList.get(i).getEntityId()));
         }
         return nameList;
     }

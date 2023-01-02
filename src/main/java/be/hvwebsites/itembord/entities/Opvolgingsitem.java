@@ -146,14 +146,6 @@ public class Opvolgingsitem extends SuperItem{
         this.latestDate = latestDate;
     }
 
-    public void setEntityName(String entName) {
-        if (!entName.equals("")){
-            super.setEntityName(SpecificData.setFirstLetterCapital(entName));
-        }else {
-            super.setEntityName("");
-        }
-    }
-
     public void convertFromFileLine(String fileLine) {
         // Maakt een opvolgingsitem obv een fileline - format: <key><102><item><auto><freqa><6><freqe><m><latest><01012021><rubriek><2>
         // fileLine splitsen in argumenten

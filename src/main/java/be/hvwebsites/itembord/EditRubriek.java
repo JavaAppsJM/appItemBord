@@ -371,6 +371,8 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
             // Bepaal rubriek in kwestie in de rubrieklist en vul parent id in
             viewModel.getRubriekById(new IDNumber(iDToUpdate))
                     .setParentId(parentRubriekId);
+            // rubriek met gewijzigde hoofdrubriek bewaren
+            viewModel.storeRubrieken();
 
             // spinner refreshen hoeft niet
 //            parent.setAdapter(shopFilterAdapter);

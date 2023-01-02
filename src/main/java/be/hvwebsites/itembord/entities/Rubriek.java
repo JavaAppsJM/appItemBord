@@ -36,11 +36,6 @@ public class Rubriek extends SuperItem{
         setParentId(inRub.getParentId());
     }
 
-    public void setEntityName(String entityName) {
-        super.setEntityName(SpecificData.setFirstLetterCapital(entityName));
-        boolean debug = true;
-    }
-
     public void convertFromFileLine(String fileLine) {
         // Maakt een rubriek obv een fileline - format: <key><102><rubriek><auto>
         // fileLine splitsen in argumenten

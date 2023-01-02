@@ -1,5 +1,6 @@
 package be.hvwebsites.itembord.entities;
 
+import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 
 public class SuperItem {
@@ -13,8 +14,8 @@ public class SuperItem {
         this.entityId = entityId;
     }
 
-    public void setEntityName(String entityName) {
-        this.entityName = entityName;
+    public void setEntityName(String entName) {
+        this.entityName = SpecificData.setFirstLetterCapital(entName);
     }
 
     public IDNumber getEntityId() {
@@ -33,7 +34,7 @@ public class SuperItem {
     }
 
     public String getEntityName(){
-        return "";
+        return this.entityName;
     }
 
 }
