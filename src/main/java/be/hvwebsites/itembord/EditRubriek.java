@@ -92,7 +92,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
             case StaticData.ACTION_NEW:
                 setTitle(SpecificData.TITLE_NEW_RUBRIEK);
                 // Spinner vullen met alle rubrieken
-                rubriekItemAdapter.addAll(viewModel.getItemsFromList(viewModel.getRubriekList(), null));
+                rubriekItemAdapter.addAll(viewModel.getRubriekItemList());
                 rubriekItemAdapter.add(new ListItemHelper(SpecificData.NO_PARENT_RUBRIEK,
                         "",
                         StaticData.IDNUMBER_NOT_FOUND));
@@ -102,10 +102,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                 if (editIntent.hasExtra(SpecificData.ID_RUBRIEK)) {
                     parentRubriekId = new IDNumber(editIntent.getIntExtra(SpecificData.ID_RUBRIEK, 0));
                     hoofdRubriekSpinner.setSelection(
-                            viewModel.getIndexById(
-                                    viewModel.getRubriekList(),
-                                    parentRubriekId),
-                            false);
+                            viewModel.getRubriekIndexById(parentRubriekId), false);
                 }
 
                 break;
@@ -120,7 +117,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                 nameView.setText(rubriekToUpdate.getEntityName());
 
                 // Spinner vullen met rubrieken behalve rubriek in kwestie
-                List<ListItemHelper> potentialRubrieken = viewModel.getItemsFromList(viewModel.getRubriekList(), rubriekToUpdate);
+                List<ListItemHelper> potentialRubrieken = viewModel.getRubriekListAndNeglectItem(rubriekToUpdate);
                 rubriekItemAdapter.addAll(potentialRubrieken);
                 rubriekItemAdapter.add(new ListItemHelper(SpecificData.NO_PARENT_RUBRIEK,
                         "",

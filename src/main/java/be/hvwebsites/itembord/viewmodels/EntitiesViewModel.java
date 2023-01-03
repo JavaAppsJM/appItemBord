@@ -77,25 +77,6 @@ public class EntitiesViewModel extends AndroidViewModel {
 
     /** Flexi methodes */
 
-    private List<String> convertEntityListinDataList(List<? extends SuperItem> inList){
-        // Converteert een SuperItemlist in een datalist voor bewaard te worden in een bestand
-        List<String> lineList = new ArrayList<>();
-        for (int i = 0; i < inList.size(); i++) {
-            lineList.add(inList.get(i).convertToFileLine());
-        }
-        return lineList;
-    }
-
-    public int getIndexById(List<? extends SuperItem> inList, IDNumber inID){
-        // Bepaalt de index vh element met een opgegeven IDNumber
-        for (int i = 0; i < inList.size(); i++) {
-            if (inList.get(i).getEntityId().getId() == inID.getId()){
-                return i;
-            }
-        }
-        return StaticData.ITEM_NOT_FOUND;
-    }
-
     public int getIndexItemHelperById(List<ListItemHelper> inList, IDNumber inID){
         // Bepaalt de index vh element met een opgegeven IDNumber
         for (int i = 0; i < inList.size(); i++) {
@@ -106,8 +87,27 @@ public class EntitiesViewModel extends AndroidViewModel {
         return StaticData.ITEM_NOT_FOUND;
     }
 
-    public List<ListItemHelper> getItemsFromList(List<? extends SuperItem> inList, SuperItem neglectItem){
-        // bepaalt een lijst met ListItemHelpers obv inlist
+    private List<String> convertEntityListinDataList(List<? extends SuperItem> inList){
+        // Converteert een SuperItemlist in een datalist voor bewaard te worden in een bestand
+        List<String> lineList = new ArrayList<>();
+        for (int i = 0; i < inList.size(); i++) {
+            lineList.add(inList.get(i).convertToFileLine());
+        }
+        return lineList;
+    }
+
+    private int getIndexById(List<? extends SuperItem> inList, IDNumber inID){
+        // Bepaalt de index vh element met een opgegeven IDNumber
+        for (int i = 0; i < inList.size(); i++) {
+            if (inList.get(i).getEntityId().getId() == inID.getId()){
+                return i;
+            }
+        }
+        return StaticData.ITEM_NOT_FOUND;
+    }
+
+    private List<ListItemHelper> getItemsFromList(List<? extends SuperItem> inList, SuperItem neglectItem){
+        // bepaalt een lijst met ListItemHelpers obv inlist mr sluit een neglectitem uit
         List<ListItemHelper> nameList = new ArrayList<>();
         for (int i = 0; i < inList.size(); i++) {
             if ((neglectItem == null) || ((neglectItem != null) &&
@@ -131,67 +131,24 @@ public class EntitiesViewModel extends AndroidViewModel {
         return null;
     }
 
-    /*
-    public List<String> getNameListFromList(List<? extends SuperItem> inList, int indisplay){
-        // bepaalt een lijst met entitynamen obv inlist
-        List<String> nameList = new ArrayList<>();
-        for (int i = 0; i < inList.size(); i++) {
-            switch (indisplay){
-                case SpecificData.DISPLAY_SMALL:
-                    nameList.add(inList.get(i).getEntityName());
-                    break;
-                case SpecificData.DISPLAY_LARGE:
-                    nameList.add(inList.get(i).getDisplayLine());
-                    break;
-                default:
-                    break;
-            }
-        }
-        return nameList;
-    }
+    /** Rubriek Methodes */
 
-/*
-    private void correctHighestID(String entity,
-                                  List<? extends ShoppingEntity> inList){
-        CookieRepository cookieRepository = new CookieRepository(basedir);
-        // Highest Id cookie corrigeren indien nodig
-        // Wat is de cookie
-        int cookieId = 0;
-        if (cookieRepository.bestaatCookie(entity) != CookieRepository.COOKIE_NOT_FOUND){
-            cookieId = Integer.parseInt(cookieRepository.getCookieValueFromLabel(entity));
+    private List<Rubriek> getRubriekenFromDataList(List<String> dataList){
+        // Converteert een datalist met rubrieken in een rubrieklist
+        List<Rubriek> rubriekList = new ArrayList<>();
+        for (int j = 0; j < dataList.size(); j++) {
+            rubriekList.add(new Rubriek(dataList.get(j)));
         }
-        // Wat is de echte hoogste Id
-        int highestId = determineHighestID(inList);
-
-        // Als de echte > cookie, cookie aanpassen
-        if (highestId > cookieId){
-            Cookie highestIdCookie = new Cookie(entity, String.valueOf(highestId));
-            cookieRepository.deleteCookie(entity);
-            cookieRepository.addCookie(highestIdCookie);
-        }
+        return rubriekList;
     }
-
-    public int determineHighestID(List<? extends ShoppingEntity> inList){
-        int highestID = 0;
-        for (int i = 0; i < inList.size(); i++) {
-            if (inList.get(i).getEntityId().getId() > highestID ){
-                highestID = inList.get(i).getEntityId().getId();
-            }
-        }
-        return highestID;
-    }
-*/
 
     public List<ListItemHelper> getRubriekItemList(){
         // bepaalt een lijst met rubriek namen en ID's obv rubrieklist
-        List<ListItemHelper> displayList = new ArrayList<>();
-        for (int i = 0; i < rubriekList.size(); i++) {
-            displayList.add(new ListItemHelper(
-                    rubriekList.get(i).getEntityName(), "",
-                    rubriekList.get(i).getEntityId()
-            ));
-        }
-        return displayList;
+        return getItemsFromList(rubriekList, null);
+    }
+
+    public List<ListItemHelper> getRubriekListAndNeglectItem(Rubriek inRubriek){
+        return getItemsFromList(rubriekList, inRubriek);
     }
 
     public List<ListItemHelper> getRubriekListByHoofdrubriekID(IDNumber hoofdrubriekID){
@@ -208,27 +165,17 @@ public class EntitiesViewModel extends AndroidViewModel {
         return displayList;
     }
 
-    private List<Rubriek> getRubriekenFromDataList(List<String> dataList){
-        // Converteert een datalist met rubrieken in een rubrieklist
-        List<Rubriek> rubriekList = new ArrayList<>();
-        for (int j = 0; j < dataList.size(); j++) {
-            rubriekList.add(new Rubriek(dataList.get(j)));
-        }
-        return rubriekList;
-    }
-
     public int getRubriekIndexById(IDNumber rubriekId){
-        for (int j = 0; j < rubriekList.size(); j++) {
-            if (rubriekList.get(j).getEntityId().getId() == rubriekId.getId()){
-                return j;
-            }
-        }
-        return StaticData.ITEM_NOT_FOUND;
+        // Bepaalt de index vd rubriek in rubrieklist obv zijn ID
+        return getIndexById(rubriekList, rubriekId);
     }
 
     public Rubriek getRubriekById(IDNumber rubriekId){
+        // Bepaalt de rubriek obv zijn ID
         return rubriekList.get(getRubriekIndexById(rubriekId));
     }
+
+    /** Opvolgingsitems Metodes */
 
     private List<Opvolgingsitem> getItemsFromDataList(List<String> dataList){
         // Converteert een datalist met opvolgingsitems in een opvolgingsitemlist
@@ -253,17 +200,14 @@ public class EntitiesViewModel extends AndroidViewModel {
         return displayList;
     }
 
-    public Opvolgingsitem getOpvolgingsitemById(IDNumber itemId){
-        return itemList.get(getItemIndexById(itemId));
+    public int getItemIndexById(IDNumber itemID){
+        // Bepaalt de index vh opvolgingsitem in de list obv zijn ID
+        return getIndexById(itemList, itemID);
     }
 
-    public int getItemIndexById(IDNumber itemID){
-        for (int j = 0; j < itemList.size(); j++) {
-            if (itemList.get(j).getEntityId().getId() == itemID.getId()){
-                return j;
-            }
-        }
-        return StaticData.ITEM_NOT_FOUND;
+    public Opvolgingsitem getOpvolgingsitemById(IDNumber itemId){
+        // Bepaalt het opvolgingsitem obv zijn ID
+        return itemList.get(getItemIndexById(itemId));
     }
 
     public int getFirstItemIndexByRubriek(IDNumber rubriekID){
@@ -274,58 +218,9 @@ public class EntitiesViewModel extends AndroidViewModel {
         }
         return StaticData.ITEM_NOT_FOUND;
     }
-/*
-    public Meter getMeterByNameForLocation(String inName, Location inLoc){
-        if (inLoc != null){
-            for (int j = 0; j < meterList.size(); j++) {
-                if ((meterList.get(j).getEntityName().equals(inName)) &&
-                        (meterList.get(j).getMeterLocationId().getId() == inLoc.getEntityId().getId())) {
-                    return meterList.get(j);
-                }
-            }
-        }
-        return null;
-    }
 
-    public List<ListItemHelper> getMeasurementsforMeter(Location inLoc, Meter inMeter){
-        // Eerst gaan we de metinglijst voor de opgegeven locatie, meter bepalen
-        List<Measurement> mList = new ArrayList<>();
-        if ((inLoc != null) && (inMeter != null)){
-            for (int j = 0; j < measurementList.size(); j++) {
-                if ((measurementList.get(j).getMeterLocationId().getId() == inLoc.getEntityId().getId() ) &&
-                        (measurementList.get(j).getMeterId().getId() == inMeter.getEntityId().getId())) {
-                    mList.add(measurementList.get(j));
-                }
-            }
-        }
-        // Display list bepalen voor geselecteerde measurements
-        List<ListItemHelper> mDisplayList = new ArrayList<>();
-        for (int i = 0; i < mList.size() ; i++) {
-            if (i == mList.size()-1){
-                // Voor de laatste meting kan je geen volgende meting doorgeven !!
-                mDisplayList.add(new ListItemHelper(
-                        mList.get(i).composeDisplayLine(mList.get(i)),
-                        "", mList.get(i).getEntityId()
-                ));
-            }else {
-                mDisplayList.add(new ListItemHelper(
-                        mList.get(i).composeDisplayLine(mList.get(i+1)),
-                        "", mList.get(i).getEntityId()
-                ));
-            }
-        }
-        return mDisplayList;
-    }
+    /** Logitems Methodes */
 
-    public int getMsrmntIndexById(IDNumber msrmntID){
-        for (int j = 0; j < measurementList.size(); j++) {
-            if (measurementList.get(j).getEntityId().getId() == msrmntID.getId()){
-                return j;
-            }
-        }
-        return StaticData.ITEM_NOT_FOUND;
-    }
-*/
     private List<Log> getLogsFromDataList(List<String> dataList){
         // Converteert een datalist met logs in een loglist
         List<Log> logs = new ArrayList<>();
@@ -363,17 +258,14 @@ public class EntitiesViewModel extends AndroidViewModel {
         return displayList;
     }
 
-    public Log getLogById(IDNumber logId){
-        return logList.get(getLogIndexById(logId));
+    public int getLogIndexById(IDNumber logID){
+        // Bepaalt de index vd log in de loglist obv zijn ID
+        return getIndexById(logList, logID);
     }
 
-    public int getLogIndexById(IDNumber logID){
-        for (int j = 0; j < logList.size(); j++) {
-            if (logList.get(j).getEntityId().getId() == logID.getId()){
-                return j;
-            }
-        }
-        return StaticData.ITEM_NOT_FOUND;
+    public Log getLogById(IDNumber logId){
+        // Bepaalt de log obv zijn ID
+        return logList.get(getLogIndexById(logId));
     }
 
     public int getFirstLogIndexByRubriek(IDNumber rubriekID){
@@ -394,15 +286,37 @@ public class EntitiesViewModel extends AndroidViewModel {
         return StaticData.ITEM_NOT_FOUND;
     }
 
+    /** Store Methods */
+
     public void storeRubrieken(){
         // Bewaart de rubrieklist
         // Eerst de rubrieklist alfabetisch sorteren
         sortRubriekList(rubriekList);
-        repository.storeData(rubriekFile, convertRubriekListinDataList(rubriekList));
+        repository.storeData(rubriekFile, convertEntityListinDataList(rubriekList));
     }
 
+    public void storeItems(){
+        // Bewaart de opvolgingsitems
+        // Eerst alfabetisch sorteren
+        if (itemList.size() > 1){
+            sortItemList(itemList);
+        }
+        repository.storeData(itemFile, convertEntityListinDataList(itemList));
+    }
+
+    public void storeLogs(){
+        // Bewaart de loglist
+        // logs omgekeerd chronologisch sorteren
+        if (logList.size() > 1){
+            sortLogs();
+        }
+        repository.storeData(logFile, convertEntityListinDataList(logList));
+    }
+
+    /** Sorteer Methods */
+
     private void sortRubriekList(List<Rubriek> rubList){
-        // Sorteert een locationlist op entityname alfabetisch
+        // Sorteert een rubrieklist op entityname alfabetisch
         Rubriek tempRubriek = new Rubriek();
         for (int i = rubList.size() ; i > 0; i--) {
             for (int j = 1; j < i ; j++) {
@@ -415,14 +329,40 @@ public class EntitiesViewModel extends AndroidViewModel {
         }
     }
 
-    private List<String> convertRubriekListinDataList(List<Rubriek> inRubList){
-        // Converteert een rubrieklist in een datalist voor bewaard te worden in een bestand
-        List<String> lineList = new ArrayList<>();
-        for (int i = 0; i < inRubList.size(); i++) {
-            lineList.add(inRubList.get(i).convertToFileLine());
+    private void sortItemList(List<Opvolgingsitem> inItemList){
+        // Sorteert een list op entityname alfabetisch
+        Opvolgingsitem tempItem = new Opvolgingsitem();
+        for (int i = inItemList.size() ; i > 0; i--) {
+            for (int j = 1; j < i ; j++) {
+                if (inItemList.get(j).getEntityName().compareToIgnoreCase(inItemList.get(j-1).getEntityName()) < 0){
+                    tempItem.setOpvolgingsitem(inItemList.get(j));
+                    inItemList.get(j).setOpvolgingsitem(inItemList.get(j-1));
+                    inItemList.get(j-1).setOpvolgingsitem(tempItem);
+                }
+            }
         }
-        return lineList;
     }
+
+    private void sortLogs(){
+        // Logs worden omgekeerd chronologisch gesorteerd
+        Log tempLog = new Log();
+        int currentDate;
+        int previousDate;
+
+        for (int i = logList.size() ; i > 0; i--) {
+            for (int j = 1; j < i ; j++) {
+                currentDate = logList.get(j).getLogDate().getIntDate();
+                previousDate = logList.get(j-1).getLogDate().getIntDate();
+                if (currentDate > previousDate){
+                    tempLog.setLog(logList.get(j));
+                    logList.get(j).setLog(logList.get(j-1));
+                    logList.get(j-1).setLog(tempLog);
+                }
+            }
+        }
+    }
+
+    /** Delete Methods */
 
     public void deleteRubriekByID(IDNumber inIDNumber){
         int indexToBeDeleted = getRubriekIndexById(inIDNumber);
@@ -453,36 +393,6 @@ public class EntitiesViewModel extends AndroidViewModel {
         }
     }
 
-    public void storeItems(){
-        // Bewaart de opvolgingsitems
-        // Eerst alfabetisch sorteren
-        sortItemList(itemList);
-        repository.storeData(itemFile, convertItemListinDataList(itemList));
-    }
-
-    private void sortItemList(List<Opvolgingsitem> inItemList){
-        // Sorteert een list op entityname alfabetisch
-        Opvolgingsitem tempItem = new Opvolgingsitem();
-        for (int i = inItemList.size() ; i > 0; i--) {
-            for (int j = 1; j < i ; j++) {
-                if (inItemList.get(j).getEntityName().compareToIgnoreCase(inItemList.get(j-1).getEntityName()) < 0){
-                    tempItem.setOpvolgingsitem(inItemList.get(j));
-                    inItemList.get(j).setOpvolgingsitem(inItemList.get(j-1));
-                    inItemList.get(j-1).setOpvolgingsitem(tempItem);
-                }
-            }
-        }
-    }
-
-    private List<String> convertItemListinDataList(List<Opvolgingsitem> inList){
-        // Converteert een itemlist in een datalist voor bewaard te worden in een bestand
-        List<String> lineList = new ArrayList<>();
-        for (int i = 0; i < inList.size(); i++) {
-            lineList.add(inList.get(i).convertToFileLine());
-        }
-        return lineList;
-    }
-
     public void deleteOpvolgingsitemByID(IDNumber inIDNumber){
         int indexToBeDeleted = getItemIndexById(inIDNumber);
         if (indexToBeDeleted != StaticData.ITEM_NOT_FOUND){
@@ -503,43 +413,6 @@ public class EntitiesViewModel extends AndroidViewModel {
         }
     }
 
-    public void storeLogs(){
-        // Bewaart de loglist
-        // logs omgekeerd chronologisch sorteren
-        if (logList.size() > 1){
-            sortLogs();
-        }
-        repository.storeData(logFile, convertLogListinDataList(logList));
-    }
-
-    private void sortLogs(){
-        // Logs worden omgekeerd chronologisch gesorteerd
-        Log tempLog = new Log();
-        int currentDate;
-        int previousDate;
-
-        for (int i = logList.size() ; i > 0; i--) {
-            for (int j = 1; j < i ; j++) {
-                currentDate = logList.get(j).getLogDate().getIntDate();
-                previousDate = logList.get(j-1).getLogDate().getIntDate();
-                if (currentDate > previousDate){
-                    tempLog.setLog(logList.get(j));
-                    logList.get(j).setLog(logList.get(j-1));
-                    logList.get(j-1).setLog(tempLog);
-                }
-            }
-        }
-    }
-
-    private List<String> convertLogListinDataList(List<Log> inList){
-        // Converteert een loglist in een datalist voor bewaard te worden in een bestand
-        List<String> lineList = new ArrayList<>();
-        for (int i = 0; i < inList.size(); i++) {
-            lineList.add(inList.get(i).convertToFileLine());
-        }
-        return lineList;
-    }
-
     public void deleteLogByID(IDNumber inIDNumber){
         int indexToBeDeleted = getLogIndexById(inIDNumber);
         if (indexToBeDeleted != StaticData.ITEM_NOT_FOUND){
@@ -550,6 +423,7 @@ public class EntitiesViewModel extends AndroidViewModel {
         }
     }
 
+    /** Getters & Setters */
     public String getBasedir() {
         return basedir;
     }
@@ -569,4 +443,29 @@ public class EntitiesViewModel extends AndroidViewModel {
     public List<Log> getLogList() {
         return logList;
     }
+
+    /** To be deleted */
+
+    /*
+    private List<String> convertItemListinDataList(List<Opvolgingsitem> inList){
+        // Converteert een itemlist in een datalist voor bewaard te worden in een bestand
+        List<String> lineList = new ArrayList<>();
+        for (int i = 0; i < inList.size(); i++) {
+            lineList.add(inList.get(i).convertToFileLine());
+        }
+        return lineList;
+    }
+*/
+
+/*
+    private List<String> convertLogListinDataList(List<Log> inList){
+        // Converteert een loglist in een datalist voor bewaard te worden in een bestand
+        List<String> lineList = new ArrayList<>();
+        for (int i = 0; i < inList.size(); i++) {
+            lineList.add(inList.get(i).convertToFileLine());
+        }
+        return lineList;
+    }
+*/
+
 }
