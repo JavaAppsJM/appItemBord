@@ -10,8 +10,9 @@
         android:layout_width="363dp"
         android:layout_height="30dp"
         android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="entitiy item"
-        android:layout_marginLeft="10dp" />
+        tools:text="entitiy item" />
 
 </android.widget.LinearLayout>

@@ -78,7 +78,7 @@ public class ManageRubriek extends AppCompatActivity {
 
         // Recyclerview vullen
         // setTitle("Beheer Rubrieken");
-        itemList.addAll(viewModel.getRubriekItemList());
+        itemList.addAll(viewModel.getRubriekItemsInStyle());
 
         // om te kunnen swipen in de recyclerview ; swippen == deleten
         ItemTouchHelper helper = new ItemTouchHelper(

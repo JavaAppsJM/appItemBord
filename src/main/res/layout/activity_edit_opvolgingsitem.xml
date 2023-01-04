@@ -98,28 +98,29 @@
 
     <EditText
         android:id="@+id/editItemFreqa"
-        android:layout_width="56dp"
-        android:layout_height="38dp"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="Frequentie"
         android:inputType="number"
         android:textSize="14sp"
+        app:flow_horizontalAlign="center"
         app:layout_constraintBaseline_toBaselineOf="@+id/labelItemFreqa"
         app:layout_constraintStart_toEndOf="@+id/labelItemFreqa" />
 
     <EditText
         android:id="@+id/editItemLatestDate"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="Datum"
         android:inputType="date"
         android:textSize="14sp"
+        app:flow_horizontalAlign="center"
         app:layout_constraintBaseline_toBaselineOf="@+id/labelItemLatestDate"
         app:layout_constraintStart_toEndOf="@+id/labelItemLatestDate" />
 

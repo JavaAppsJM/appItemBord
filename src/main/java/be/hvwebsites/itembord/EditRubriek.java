@@ -339,12 +339,11 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                 // Gegevens overnemen vh scherm
                 if (action.equals(StaticData.ACTION_UPDATE)) { // Update
                     viewModel.getRubriekById(new IDNumber(iDToUpdate)).setEntityName(String.valueOf(nameView.getText()));
+                    viewModel.getRubriekById(new IDNumber(iDToUpdate)).setParentId(parentRubriekId);
                 } else { // New
                     Rubriek newRubriek = new Rubriek(viewModel.getBasedir(), false);
                     newRubriek.setEntityName(String.valueOf(nameView.getText()));
-                    if (parentRubriekId.getId() != StaticData.IDNUMBER_NOT_FOUND.getId()){
-                        newRubriek.setParentId(parentRubriekId);
-                    }
+                    newRubriek.setParentId(parentRubriekId);
                     viewModel.getRubriekList().add(newRubriek);
                 }
                 viewModel.storeRubrieken();
@@ -358,28 +357,22 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getItemAtPosition(position) != null){
-            Toast.makeText(EditRubriek.this,
-                    "Hoofdrubriek gekozen ...",
-                    Toast.LENGTH_SHORT).show();
             // Bepalen wat geselecteerd is
             ListItemHelper selecRubriek = (ListItemHelper) parent.getItemAtPosition(position);
             parentRubriekId = selecRubriek.getItemID();
-
-            // Bepaal rubriek in kwestie in de rubrieklist en vul parent id in
-            viewModel.getRubriekById(new IDNumber(iDToUpdate))
-                    .setParentId(parentRubriekId);
-            // rubriek met gewijzigde hoofdrubriek bewaren
-            viewModel.storeRubrieken();
-
-            // spinner refreshen hoeft niet
-//            parent.setAdapter(shopFilterAdapter);
-//            parent.setSelection(viewModel.getShopIndexById(shopFilter.getEntityId()));
+            if (parentRubriekId.getId() != StaticData.ITEM_NOT_FOUND){
+                Toast.makeText(EditRubriek.this,
+                        "Hoofdrubriek gekozen ...",
+                        Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(EditRubriek.this,
+                        "Geen hoofdrubriek gekozen ...",
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
-
-
 }

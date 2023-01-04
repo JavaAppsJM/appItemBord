@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 // Creer statusborditem en steek in statusbordlist
                 statusbordList.add(new ListItemStatusbordHelper(item1,
                         item2,
-                        "",
+                        opvolgingsitem.getDisplayStyle(),
                         opvolgingsitem.getEntityId()));
             }
         }

@@ -25,6 +25,15 @@ public class SpecificData {
 
     public static final String DISPLAY_SMALL = "display small";
     public static final String DISPLAY_LARGE = "display large";
+    public static final String DISPLAY_OVERDUE = "display overdue";
+    public static final String DISPLAY_DUE = "display due";
+    public static final String DISPLAY_FUTURE = "display future";
+
+    public static final String STYLE_BOLD = "style bold";
+    public static final String STYLE_RED = "style red";
+    public static final String STYLE_ORANGE = "style orange";
+    public static final String STYLE_GREEN = "style green";
+    public static final String STYLE_NORMAL = "style normal";
 
     public static final String NO_PARENT_RUBRIEK = "Geen hoofdrubriek";
 

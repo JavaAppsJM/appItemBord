@@ -147,6 +147,23 @@ public class EntitiesViewModel extends AndroidViewModel {
         return getItemsFromList(rubriekList, null);
     }
 
+    public List<ListItemHelper> getRubriekItemsInStyle(){
+        // bepaalt een lijst met ListItemHelpers obv rubrieklist geeft de hoofdrubrieken style BOLD
+        List<ListItemHelper> nameList = new ArrayList<>();
+        for (int i = 0; i < rubriekList.size(); i++) {
+            if (rubriekList.get(i).getParentId().getId() == StaticData.ITEM_NOT_FOUND){
+                nameList.add(new ListItemHelper(rubriekList.get(i).getEntityName(),
+                        SpecificData.STYLE_BOLD,
+                        rubriekList.get(i).getEntityId()));
+            }else {
+                nameList.add(new ListItemHelper(rubriekList.get(i).getEntityName(),
+                        "",
+                        rubriekList.get(i).getEntityId()));
+            }
+        }
+        return nameList;
+    }
+
     public List<ListItemHelper> getRubriekListAndNeglectItem(Rubriek inRubriek){
         return getItemsFromList(rubriekList, inRubriek);
     }

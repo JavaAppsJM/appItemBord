@@ -1,5 +1,7 @@
 package be.hvwebsites.itembord.entities;
 
+import java.util.Calendar;
+
 import be.hvwebsites.itembord.constants.FrequentieDateUnit;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
@@ -12,6 +14,7 @@ public class Opvolgingsitem extends SuperItem{
     private DateString latestDate;
     private long eventId;
     public static final String ENTITY_LATEST_ID = "opvolgingsitemlatestid";
+    public static final long ONE_WEEK_IN_MILLISEC = 7 * 24 * 60 * 60 * 1000;
     private IDNumber rubriekId;
 
     public Opvolgingsitem() {
@@ -78,6 +81,59 @@ public class Opvolgingsitem extends SuperItem{
                 frequentieUnit.getLetter() +
                 "): " +
                 latestDate.getFormatDate();
+    }
+
+    public String getDisplayStyle(){
+        if (latestDateIsEmpty()){
+            return SpecificData.STYLE_NORMAL;
+        }else if(isOverDue(calculateNextDate())){
+            return SpecificData.STYLE_RED;
+        }else if (isDue(calculateNextDate())){
+            return SpecificData.STYLE_ORANGE;
+        }else {
+            return SpecificData.STYLE_GREEN;
+        }
+    }
+
+    private boolean latestDateIsEmpty() {
+        // Bepaalt of de latestdate empty is
+        if (latestDate.getDateString().equals(DateString.EMPTY_DATESTRING)){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    private boolean isOverDue(DateString inDateString) {
+        // Today
+        Calendar calendarDateToday = Calendar.getInstance();
+        long todayInMilliSec = calendarDateToday.getTimeInMillis();
+
+        // next Date
+        long nextDateInMilliSec = inDateString.getDateInMillis();
+
+        if (todayInMilliSec > nextDateInMilliSec) {
+            // Overdue
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isDue(DateString inDateString) {
+        // Today
+        Calendar calendarDateToday = Calendar.getInstance();
+        long todayInMilliSec = calendarDateToday.getTimeInMillis();
+
+        // next Date
+        long nextDateInMilliSec = inDateString.getDateInMillis();
+
+        if (todayInMilliSec >= nextDateInMilliSec - ONE_WEEK_IN_MILLISEC) {
+            // Due
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public long getEventId() {

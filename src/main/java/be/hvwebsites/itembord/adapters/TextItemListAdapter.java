@@ -2,6 +2,7 @@ package be.hvwebsites.itembord.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +108,19 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
         if (itemList != null) {
             String currentLine = itemList.get(position).getItemtext();
             holder.textItemView.setText(currentLine);
+
+            // Onderscheid maken in style
+            holder.textItemView.setTypeface(null, Typeface.NORMAL);
+            switch (itemList.get(position).getItemStyle()){
+                case SpecificData.STYLE_BOLD:
+                    holder.textItemView.setTypeface(null, Typeface.BOLD);
+                    //holder.textItemView.setTextSize(16);
+                    break;
+                default:
+                    holder.textItemView.setTypeface(null, Typeface.NORMAL);
+            }
+
+
         } else {
             holder.textItemView.setText("No data !");
         }

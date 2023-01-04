@@ -2,18 +2,21 @@ package be.hvwebsites.itembord.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import be.hvwebsites.itembord.EditOpvolgingsitem;
 import be.hvwebsites.itembord.R;
+import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.helpers.ListItemStatusbordHelper;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
@@ -61,13 +64,6 @@ public class StatusbordItemListAdapter extends RecyclerView.Adapter<StatusbordIt
     public ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = inflater.inflate(R.layout.list_statusbord_item, parent, false);
 
-/*
-        if (entityType.equals(SpecificData.ENTITY_TYPE_3)){
-            itemView = inflater.inflate(R.layout.list_measurement_item, parent, false);
-        }else {
-            itemView = inflater.inflate(R.layout.list_manage_entities_item, parent, false);
-        }
-*/
         return new ListViewHolder(itemView);
     }
 
@@ -77,6 +73,27 @@ public class StatusbordItemListAdapter extends RecyclerView.Adapter<StatusbordIt
             String currentLine = itemList.get(position).getItemTextLine1();
             holder.textItemViewLine1.setText(itemList.get(position).getItemTextLine1());
             holder.textItemViewLine2.setText(itemList.get(position).getItemTextLine2());
+
+            // Bepaal style
+            holder.textItemViewLine1.setTextColor(ContextCompat.getColor(mContext,
+                    R.color.black));
+            switch (itemList.get(position).getItemStyle()){
+                case SpecificData.STYLE_RED:
+                    holder.textItemViewLine1.setTextColor(ContextCompat.getColor(mContext,
+                            R.color.red));
+                    break;
+                case SpecificData.STYLE_ORANGE:
+                    holder.textItemViewLine1.setTextColor(ContextCompat.getColor(mContext,
+                            R.color.orange));
+                    break;
+                case SpecificData.STYLE_GREEN:
+                    holder.textItemViewLine1.setTextColor(ContextCompat.getColor(mContext,
+                            R.color.green));
+                    break;
+                default:
+            }
+
+
         }else {
             holder.textItemViewLine1.setText("No data !");
         }
