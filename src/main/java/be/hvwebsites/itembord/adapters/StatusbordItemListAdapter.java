@@ -2,6 +2,7 @@ package be.hvwebsites.itembord.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,6 +70,7 @@ public class StatusbordItemListAdapter extends RecyclerView.Adapter<StatusbordIt
 
     @Override
     public void onBindViewHolder(@NonNull ListViewHolder holder, int position) {
+        Resources colores = holder.textItemViewLine1.getResources();
         if (itemList != null){
             String currentLine = itemList.get(position).getItemTextLine1();
             holder.textItemViewLine1.setText(itemList.get(position).getItemTextLine1());
@@ -87,8 +89,7 @@ public class StatusbordItemListAdapter extends RecyclerView.Adapter<StatusbordIt
                             R.color.orange));
                     break;
                 case SpecificData.STYLE_GREEN:
-                    holder.textItemViewLine1.setTextColor(ContextCompat.getColor(mContext,
-                            R.color.green));
+                    holder.textItemViewLine1.setTextColor(colores.getColor(R.color.green, null));
                     break;
                 default:
             }
