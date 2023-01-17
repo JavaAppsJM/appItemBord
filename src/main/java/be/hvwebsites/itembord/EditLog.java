@@ -167,10 +167,10 @@ public class EditLog extends AppCompatActivity implements DatePickerInterface {
 
                 // Teruggaan nr EditRubriek of EditOpvolgingsitem
                 Intent replyIntent = null;
-                if (callingActivity.equals(SpecificData.ENTITY_TYPE_RUBRIEK)){
+                if (callingActivity.equals(SpecificData.ACTIVITY_EDIT_RUBRIEK)){
                     replyIntent = new Intent(EditLog.this, EditRubriek.class);
                     replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekLogitem.getEntityId().getId());
-                }else if (callingActivity.equals(SpecificData.ENTITY_TYPE_OPVOLGINGSITEM)){
+                }else if (callingActivity.equals(SpecificData.ACTIVITY_EDIT_OPVITEM)){
                     replyIntent = new Intent(EditLog.this, EditOpvolgingsitem.class);
                     replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, opvolgingsitemLogitem.getEntityId().getId());
                 }else {// TODO:Als je van logboek komt

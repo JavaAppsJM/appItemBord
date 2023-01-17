@@ -109,6 +109,19 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
             String currentLine = itemList.get(position).getItemtext();
             holder.textItemView.setText(currentLine);
 
+            // Onderscheid maken in callingactivity
+            switch (callingActivity){
+                case SpecificData.ACTIVITY_MANAGE_RUBRIEK:
+                    break;
+                case SpecificData.ACTIVITY_EDIT_RUBRIEK:
+                    holder.textItemView.setTextSize(14);
+                    break;
+                case SpecificData.ACTIVITY_EDIT_OPVITEM:
+                    holder.textItemView.setTextSize(14);
+                    break;
+                default:
+            }
+
             // Onderscheid maken in style
             holder.textItemView.setTypeface(null, Typeface.NORMAL);
             switch (itemList.get(position).getItemStyle()){

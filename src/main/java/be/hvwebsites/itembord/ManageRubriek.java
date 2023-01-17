@@ -63,6 +63,7 @@ public class ManageRubriek extends AppCompatActivity {
         // String baseDir = getBaseContext().getFilesDir().getAbsolutePath(); // internal files
         // Initialize viewmodel mt basis directory (data wordt opgehaald in viewmodel)
         List<ReturnInfo> viewModelRetInfo = viewModel.initializeViewModel(baseDir);
+        // Als er errors of opmerkingen zijn, worden ze hier getoond
         for (int i = 0; i < viewModelRetInfo.size(); i++) {
             Toast.makeText(ManageRubriek.this,
                     viewModelRetInfo.get(i).getReturnMessage(),
@@ -77,7 +78,6 @@ public class ManageRubriek extends AppCompatActivity {
         itemList.clear();
 
         // Recyclerview vullen
-        // setTitle("Beheer Rubrieken");
         itemList.addAll(viewModel.getRubriekItemsInStyle());
 
         // om te kunnen swipen in de recyclerview ; swippen == deleten
@@ -105,11 +105,13 @@ public class ManageRubriek extends AppCompatActivity {
                         itemList.addAll(viewModel.getRubriekItemList());
                         // Refresh recyclerview
                         adapter.setEntityType(SpecificData.ENTITY_TYPE_RUBRIEK);
+                        adapter.setCallingActivity(SpecificData.ACTIVITY_MANAGE_RUBRIEK);
                         adapter.setItemList(itemList);
                     }
                 });
         helper.attachToRecyclerView(recyclerView);
         adapter.setEntityType(SpecificData.ENTITY_TYPE_RUBRIEK);
+        adapter.setCallingActivity(SpecificData.ACTIVITY_MANAGE_RUBRIEK);
         adapter.setItemList(itemList);
     }
 }

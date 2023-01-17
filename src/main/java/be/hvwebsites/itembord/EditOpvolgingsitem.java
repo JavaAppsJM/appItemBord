@@ -220,13 +220,13 @@ public class EditOpvolgingsitem extends AppCompatActivity
                                 itemList.addAll(viewModel.getLogItemListByOItemID(opvolgingsitemToUpdate.getEntityId()));
                                 // Refresh recyclerview
                                 adapter.setEntityType(SpecificData.ENTITY_TYPE_LOG);
-                                adapter.setCallingActivity(SpecificData.ENTITY_TYPE_OPVOLGINGSITEM);
+                                adapter.setCallingActivity(SpecificData.ACTIVITY_EDIT_OPVITEM);
                                 adapter.setItemList(itemList);
                             }
                         });
                 helper.attachToRecyclerView(recyclerView);
                 adapter.setEntityType(SpecificData.ENTITY_TYPE_LOG);
-                adapter.setCallingActivity(SpecificData.ENTITY_TYPE_OPVOLGINGSITEM);
+                adapter.setCallingActivity(SpecificData.ACTIVITY_EDIT_OPVITEM);
                 adapter.setItemList(itemList);
 
                 // FloatingActionButton om een logitem toe te voegen
@@ -237,7 +237,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
                         // vul in met editlogitem activity
                         Intent manIntent = new Intent(EditOpvolgingsitem.this, EditLog.class);
                         manIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_NEW);
-                        manIntent.putExtra(StaticData.EXTRA_INTENT_KEY_RETURN, SpecificData.ENTITY_TYPE_OPVOLGINGSITEM);
+                        manIntent.putExtra(StaticData.EXTRA_INTENT_KEY_RETURN, SpecificData.ACTIVITY_EDIT_OPVITEM);
                         manIntent.putExtra(SpecificData.ID_RUBRIEK, rubriekOpvolgingsitem.getEntityId().getId());
                         manIntent.putExtra(SpecificData.ID_OPVOLGINGSITEM, opvolgingsitemToUpdate.getEntityId().getId());
                         startActivity(manIntent);

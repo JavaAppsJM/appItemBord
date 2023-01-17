@@ -23,6 +23,12 @@ public class SpecificData {
     public static final String ID_OPVOLGINGSITEM = "opvolgingsitem ID";
     public static final String ID_LOG = "log ID";
 
+    // Calling Activities
+    public static final String ACTIVITY_MANAGE_RUBRIEK = "Manage Rubriek";
+    public static final String ACTIVITY_EDIT_RUBRIEK = "Edit Rubriek";
+    public static final String ACTIVITY_EDIT_OPVITEM = "Edit Opvolgingsitem";
+    public static final String ACTIVITY_EDIT_LOG = "Edit Log";
+
     public static final String DISPLAY_SMALL = "display small";
     public static final String DISPLAY_LARGE = "display large";
     public static final String DISPLAY_OVERDUE = "display overdue";

@@ -180,7 +180,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                                 }
                                 // Refresh recyclerview
                                 adapter.setEntityType(listEntityType);
-                                adapter.setCallingActivity(SpecificData.ENTITY_TYPE_RUBRIEK);
+                                adapter.setCallingActivity(SpecificData.ACTIVITY_EDIT_RUBRIEK);
                                 adapter.setItemList(itemList);
                             }
                         }
@@ -217,13 +217,14 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                             itemList.addAll(viewModel.getRubriekListByHoofdrubriekID(rubriekToUpdate.getEntityId()));
                             listEntityType = SpecificData.ENTITY_TYPE_RUBRIEK;
                             adapter.setEntityType(SpecificData.ENTITY_TYPE_RUBRIEK);
-                            adapter.setCallingActivity(SpecificData.ENTITY_TYPE_RUBRIEK);
+                            adapter.setCallingActivity(SpecificData.ACTIVITY_EDIT_RUBRIEK);
                             adapter.setItemList(itemList);
                         }
                     });
                     // Vullen recyclerlist mt rubrieken
                     listEntityType = SpecificData.ENTITY_TYPE_RUBRIEK;
                     adapter.setEntityType(SpecificData.ENTITY_TYPE_RUBRIEK);
+                    adapter.setCallingActivity(getPackageName());
                     adapter.setItemList(itemList);
                 }catch (NullPointerException ex){
                     // Er zijn geen subrubrieken
@@ -237,7 +238,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                     itemList.addAll(viewModel.getOpvolgingsItemItemListByRubriekID(rubriekToUpdate.getEntityId()));
                     listEntityType = SpecificData.ENTITY_TYPE_OPVOLGINGSITEM;
                     adapter.setEntityType(SpecificData.ENTITY_TYPE_OPVOLGINGSITEM);
-                    adapter.setCallingActivity(SpecificData.ENTITY_TYPE_RUBRIEK);
+                    adapter.setCallingActivity(SpecificData.ACTIVITY_EDIT_RUBRIEK);
                     adapter.setItemList(itemList);
                 }
 
@@ -261,7 +262,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                         itemList.addAll(viewModel.getOpvolgingsItemItemListByRubriekID(rubriekToUpdate.getEntityId()));
                         listEntityType = SpecificData.ENTITY_TYPE_OPVOLGINGSITEM;
                         adapter.setEntityType(SpecificData.ENTITY_TYPE_OPVOLGINGSITEM);
-                        adapter.setCallingActivity(SpecificData.ENTITY_TYPE_RUBRIEK);
+                        adapter.setCallingActivity(SpecificData.ACTIVITY_EDIT_RUBRIEK);
                         adapter.setItemList(itemList);
                     }
                 });
@@ -290,7 +291,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                         itemList.addAll(viewModel.getLogItemListByRubriekID(rubriekToUpdate.getEntityId()));
                         listEntityType = SpecificData.ENTITY_TYPE_LOG;
                         adapter.setEntityType(SpecificData.ENTITY_TYPE_LOG);
-                        adapter.setCallingActivity(SpecificData.ENTITY_TYPE_RUBRIEK);
+                        adapter.setCallingActivity(SpecificData.ACTIVITY_EDIT_RUBRIEK);
                         adapter.setItemList(itemList);
                     }
                 });
@@ -312,7 +313,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                         }
                         intent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_NEW);
                         intent.putExtra(SpecificData.ID_RUBRIEK, rubriekToUpdate.getEntityId().getId());
-                        intent.putExtra(StaticData.EXTRA_INTENT_KEY_RETURN, SpecificData.ENTITY_TYPE_RUBRIEK);
+                        intent.putExtra(StaticData.EXTRA_INTENT_KEY_RETURN, SpecificData.ACTIVITY_EDIT_RUBRIEK);
                         startActivity(intent);
                     }
                 });
@@ -323,7 +324,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
         // selection listener activeren, moet gebueren nadat de adapter gekoppeld is aan de spinner !!
         hoofdRubriekSpinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
 /*
-        // vr de nieuwe shopfilteradapter
+        // als er niets te tonen is in de spinner
         hoofdRubriekSpinner.setAdapter(new NothingSelectedSpinnerAdapter(
                 rubriekItemAdapter, R.layout.contact_spinner_row_nothing_selected, this
         ));
