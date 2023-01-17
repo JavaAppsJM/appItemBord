@@ -18,6 +18,10 @@
         android:id="@+id/menu_logboek"
         android:title="Logboek" />
 
+    <item
+        android:id="@+id/menu_exit"
+        android:title="Exit app" />
+
     <!--
         <item
             android:id="@+id/menu_beheer_parameters"

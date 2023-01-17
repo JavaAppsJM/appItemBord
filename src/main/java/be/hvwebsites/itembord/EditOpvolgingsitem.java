@@ -438,8 +438,9 @@ public class EditOpvolgingsitem extends AppCompatActivity
                 cr);
         // Bepaal volgende opvolgingsdatum
         long eventDateMs = opvolgingsitemPastProcess.calculateNextDate().getCalendarDate().getTimeInMillis();
-        // Event om 10h in de vm zetten 10*3600*1000 bijtellen
-        eventDateMs = eventDateMs + (10*3600*1000);
+        // Event om 10h in de vm zetten 10*3600*1000 bijtellen, lukt niet want volgende
+        // opvolgingsdatum eventDateMs is bepaald obv uur vh moment en niet 0h00
+        //eventDateMs = eventDateMs + (10*3600*1000);
         // Maak een event in de agenda
         final long eventId = calenderService.createEventInMyCalendar(
                 cr,

@@ -35,9 +35,9 @@ public class FlexDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        // TODO: rekening houden met subject om positive en negative click op te vangen
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        // Rekening houden met subject om positive en negative click op te vangen
         if (subjectDialog.equals("Log")){
             builder.setMessage(msgDialog)
                     .setTitle(titleDialog)

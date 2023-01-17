@@ -117,7 +117,8 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        // TODO: Menu items definieren
+
+        /** Menu items definieren */
         Intent mainIntent;
         switch (item.getItemId()) {
             case R.id.menu_beheer_rubrieken:
@@ -125,6 +126,9 @@ public class MainActivity extends AppCompatActivity {
                 mainIntent = new Intent(MainActivity.this, ManageRubriek.class);
                 startActivity(mainIntent);
                 return true;
+            case R.id.menu_exit:
+                // Exit app
+                finish();
             default:
                 // Do nothing
         }
