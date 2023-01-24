@@ -12,10 +12,11 @@ public class Opvolgingsitem extends SuperItem{
     private int frequentieNbr;
     private FrequentieDateUnit frequentieUnit;
     private DateString latestDate;
+    private long nextDate;
     private long eventId;
+    private IDNumber rubriekId;
     public static final String ENTITY_LATEST_ID = "opvolgingsitemlatestid";
     public static final long ONE_WEEK_IN_MILLISEC = 7 * 24 * 60 * 60 * 1000;
-    private IDNumber rubriekId;
 
     public Opvolgingsitem() {
         super();
@@ -26,6 +27,7 @@ public class Opvolgingsitem extends SuperItem{
         setEntityName("");
         entityNamePast = "";
         latestDate = new DateString(DateString.EMPTY_DATESTRING);
+        nextDate = calculateNextDate().getDateInMillis();
     }
 
     public Opvolgingsitem(String fileLine){
@@ -97,11 +99,7 @@ public class Opvolgingsitem extends SuperItem{
 
     private boolean latestDateIsEmpty() {
         // Bepaalt of de latestdate empty is
-        if (latestDate.getDateString().equals(DateString.EMPTY_DATESTRING)){
-            return true;
-        }else {
-            return false;
-        }
+        return latestDate.getDateString().equals(DateString.EMPTY_DATESTRING);
     }
 
     private boolean isOverDue(DateString inDateString) {
@@ -112,12 +110,8 @@ public class Opvolgingsitem extends SuperItem{
         // next Date
         long nextDateInMilliSec = inDateString.getDateInMillis();
 
-        if (todayInMilliSec > nextDateInMilliSec) {
-            // Overdue
-            return true;
-        } else {
-            return false;
-        }
+        // Overdue
+        return todayInMilliSec > nextDateInMilliSec;
     }
 
     private boolean isDue(DateString inDateString) {
@@ -128,12 +122,8 @@ public class Opvolgingsitem extends SuperItem{
         // next Date
         long nextDateInMilliSec = inDateString.getDateInMillis();
 
-        if (todayInMilliSec >= nextDateInMilliSec - ONE_WEEK_IN_MILLISEC) {
-            // Due
-            return true;
-        } else {
-            return false;
-        }
+        // Due
+        return todayInMilliSec >= nextDateInMilliSec - ONE_WEEK_IN_MILLISEC;
     }
 
     public long getEventId() {
@@ -200,6 +190,11 @@ public class Opvolgingsitem extends SuperItem{
 
     public void setLatestDate(DateString latestDate) {
         this.latestDate = latestDate;
+        this.nextDate = calculateNextDate().getDateInMillis();
+    }
+
+    public long getNextDate() {
+        return nextDate;
     }
 
     public void convertFromFileLine(String fileLine) {
@@ -235,7 +230,7 @@ public class Opvolgingsitem extends SuperItem{
     }
 
     public String convertToFileLine() {
-        String fileLine = "<key><" + getEntityId().getIdString()
+        return "<key><" + getEntityId().getIdString()
                 + "><item><" + getEntityName()
                 + "><past><" + getEntityNamePast()
                 + "><freqa><" + getFrequentieNbr()
@@ -243,7 +238,6 @@ public class Opvolgingsitem extends SuperItem{
                 + "><latest><" + getLatestDate().getDateString()
                 + "><event><" + getEventId()
                 + "><rubriek><" + getRubriekId().getIdString() + ">";
-        return fileLine;
     }
 
 }

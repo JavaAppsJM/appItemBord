@@ -37,8 +37,6 @@ public class EntitiesViewModel extends AndroidViewModel {
     public static final String RUBRIEK_FILE = "rubriek.txt";
     public static final String ITEM_FILE = "item.txt";
     public static final String LOG_FILE = "log.txt";
-    // Spinner selecties om te onthouden
-    private String spinnerSelection = "";
 
 
     public EntitiesViewModel(@NonNull Application application) {
@@ -347,11 +345,11 @@ public class EntitiesViewModel extends AndroidViewModel {
     }
 
     private void sortItemList(List<Opvolgingsitem> inItemList){
-        // Sorteert een list op entityname alfabetisch
+        // Sorteert een opvolgingsitemlist op nextDate chronologisch
         Opvolgingsitem tempItem = new Opvolgingsitem();
         for (int i = inItemList.size() ; i > 0; i--) {
             for (int j = 1; j < i ; j++) {
-                if (inItemList.get(j).getEntityName().compareToIgnoreCase(inItemList.get(j-1).getEntityName()) < 0){
+                if (inItemList.get(j).getNextDate() < inItemList.get(j-1).getNextDate()){
                     tempItem.setOpvolgingsitem(inItemList.get(j));
                     inItemList.get(j).setOpvolgingsitem(inItemList.get(j-1));
                     inItemList.get(j-1).setOpvolgingsitem(tempItem);
@@ -446,7 +444,7 @@ public class EntitiesViewModel extends AndroidViewModel {
     }
 
     public void setSpinnerSelection(String spinnerSelection) {
-        this.spinnerSelection = spinnerSelection;
+        // Spinner selecties om te onthouden
     }
 
     public List<Rubriek> getRubriekList() {
