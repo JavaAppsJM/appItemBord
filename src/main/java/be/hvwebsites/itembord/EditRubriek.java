@@ -127,7 +127,8 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                 // Enkel indien rubriek gekend is
                 // ParentId bepalen als die er is
                 // Spinner selectie invullen met parentrubriek
-                if (rubriekToUpdate.getParentId().getId() != StaticData.IDNUMBER_NOT_FOUND.getId()){
+                if ((rubriekToUpdate.getParentId().getId() != StaticData.IDNUMBER_NOT_FOUND.getId()) &&
+                (viewModel.getIndexItemHelperById(potentialRubrieken, rubriekToUpdate.getParentId()) != StaticData.ITEM_NOT_FOUND)){
                     // Er is een parentrubriek
                     parentRubriekId = rubriekToUpdate.getParentId();
                     //parentRubriekView.setText(viewModel.getRubriekById(parentRubriekId).getEntityName());

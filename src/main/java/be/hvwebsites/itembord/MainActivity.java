@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                         opvolgingsitem.getEntityName();
                 // Vul tweede lijn in
                 item2 = "Vervaldatum: " +
-                        opvolgingsitem.calculateNextDate().getFormatDate() +
+                        opvolgingsitem.getNextDateDS().getFormatDate() +
                         " Vorige: " +
                         opvolgingsitem.getLatestDate().getFormatDate();
                 // Creer statusborditem en steek in statusbordlist

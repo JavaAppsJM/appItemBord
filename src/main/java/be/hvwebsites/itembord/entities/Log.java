@@ -38,7 +38,7 @@ public class Log extends SuperItem{
     }
 
     public String getDisplayLog(){
-        return logDate.getFormatDate() + " " + logDescription;
+        return logDate.getFormatDate() + " " + logDescription.substring(0, 50);
     }
 
     public DateString getLogDate() {

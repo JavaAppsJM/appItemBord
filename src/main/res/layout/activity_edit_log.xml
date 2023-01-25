@@ -72,10 +72,9 @@
 
     <EditText
         android:id="@+id/editItemLogDate"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/labelDate"
@@ -104,7 +103,7 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/hintLogDescription"
-        android:inputType="textPersonName"
+        android:inputType="textLongMessage|textMultiLine"
         android:singleLine="false"
         android:textAlignment="viewStart"
         android:textSize="14sp"

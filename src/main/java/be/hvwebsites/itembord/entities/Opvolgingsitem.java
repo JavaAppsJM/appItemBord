@@ -197,6 +197,10 @@ public class Opvolgingsitem extends SuperItem{
         return nextDate;
     }
 
+    public DateString getNextDateDS(){
+        return new DateString(getNextDate());
+    }
+
     public void convertFromFileLine(String fileLine) {
         // Maakt een opvolgingsitem obv een fileline - format: <key><102><item><auto><freqa><6><freqe><m><latest><01012021><rubriek><2>
         // fileLine splitsen in argumenten
