@@ -38,7 +38,12 @@ public class Log extends SuperItem{
     }
 
     public String getDisplayLog(){
-        return logDate.getFormatDate() + " " + logDescription.substring(0, 50);
+        // Bepaal lengte logdescription
+        int lengthLD = logDescription.length();
+        if (lengthLD > 45){
+            lengthLD = 45;
+        }
+        return logDate.getFormatDate() + " " + logDescription.substring(0, lengthLD);
     }
 
     public DateString getLogDate() {

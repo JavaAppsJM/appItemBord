@@ -13,7 +13,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/instructionEdit"
+        android:text="@string/instruction_edit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,7 +24,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/labelRubriek"
+        android:text="@string/label_rubriek"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/instructionEditItem" />
 
@@ -176,7 +176,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="@string/labelBewaren"
+        android:text="@string/button_bewaren"
         app:layout_constraintBaseline_toBaselineOf="@+id/labelItemRubriek"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -186,8 +186,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/labelLogboek"
+        android:text="@string/head_logboek"
         android:textStyle="bold"
+        style="@style/Headings"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelItemLatestDate" />
 

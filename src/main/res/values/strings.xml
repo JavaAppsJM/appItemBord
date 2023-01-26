@@ -1,12 +1,16 @@
 <resources>
     <string name="app_name">Item Bord</string>
-    <string name="instructionEdit">Vul gegevens in of pas gegevens aan en druk op bewaren</string>
-    <string name="labelRubriek">Rubriek:</string>
-    <string name="labelBewaren">Bewaren</string>
-    <string name="labelOpvolgingsitem">Opvolgingsitem:</string>
-    <string name="labelLogboek">Logboek</string>
-    <string name="labelHoofdrubriek">Hoofdrubriek:</string>
-    <string name="labelDate">Datum:</string>
-    <string name="labelBeschrijving">Beschrijving</string>
-    <string name="hintLogDescription">Beschrijf het logitem...</string>
+    <string name="instruction_edit">Vul gegevens in of pas gegevens aan en druk op bewaren</string>
+    <string name="label_rubriek">Rubriek:</string>
+    <string name="button_bewaren">Bewaren</string>
+    <string name="label_opvolgingsitem">Opvolgingsitem:</string>
+    <string name="head_logboek">Logboek</string>
+    <string name="label_date">Datum:</string>
+    <string name="label_beschrijving">Beschrijving:</string>
+    <string name="hint_logDescription">Beschrijf het logitem...</string>
+    <string name="koppelteken">-</string>
+    <string name="hint_rubriek_naam">Rubriek naam</string>
+    <string name="head_subrubrieken">Subrubrieken</string>
+    <string name="head_opvolgingsitems">Opvolgingsitems</string>
+    <string name="label_hoofdrubriek">Hoofdrubriek:</string>
 </resources>

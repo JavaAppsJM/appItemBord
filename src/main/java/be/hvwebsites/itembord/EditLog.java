@@ -132,10 +132,6 @@ public class EditLog extends AppCompatActivity implements DatePickerInterface {
         rubriekNameV.setText(rubriekLogitem.getEntityName());
         if (opvolgingsitemLogitem.getEntityId() != StaticData.IDNUMBER_NOT_FOUND){
             opvolgingsitemNameV.setText(opvolgingsitemLogitem.getEntityName());
-        }else {
-            // Zet opvolgingsitemlabel invisible
-            opvolgingsitemNameV.setVisibility(View.INVISIBLE);
-            opvolgingsitemLabelV.setVisibility(View.INVISIBLE);
         }
 
         Button saveButton = findViewById(R.id.buttonSaveLog);

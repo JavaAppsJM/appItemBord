@@ -11,9 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/instructionEdit"
+        android:text="@string/instruction_edit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,9 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/labelRubriek"
+        android:text="@string/label_rubriek"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/instructionEditLog" />
 
@@ -33,7 +31,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:text=""
         app:layout_constraintBaseline_toBaselineOf="@+id/labelLogRubriek"
         app:layout_constraintStart_toEndOf="@+id/labelLogRubriek" />
@@ -43,9 +40,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/labelOpvolgingsitem"
+        android:text="@string/label_opvolgingsitem"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelLogRubriek" />
 
@@ -54,8 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:text=""
+        android:text="@string/koppelteken"
         app:layout_constraintBaseline_toBaselineOf="@+id/labelLogOpvolgingsitem"
         app:layout_constraintStart_toEndOf="@+id/labelLogOpvolgingsitem" />
 
@@ -64,9 +59,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/labelDate"
+        android:text="@string/label_date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelLogOpvolgingsitem" />
 
@@ -77,20 +71,21 @@
         android:layout_marginStart="16dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="@string/labelDate"
+        android:hint="@string/label_date"
         android:inputType="date"
+        android:minHeight="48dp"
         android:textSize="14sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/labelLogDate"
-        app:layout_constraintStart_toEndOf="@+id/labelLogDate" />
+        app:layout_constraintStart_toEndOf="@+id/labelLogDate"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
     <TextView
         android:id="@+id/labelLogDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/labelBeschrijving"
+        android:text="@string/label_beschrijving"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelLogDate" />
 
@@ -102,7 +97,7 @@
         android:layout_marginEnd="16dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="@string/hintLogDescription"
+        android:hint="@string/hint_logDescription"
         android:inputType="textLongMessage|textMultiLine"
         android:singleLine="false"
         android:textAlignment="viewStart"
@@ -117,7 +112,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/labelBewaren"
+        android:text="@string/button_bewaren"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editLogDescription" />
 
