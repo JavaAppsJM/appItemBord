@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import be.hvwebsites.itembord.entities.Opvolgingsitem;
 import be.hvwebsites.itembord.helpers.ListItemStatusbordHelper;
 import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
+import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
@@ -69,6 +71,17 @@ public class MainActivity extends AppCompatActivity {
                     SpecificData.NO_STATUSBORDITEMS_YET,
                     Toast.LENGTH_LONG).show();
         }
+
+        // TODO: als er lang geklikt is op een oitem, kan dat hier gecapteerd worden
+        // TODO: in de adapter long click voorzien om het oitem af te vinken
+        adapter.setOnItemClickListener(new StatusbordItemListAdapter.ClickListener() {
+            @Override
+            public void onItemClicked(IDNumber itemID, View v) {
+                // TODO: Opvolgingsitem itemID moet afgevinkt worden
+            }
+        });
+
+
     }
 
     private List<ListItemStatusbordHelper> buildStatusbordList(){

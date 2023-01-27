@@ -272,6 +272,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
                     }else if (frequencyYearV.isChecked()){
                         opvolgingsitemToUpdate.setFrequentieUnit(FrequentieDateUnit.YEARS);
                     }
+                    // TODO: vragen aan opvolgingsitem of de latest date veranderd is
                     boolean latestDateChanged = false;
                     String newLatestDate = String.valueOf(opvolgingsitemLatestDateV.getText());
                     DateString newLatestDatestring = new DateString(String.valueOf(opvolgingsitemLatestDateV.getText()));

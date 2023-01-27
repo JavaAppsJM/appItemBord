@@ -26,10 +26,22 @@ public class StatusbordItemListAdapter extends RecyclerView.Adapter<StatusbordIt
     private final LayoutInflater inflater;
     private Context mContext;
     private List<ListItemStatusbordHelper> itemList;
+    private ClickListener clickListener;
 
     public StatusbordItemListAdapter(Context context) {
         this.mContext = context;
         inflater = LayoutInflater.from(context);
+    }
+
+    public void setOnItemClickListener(ClickListener clickListener){
+        // Methode om de clicklistener property vd adapter in te vullen met het
+        // bewaren vd tobuy
+        this.clickListener = clickListener;
+    }
+
+    public interface ClickListener{
+        // Interface om een clicklistener door te geven nr de activity
+        void onItemClicked(IDNumber itemID, View v);
     }
 
     class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -94,7 +106,20 @@ public class StatusbordItemListAdapter extends RecyclerView.Adapter<StatusbordIt
                 default:
             }
 
+            // TODO: long click voorzien
+            holder.textItemViewLine1.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    // er is lang geklikt, het corresponderend oitem moet automatisch afgevinkt worden
+                    int positionToUpdate = holder.getAdapterPosition();
+                    // Bepaal de ID vh currentitem
+                    IDNumber itemIDToUpdate = itemList.get(positionToUpdate).getItemID();
 
+                    // clicklistener mt properties doorgeven nr activity
+                    clickListener.onItemClicked(itemIDToUpdate, view);
+                    return true;
+                }
+            });
         }else {
             holder.textItemViewLine1.setText("No data !");
         }
