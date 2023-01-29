@@ -55,9 +55,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
     private RadioButton frequencyMonthV;
     private RadioButton frequencyYearV;
     private EditText opvolgingsitemLatestDateV;
-    private Log newLog;
     private CalenderService calenderService;
-    private boolean continueFlag = false;
     // Device
     private final String deviceModel = Build.MODEL;
 
@@ -274,7 +272,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
                     }
                     // TODO: vragen aan opvolgingsitem of de latest date veranderd is
                     boolean latestDateChanged = false;
-                    String newLatestDate = String.valueOf(opvolgingsitemLatestDateV.getText());
+                    // String newLatestDate = String.valueOf(opvolgingsitemLatestDateV.getText());
                     DateString newLatestDatestring = new DateString(String.valueOf(opvolgingsitemLatestDateV.getText()));
                     if (!opvolgingsitemToUpdate.getLatestDate().getDateString().equals(newLatestDatestring.getDateString())){
                         // Indien latestdate gewijzigd is ...
@@ -369,8 +367,8 @@ public class EditOpvolgingsitem extends AppCompatActivity
         // Create an instance of the dialog fragment and show it
         FlexDialogFragment logDialog = new FlexDialogFragment();
         logDialog.setSubjectDialog("Log");
-        logDialog.setTitleDialog("Wenst u een log aan te maken ?");
-        logDialog.setMsgDialog("Click JA of NEE: ");
+//        logDialog.setTitleDialog("Wenst u een log aan te maken ?");
+//        logDialog.setMsgDialog("Click JA of NEE: ");
         logDialog.show(getSupportFragmentManager(), "LogDialogFragment");
     }
 
@@ -378,9 +376,9 @@ public class EditOpvolgingsitem extends AppCompatActivity
     // Fragment.onAttach() callback, which it uses to call the following methods
     // defined by the LogDialogFragment.LogDialogInterface interface
     @Override
-    public void onLogDialogPositiveClick(DialogFragment dialogFragment) {
+    public void onLogDialogPositiveClick(DialogFragment dialogFragment, String subject) {
         // Maak alvast de log aan
-        newLog = new Log(viewModel.getBasedir(), false);
+        Log newLog = new Log(viewModel.getBasedir(), false);
         newLog.setLogDate(opvolgingsitemPastProcess.getLatestDate());
         // entityNamePAst gebruiken om log aan te maken
         newLog.setLogDescription(opvolgingsitemPastProcess.getEntityNamePast());
@@ -416,15 +414,14 @@ public class EditOpvolgingsitem extends AppCompatActivity
             // Vraag stellen om in agenda te registreren,
             createEventSaveDialog();
         }
-
     }
 
     private void createEventSaveDialog(){
         // Create an instance of the dialog fragment and show it
         FlexDialogFragment eventDialog = new FlexDialogFragment();
         eventDialog.setSubjectDialog("Event");
-        eventDialog.setTitleDialog("Wenst u een event in de agenda aan te maken ?");
-        eventDialog.setMsgDialog("Click JA of NEE: ");
+//        eventDialog.setTitleDialog("Wenst u een event in de agenda aan te maken ?");
+//        eventDialog.setMsgDialog("Click JA of NEE: ");
         eventDialog.show(getSupportFragmentManager(), "EventDialogFragment");
     }
 
@@ -479,6 +476,26 @@ public class EditOpvolgingsitem extends AppCompatActivity
         replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
         replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
         startActivity(replyIntent);
+    }
+
+    @Override
+    public void onOitemDialogPositiveClick(DialogFragment dialogFragment) {
+        // Not used
+    }
+
+    @Override
+    public void onOitemDialogNegativeClick(DialogFragment dialogFragment) {
+        // Not used
+    }
+
+    @Override
+    public void onDateDialogPositiveClick(DialogFragment dialogFragment) {
+        // Not used
+    }
+
+    @Override
+    public void onDateDialogNegativeClick(DialogFragment dialogFragment) {
+        // Not used
     }
 
     public void onRadioButtonClicked(View view) {

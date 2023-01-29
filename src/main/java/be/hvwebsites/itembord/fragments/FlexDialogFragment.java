@@ -38,12 +38,72 @@ public class FlexDialogFragment extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Rekening houden met subject om positive en negative click op te vangen
+        switch (subjectDialog){
+            case "Log":
+                builder.setMessage(msgDialog)
+                        .setTitle(titleDialog)
+                        .setPositiveButton("JA", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                flexDialogInterface.onLogDialogPositiveClick(FlexDialogFragment.this, subjectDialog);
+                            }
+                        })
+                        .setNegativeButton("NEE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                flexDialogInterface.onLogDialogNegativeClick(FlexDialogFragment.this);
+                            }
+                        });
+                break;
+            case "Event":
+                builder.setMessage(msgDialog)
+                        .setTitle(titleDialog)
+                        .setPositiveButton("JA", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                flexDialogInterface.onEventDialogPositiveClick(FlexDialogFragment.this);
+                            }
+                        })
+                        .setNegativeButton("NEE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                flexDialogInterface.onEventDialogNegativeClick(FlexDialogFragment.this);
+                            }
+                        });
+                break;
+            case "Oitem":
+                builder.setMessage(msgDialog)
+                        .setTitle(titleDialog)
+                        .setPositiveButton("JA", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                flexDialogInterface.onOitemDialogPositiveClick(FlexDialogFragment.this);
+                            }
+                        })
+                        .setNegativeButton("NEE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                flexDialogInterface.onOitemDialogNegativeClick(FlexDialogFragment.this);
+                            }
+                        });
+                break;
+            case "Date":
+                builder.setMessage(msgDialog)
+                        .setTitle(titleDialog)
+                        .setPositiveButton("JA", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                flexDialogInterface.onDateDialogPositiveClick(FlexDialogFragment.this);
+                            }
+                        })
+                        .setNegativeButton("NEE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                flexDialogInterface.onDateDialogNegativeClick(FlexDialogFragment.this);
+                            }
+                        });
+                break;
+            default:
+        }
+/*
         if (subjectDialog.equals("Log")){
             builder.setMessage(msgDialog)
                     .setTitle(titleDialog)
                     .setPositiveButton("JA", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            flexDialogInterface.onLogDialogPositiveClick(FlexDialogFragment.this);
+                            flexDialogInterface.onLogDialogPositiveClick(FlexDialogFragment.this, subjectDialog);
                         }
                     })
                     .setNegativeButton("NEE", new DialogInterface.OnClickListener() {
@@ -66,6 +126,7 @@ public class FlexDialogFragment extends DialogFragment {
                     });
 
         }
+*/
         // Create the AlertDialog object and return it
         return builder.create();
     }
@@ -76,6 +137,22 @@ public class FlexDialogFragment extends DialogFragment {
 
     public void setSubjectDialog(String subjectDialog) {
         this.subjectDialog = subjectDialog;
+        switch (subjectDialog){
+            case "Log":
+                this.titleDialog = "Wenst u een log aan te maken ?";
+                break;
+            case "Event":
+                this.titleDialog = "Wenst u een event in de agenda aan te maken ?";
+                break;
+            case "Oitem":
+                this.titleDialog = "Wenst u het opvolgingsitem af te vinken ?";
+                break;
+            case "Date":
+                this.titleDialog = "Wenst u datum uitgevoerd op vandaag te zetten of niet (= op vervaldatum) ?";
+                break;
+            default:
+        }
+        this.msgDialog = "Click JA of NEE: ";
     }
 
     public String getTitleDialog() {

@@ -2,6 +2,7 @@ package be.hvwebsites.itembord;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,16 +22,20 @@ import java.util.List;
 import be.hvwebsites.itembord.adapters.StatusbordItemListAdapter;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Opvolgingsitem;
+import be.hvwebsites.itembord.fragments.FlexDialogFragment;
 import be.hvwebsites.itembord.helpers.ListItemStatusbordHelper;
+import be.hvwebsites.itembord.interfaces.FlexDialogInterface;
 import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
+import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FlexDialogInterface {
     private EntitiesViewModel viewModel;
     private List<ListItemStatusbordHelper> itemList = new ArrayList<>();
+    private IDNumber opvolgingsitemID;
     // Device
     private final String deviceModel = Build.MODEL;
 
@@ -72,12 +77,17 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
         }
 
-        // TODO: als er lang geklikt is op een oitem, kan dat hier gecapteerd worden
-        // TODO: in de adapter long click voorzien om het oitem af te vinken
+        // Als er lang geklikt is op een oitem, kan dat hier gecapteerd worden
         adapter.setOnItemClickListener(new StatusbordItemListAdapter.ClickListener() {
             @Override
             public void onItemClicked(IDNumber itemID, View v) {
-                // TODO: Opvolgingsitem itemID moet afgevinkt worden
+                // Opvolgingsitem ID global maken
+                opvolgingsitemID.setId(itemID.getId());
+                // Via een dialog vragen om te bevestigen om oitem af te vinken
+                // Create an instance of the dialog fragment and show it
+                FlexDialogFragment oitemDialog = new FlexDialogFragment();
+                oitemDialog.setSubjectDialog("Oitem");
+                oitemDialog.show(getSupportFragmentManager(), "oItemDialogFragment");
             }
         });
 
@@ -156,4 +166,86 @@ public class MainActivity extends AppCompatActivity {
         outState.putString(StaticData.FILE_BASE_DIR, viewModel.getBasedir());
 
     }
+
+    @Override
+    public void onOitemDialogPositiveClick(DialogFragment dialogFragment) {
+        // Via een dialog vragen of latest date = vandaag of vervaldatum moet gewijzigd worden
+        FlexDialogFragment dateDialog = new FlexDialogFragment();
+        dateDialog.setSubjectDialog("Date");
+        dateDialog.show(getSupportFragmentManager(), "dateDialogFragment");
+
+
+
+    }
+
+    @Override
+    public void onOitemDialogNegativeClick(DialogFragment dialogFragment) {
+        // Opvolgingsitem moet niet afgevinkt worden, er moet niets gebeuren !
+    }
+
+    @Override
+    public void onDateDialogPositiveClick(DialogFragment dialogFragment) {
+        // Opvolgingsitem moet latest date = vandaag nemen
+        Opvolgingsitem oItem = viewModel.getOpvolgingsitemById(opvolgingsitemID);
+        DateString tempDs = new DateString();
+        tempDs.setDateToday();
+        oItem.setLatestDate(tempDs);
+
+        // TODO: Opvolgingsitem itemID moet afgevinkt worden
+        // TODO: oitem bepalen
+        // TODO: latestdate en vervaldatum herbepalen
+        // TODO: updaten oitem
+
+        // TODO: via een dialog vragen of er een log moet aangemaakt worden
+        FlexDialogFragment logDialog = new FlexDialogFragment();
+        logDialog.setSubjectDialog("Log");
+        logDialog.show(getSupportFragmentManager(), "LogDialogFragment");
+
+        // TODO: agenda wijzigen indien nodig
+    }
+
+    @Override
+    public void onDateDialogNegativeClick(DialogFragment dialogFragment) {
+        // TODO: Opvolgingsitem moet latest date = vervaldatum nemen
+
+    }
+
+    @Override
+    public void onLogDialogPositiveClick(DialogFragment dialogFragment, String subject) {
+        // TODO: via een dialog vragen of er een log moet aangemaakt worden
+        FlexDialogFragment logDialog = new FlexDialogFragment();
+        logDialog.setSubjectDialog("Log");
+        logDialog.show(getSupportFragmentManager(), "LogDialogFragment");
+
+        // TODO: Opvolgingsitem itemID moet afgevinkt worden
+        // TODO: oitem bepalen
+        Opvolgingsitem oItem = viewModel.getOpvolgingsitemById(opvolgingsitemID);
+        oItem.setLatestDate(oItem.calculateNextDate());
+        // TODO: latestdate en vervaldatum herbepalen
+        // TODO: updaten oitem
+
+        // TODO: via een dialog vragen of er een log moet aangemaakt worden
+        FlexDialogFragment logDialog = new FlexDialogFragment();
+        logDialog.setSubjectDialog("Log");
+        logDialog.show(getSupportFragmentManager(), "LogDialogFragment");
+
+        // TODO: agenda wijzigen indien nodig
+
+    }
+
+    @Override
+    public void onLogDialogNegativeClick(DialogFragment dialogFragment) {
+
+    }
+
+    @Override
+    public void onEventDialogPositiveClick(DialogFragment dialogFragment) {
+
+    }
+
+    @Override
+    public void onEventDialogNegativeClick(DialogFragment dialogFragment) {
+
+    }
+
 }
