@@ -84,12 +84,12 @@ public class FlexDialogFragment extends DialogFragment {
             case "Date":
                 builder.setMessage(msgDialog)
                         .setTitle(titleDialog)
-                        .setPositiveButton("JA", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("VANDAAG", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 flexDialogInterface.onDateDialogPositiveClick(FlexDialogFragment.this);
                             }
                         })
-                        .setNegativeButton("NEE", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("VERVALDATUM", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 flexDialogInterface.onDateDialogNegativeClick(FlexDialogFragment.this);
                             }
@@ -137,6 +137,7 @@ public class FlexDialogFragment extends DialogFragment {
 
     public void setSubjectDialog(String subjectDialog) {
         this.subjectDialog = subjectDialog;
+        this.msgDialog = "Click JA of NEE: ";
         switch (subjectDialog){
             case "Log":
                 this.titleDialog = "Wenst u een log aan te maken ?";
@@ -149,10 +150,10 @@ public class FlexDialogFragment extends DialogFragment {
                 break;
             case "Date":
                 this.titleDialog = "Wenst u datum uitgevoerd op vandaag te zetten of niet (= op vervaldatum) ?";
+                this.msgDialog = "Click VANDAAG of VERVALDATUM: ";
                 break;
             default:
         }
-        this.msgDialog = "Click JA of NEE: ";
     }
 
     public String getTitleDialog() {

@@ -378,12 +378,14 @@ public class EditOpvolgingsitem extends AppCompatActivity
     @Override
     public void onLogDialogPositiveClick(DialogFragment dialogFragment, String subject) {
         // Maak alvast de log aan
-        Log newLog = new Log(viewModel.getBasedir(), false);
+        Log newLog = new Log(viewModel.getBasedir(), opvolgingsitemPastProcess);
+/*
         newLog.setLogDate(opvolgingsitemPastProcess.getLatestDate());
         // entityNamePAst gebruiken om log aan te maken
         newLog.setLogDescription(opvolgingsitemPastProcess.getEntityNamePast());
         newLog.setRubriekId(opvolgingsitemPastProcess.getRubriekId());
         newLog.setItemId(opvolgingsitemPastProcess.getEntityId());
+*/
         // de log moet bewaard worden !
         viewModel.getLogList().add(newLog);
         viewModel.storeLogs();
