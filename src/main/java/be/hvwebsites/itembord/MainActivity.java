@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         List<ReturnInfo> viewModelRetInfo = viewModel.initializeViewModel(baseDir);
         // Display return msg(s)
         for (int i = 0; i < viewModelRetInfo.size(); i++) {
-            Toast.makeText(MainActivity.this,
+            Toast.makeText(getApplicationContext(),
                     viewModelRetInfo.get(i).getReturnMessage(),
                     Toast.LENGTH_SHORT).show();
         }
@@ -151,6 +151,11 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
             case R.id.menu_beheer_rubrieken:
                 // ga naar activity ManageRubriek
                 mainIntent = new Intent(MainActivity.this, ManageRubriek.class);
+                startActivity(mainIntent);
+                return true;
+            case R.id.menu_logboek:
+                // ga naar activity Logboek
+                mainIntent = new Intent(MainActivity.this, Logboek.class);
                 startActivity(mainIntent);
                 return true;
             case R.id.menu_exit:
@@ -262,8 +267,6 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
 
             Toast.makeText(getApplicationContext(), "Event in de agenda gecreeerd !",
                     Toast.LENGTH_SHORT).show();
-
-
         }
         // Opvolgingsitem bewaren
         viewModel.storeItems();

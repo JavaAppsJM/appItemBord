@@ -3,6 +3,7 @@ package be.hvwebsites.itembord.constants;
 public class SpecificData {
 
     public static final String NO_STATUSBORDITEMS_YET = "Er zijn nog geen items voor het status bord !";
+    public static final String NO_LOGBOEKITEMS_YET = "Er zijn nog geen logs voor het logboek !";
 
     public static final String NO_RUBRIEKEN_YET = "Er zijn nog geen rubrieken !";
     public static final String NO_OPVOLGINGSITEMS_YET = "Er zijn nog geen opvolgingsitems !";

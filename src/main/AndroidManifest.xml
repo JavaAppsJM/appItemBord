@@ -16,11 +16,19 @@
         android:theme="@style/Theme.ItemBord"
         tools:targetApi="31">
         <activity
+            android:name=".Logboek"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".EditLog"
             android:label="Beheer Log Item"
-            android:windowSoftInputMode="stateHidden"
-            android:parentActivityName=".ManageRubriek">
-            <!--            Moet nog aangepast worden nr logboek-->
+            android:parentActivityName=".ManageRubriek"
+            android:windowSoftInputMode="stateHidden">
+
+            <!-- Moet nog aangepast worden nr logboek -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ManageRubriek" />
@@ -28,8 +36,8 @@
         <activity
             android:name=".EditOpvolgingsitem"
             android:label="Beheer Opvolgingsitem"
-            android:windowSoftInputMode="stateHidden"
-            android:parentActivityName=".ManageRubriek">
+            android:parentActivityName=".ManageRubriek"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ManageRubriek" />
@@ -37,8 +45,8 @@
         <activity
             android:name=".EditRubriek"
             android:label="Beheer Rubriek"
-            android:windowSoftInputMode="stateHidden"
-            android:parentActivityName=".ManageRubriek">
+            android:parentActivityName=".ManageRubriek"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ManageRubriek" />

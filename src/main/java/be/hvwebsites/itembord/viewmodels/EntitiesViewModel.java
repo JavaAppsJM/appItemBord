@@ -222,7 +222,12 @@ public class EntitiesViewModel extends AndroidViewModel {
 
     public Opvolgingsitem getOpvolgingsitemById(IDNumber itemId){
         // Bepaalt het opvolgingsitem obv zijn ID
-        return itemList.get(getItemIndexById(itemId));
+        int index = getItemIndexById(itemId);
+        if (index == StaticData.ITEM_NOT_FOUND){
+            return null;
+        }else {
+            return itemList.get(index);
+        }
     }
 
     public int getFirstItemIndexByRubriek(IDNumber rubriekID){
