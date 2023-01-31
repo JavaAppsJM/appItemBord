@@ -106,7 +106,7 @@ public class StatusbordItemListAdapter extends RecyclerView.Adapter<StatusbordIt
                 default:
             }
 
-            // TODO: long click voorzien
+            // Long click voorzien
             holder.textItemViewLine1.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {

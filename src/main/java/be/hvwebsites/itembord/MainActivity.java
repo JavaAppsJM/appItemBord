@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
     private List<ListItemStatusbordHelper> itemList = new ArrayList<>();
     private Opvolgingsitem opvolgingsitemToRollOn;
     private int opvolgingsitemToRollOnIndex;
+    private final StatusbordItemListAdapter statusBordAdapter = new StatusbordItemListAdapter(this);
     // Device
     private final String deviceModel = Build.MODEL;
 
@@ -67,14 +68,14 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
 
         // Recyclerview definieren
         RecyclerView recyclerView = findViewById(R.id.recycler_statusbord);
-        final StatusbordItemListAdapter adapter = new StatusbordItemListAdapter(this);
-        recyclerView.setAdapter(adapter);
+        //final StatusbordItemListAdapter adapter = new StatusbordItemListAdapter(this);
+        recyclerView.setAdapter(statusBordAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Recyclerview invullen met statusbord items
         itemList.clear();
         itemList.addAll(buildStatusbordList());
-        adapter.setItemList(itemList);
+        statusBordAdapter.setItemList(itemList);
         if (itemList.size() == 0){
             Toast.makeText(this,
                     SpecificData.NO_STATUSBORDITEMS_YET,
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         }
 
         // Als er lang geklikt is op een oitem, kan dat hier gecapteerd worden
-        adapter.setOnItemClickListener(new StatusbordItemListAdapter.ClickListener() {
+        statusBordAdapter.setOnItemClickListener(new StatusbordItemListAdapter.ClickListener() {
             @Override
             public void onItemClicked(IDNumber itemID, View v) {
                 // Opvolgingsitem to roll on en index bepalen
@@ -95,8 +96,6 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                 oitemDialog.show(getSupportFragmentManager(), "oItemDialogFragment");
             }
         });
-
-
     }
 
     private List<ListItemStatusbordHelper> buildStatusbordList(){
@@ -197,14 +196,14 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
 
     @Override
     public void onDateDialogNegativeClick(DialogFragment dialogFragment) {
-        // TODO: Opvolgingsitem moet latest date = vervaldatum nemen
+        // Opvolgingsitem moet latest date = vervaldatum nemen
         opvolgingsitemToRollOn.setLatestDate(opvolgingsitemToRollOn.calculateNextDate());
         // Doe de verdere verwerking van afvinken
         processRollOnOItem();
     }
 
     private void processRollOnOItem() {
-        // TODO: Opvolgingsitem moet afgevinkt worden
+        // Opvolgingsitem moet afgevinkt worden
         // Opvolgingsitem in list aanpassen
         viewModel.getOpvolgingsitemList().get(opvolgingsitemToRollOnIndex).setOpvolgingsitem(opvolgingsitemToRollOn);
 
@@ -268,6 +267,16 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         }
         // Opvolgingsitem bewaren
         viewModel.storeItems();
+
+        // Recyclerlist refreshen
+        itemList.clear();
+        itemList.addAll(buildStatusbordList());
+        statusBordAdapter.setItemList(itemList);
+        if (itemList.size() == 0){
+            Toast.makeText(this,
+                    SpecificData.NO_STATUSBORDITEMS_YET,
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
         @Override

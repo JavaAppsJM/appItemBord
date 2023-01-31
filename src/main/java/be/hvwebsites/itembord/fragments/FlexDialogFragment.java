@@ -149,7 +149,7 @@ public class FlexDialogFragment extends DialogFragment {
                 this.titleDialog = "Wenst u het opvolgingsitem af te vinken ?";
                 break;
             case "Date":
-                this.titleDialog = "Wenst u datum uitgevoerd op vandaag te zetten of niet (= op vervaldatum) ?";
+                this.titleDialog = "Wenst u datum uitgevoerd op vandaag of op vervaldatum te zetten ?";
                 this.msgDialog = "Click VANDAAG of VERVALDATUM: ";
                 break;
             default:
