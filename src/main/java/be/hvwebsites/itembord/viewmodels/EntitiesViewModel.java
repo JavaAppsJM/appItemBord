@@ -256,7 +256,7 @@ public class EntitiesViewModel extends AndroidViewModel {
         for (int i = 0; i < logList.size(); i++) {
             if (logList.get(i).getRubriekId().getId() == rubriekID.getId()){
                 displayList.add(new ListItemHelper(
-                        logList.get(i).getDisplayLog(), "",
+                        logList.get(i).getDisplayLog(45), "",
                         logList.get(i).getEntityId()
                 ));
             }
@@ -270,7 +270,7 @@ public class EntitiesViewModel extends AndroidViewModel {
         for (int i = 0; i < logList.size(); i++) {
             if (logList.get(i).getItemId().getId() == oItemID.getId()){
                 displayList.add(new ListItemHelper(
-                        logList.get(i).getDisplayLog(), "",
+                        logList.get(i).getDisplayLog(45), "",
                         logList.get(i).getEntityId()
                 ));
             }

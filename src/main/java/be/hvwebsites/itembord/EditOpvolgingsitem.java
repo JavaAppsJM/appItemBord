@@ -309,7 +309,6 @@ public class EditOpvolgingsitem extends AppCompatActivity
                     newOItem.setEntityName(String.valueOf(opvolgingsitemNameV.getText()));
                     newOItem.setEntityNamePast(String.valueOf(opvolgingsitemNamePastV.getText()));
                     newOItem.setFrequentieNbr(Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())));
-                    newOItem.setLatestDate(new DateString(String.valueOf(opvolgingsitemLatestDateV.getText())));
                     if (frequencyDayV.isChecked()){
                         newOItem.setFrequentieUnit(FrequentieDateUnit.DAYS);
                     }else if (frequencyWeekV.isChecked()){
@@ -319,6 +318,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
                     }else if (frequencyYearV.isChecked()){
                         newOItem.setFrequentieUnit(FrequentieDateUnit.YEARS);
                     }
+                    newOItem.setLatestDate(new DateString(String.valueOf(opvolgingsitemLatestDateV.getText())));
                     // Toevoegen opvolgingsitem aan opvolgingsitemlist
                     viewModel.getOpvolgingsitemList().add(newOItem);
                     // Als er een laatste opvolgingsdatum is ...
@@ -437,7 +437,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
                 EditOpvolgingsitem.this,
                 cr);
         // Bepaal volgende opvolgingsdatum
-        long eventDateMs = opvolgingsitemPastProcess.calculateNextDate().getCalendarDate().getTimeInMillis();
+        long eventDateMs = opvolgingsitemPastProcess.getNextDate();
         // Event om 10h in de vm zetten 10*3600*1000 bijtellen, lukt niet want volgende
         // opvolgingsdatum eventDateMs is bepaald obv uur vh moment en niet 0h00
         //eventDateMs = eventDateMs + (10*3600*1000);

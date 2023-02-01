@@ -1,21 +1,20 @@
 package be.hvwebsites.itembord;
 
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.ContentResolver;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,9 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
     private List<ListItemStatusbordHelper> itemList = new ArrayList<>();
     private Opvolgingsitem opvolgingsitemToRollOn;
     private int opvolgingsitemToRollOnIndex;
-    private final StatusbordItemListAdapter statusBordAdapter = new StatusbordItemListAdapter(this);
+    private RecyclerView recyclerView;
+
+    private StatusbordItemListAdapter statusBordAdapter;
     // Device
     private final String deviceModel = Build.MODEL;
 
@@ -67,8 +68,8 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         }
 
         // Recyclerview definieren
-        RecyclerView recyclerView = findViewById(R.id.recycler_statusbord);
-        //final StatusbordItemListAdapter adapter = new StatusbordItemListAdapter(this);
+        recyclerView = findViewById(R.id.recycler_statusbord);
+        statusBordAdapter = new StatusbordItemListAdapter(this);
         recyclerView.setAdapter(statusBordAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -202,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
     @Override
     public void onDateDialogNegativeClick(DialogFragment dialogFragment) {
         // Opvolgingsitem moet latest date = vervaldatum nemen
-        opvolgingsitemToRollOn.setLatestDate(opvolgingsitemToRollOn.calculateNextDate());
+        opvolgingsitemToRollOn.setLatestDate(opvolgingsitemToRollOn.getNextDateDS());
         // Doe de verdere verwerking van afvinken
         processRollOnOItem();
     }
@@ -248,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
 
             // Nieuw event aanmaken op de nieuwe vervaldatum
             // Bepaal nieuwe vervaldatum
-            long eventDateMs = opvolgingsitemToRollOn.calculateNextDate().getCalendarDate().getTimeInMillis();
+            long eventDateMs = opvolgingsitemToRollOn.getNextDate();
 
             // Maak een event in de agenda
             final long eventId = calenderService.createEventInMyCalendar(
@@ -275,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         itemList.clear();
         itemList.addAll(buildStatusbordList());
         statusBordAdapter.setItemList(itemList);
+        recyclerView.setAdapter(statusBordAdapter);
         if (itemList.size() == 0){
             Toast.makeText(this,
                     SpecificData.NO_STATUSBORDITEMS_YET,

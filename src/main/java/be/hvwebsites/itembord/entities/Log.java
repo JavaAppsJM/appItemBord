@@ -45,13 +45,17 @@ public class Log extends SuperItem{
         setItemId(inLog.getItemId());
     }
 
-    public String getDisplayLog(){
+    public String getDisplayLog(int inlength){
+        return logDate.getFormatDate() + " " + getLogDescTrunc(inlength);
+    }
+
+    public String getLogDescTrunc(int inLength){
         // Bepaal lengte logdescription
         int lengthLD = logDescription.length();
-        if (lengthLD > 45){
-            lengthLD = 45;
+        if (lengthLD > inLength){
+            lengthLD = inLength;
         }
-        return logDate.getFormatDate() + " " + logDescription.substring(0, lengthLD);
+        return logDescription.substring(0, lengthLD);
     }
 
     public DateString getLogDate() {

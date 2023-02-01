@@ -17,21 +17,22 @@
         tools:targetApi="31">
         <activity
             android:name=".Logboek"
-            android:exported="false">
+            android:label="Logboek"
+            android:parentActivityName=".MainActivity">
             <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".EditLog"
             android:label="Beheer Log Item"
-            android:parentActivityName=".ManageRubriek"
+            android:parentActivityName=".Logboek"
             android:windowSoftInputMode="stateHidden">
 
             <!-- Moet nog aangepast worden nr logboek -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ManageRubriek" />
+                android:value=".Logboek" />
         </activity>
         <activity
             android:name=".EditOpvolgingsitem"

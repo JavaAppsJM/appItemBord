@@ -27,15 +27,15 @@ public class Opvolgingsitem extends SuperItem{
         setEntityName("");
         entityNamePast = "";
         latestDate = new DateString(DateString.EMPTY_DATESTRING);
-        nextDate = calculateNextDate().getDateInMillis();
+        nextDate = 0;
     }
 
     public Opvolgingsitem(String fileLine){
         convertFromFileLine(fileLine);
     }
 
-    public DateString calculateNextDate(){
-        DateString newDate = new DateString(latestDate.getDateString());
+    private DateString calculateNextDate(DateString inDateString){
+        DateString newDate = new DateString(inDateString.getDateString());
 
         // Bereken nieuwe datum als datestring
         switch (frequentieUnit){
@@ -88,9 +88,9 @@ public class Opvolgingsitem extends SuperItem{
     public String getDisplayStyle(){
         if (latestDateIsEmpty()){
             return SpecificData.STYLE_NORMAL;
-        }else if(isOverDue(calculateNextDate())){
+        }else if(isOverDue(getNextDateDS())){
             return SpecificData.STYLE_RED;
-        }else if (isDue(calculateNextDate())){
+        }else if (isDue(getNextDateDS())){
             return SpecificData.STYLE_ORANGE;
         }else {
             return SpecificData.STYLE_GREEN;
@@ -190,7 +190,7 @@ public class Opvolgingsitem extends SuperItem{
 
     public void setLatestDate(DateString latestDate) {
         this.latestDate = latestDate;
-        this.nextDate = calculateNextDate().getDateInMillis();
+        this.nextDate = calculateNextDate(latestDate).getDateInMillis();
     }
 
     public long getNextDate() {

@@ -85,11 +85,11 @@ public class Logboek extends AppCompatActivity {
 
             // Opvolgingsitem kan null zijn !
             if (opvolgingsitem != null){
-                item1 = item1 + opvolgingsitem.getEntityName();
+                item1 = item1 + ": " + opvolgingsitem.getEntityName();
             }
 
             // Vul tweede lijn in
-            item2 = log.getLogDescription().substring(0, 60);
+            item2 = log.getLogDescTrunc(70);
             // Creer logboekitem en steek in list
             logboekList.add(new ListItemLogboekHelper(item1,
                     item2,
@@ -100,7 +100,7 @@ public class Logboek extends AppCompatActivity {
         }
 
         // Logboeklist sorteren op rubriek, datum
-        ListItemLogboekHelper temp;
+        ListItemLogboekHelper temp = new ListItemLogboekHelper();
         int sortf11, sortf12 ,sortf21, sortf22;
         for (int i = logboekList.size() ; i > 0 ; i--) {
             for (int j = 1 ; j < i ; j++) {
@@ -109,9 +109,9 @@ public class Logboek extends AppCompatActivity {
                 sortf21 = logboekList.get(j-1).getSortField2();
                 sortf22 = logboekList.get(j).getSortField2();
                 if ((sortf11 > sortf12)
-                        || ((sortf11 == sortf12) && (sortf21 > sortf22))) {
+                        || ((sortf11 == sortf12) && (sortf21 < sortf22))) {
                     // wisselen
-                    temp = logboekList.get(j);
+                    temp.setLogItem(logboekList.get(j));
                     logboekList.get(j).setLogItem(logboekList.get(j-1));
                     logboekList.get(j-1).setLogItem(temp);
                 }
