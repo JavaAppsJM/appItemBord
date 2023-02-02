@@ -9,6 +9,8 @@ public class SpecificData {
     public static final String NO_LOGS_YET = "Er zijn nog geen logs !";
 
     public static final String NO_PARENT_RUBRIEK = "Geen hoofdrubriek";
+    public static final String NO_RUBRIEK_FILTER = "Geen rubriek filter";
+    public static final String NO_OPVOLGINGSITEM_FILTER = "Geen oitem filter";
 
     public static final String TITLE_NEW_RUBRIEK = "Rubriek Toevoegen";
     public static final String TITLE_UPDATE_RUBRIEK = "Rubriek Aanpassen";

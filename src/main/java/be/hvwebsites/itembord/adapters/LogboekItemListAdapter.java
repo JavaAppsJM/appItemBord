@@ -15,21 +15,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import be.hvwebsites.itembord.EditLog;
-import be.hvwebsites.itembord.EditOpvolgingsitem;
 import be.hvwebsites.itembord.R;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.helpers.ListItemLogboekHelper;
-import be.hvwebsites.itembord.helpers.ListItemStatusbordHelper;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
-public class LoboekItemListAdapter extends RecyclerView.Adapter<LoboekItemListAdapter.ListViewHolder> {
+public class LogboekItemListAdapter extends RecyclerView.Adapter<LogboekItemListAdapter.ListViewHolder> {
     private final LayoutInflater inflater;
     private Context mContext;
     private List<ListItemLogboekHelper> itemList;
     private ClickListener clickListener;
 
-    public LoboekItemListAdapter(Context context) {
+    public LogboekItemListAdapter(Context context) {
         this.mContext = context;
         inflater = LayoutInflater.from(context);
     }

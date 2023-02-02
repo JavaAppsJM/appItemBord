@@ -7,22 +7,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import be.hvwebsites.itembord.adapters.LoboekItemListAdapter;
+import be.hvwebsites.itembord.adapters.LogboekItemListAdapter;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Log;
 import be.hvwebsites.itembord.entities.Opvolgingsitem;
 import be.hvwebsites.itembord.helpers.ListItemLogboekHelper;
-import be.hvwebsites.itembord.helpers.ListItemStatusbordHelper;
 import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
+import be.hvwebsites.libraryandroid4.helpers.ListItemHelper;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
+import be.hvwebsites.libraryandroid4.statics.StaticData;
 
-public class Logboek extends AppCompatActivity {
+public class Logboek extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private EntitiesViewModel viewModel;
     private List<ListItemLogboekHelper> logboekList = new ArrayList<>();
     // Device
@@ -32,6 +37,7 @@ public class Logboek extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logboek);
+
         // Creer een filebase service (bevat file base en file base directory) obv device en package name
         FileBaseService fileBaseService = new FileBaseService(deviceModel, getPackageName());
 
@@ -49,9 +55,37 @@ public class Logboek extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
+        // Rubriekfilter Spinner en adapter definieren
+        Spinner rubriekFilterSpinner = (Spinner) findViewById(R.id.spinr_rubriek);
+        // rubriekfilterAdapter obv ListItemHelper
+        ArrayAdapter<ListItemHelper> rubriekFilterAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item);
+        rubriekFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Rubriekfilter vullen met alle rubrieken
+        rubriekFilterAdapter.addAll(viewModel.getRubriekItemList());
+        rubriekFilterAdapter.add(new ListItemHelper(SpecificData.NO_RUBRIEK_FILTER,
+                "",
+                StaticData.IDNUMBER_NOT_FOUND));
+        rubriekFilterSpinner.setAdapter(rubriekFilterAdapter);
+
+        // Opvolgingsitemfilter Spinner en adapter definieren
+        Spinner oItemFilterSpinner = (Spinner) findViewById(R.id.spinr_oitem);
+        // OpvolgingsitemfilterAdapter obv ListItemHelper
+        ArrayAdapter<ListItemHelper> oItemFilterAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item);
+        oItemFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Opvolgingsitemfilter invullen
+        //rubriekFilterAdapter.addAll(viewModel.getRubriekItemList());
+        rubriekFilterAdapter.add(new ListItemHelper(SpecificData.NO_OPVOLGINGSITEM_FILTER,
+                "",
+                StaticData.IDNUMBER_NOT_FOUND));
+        oItemFilterSpinner.setAdapter(oItemFilterAdapter);
+
         // Recyclerview definieren
         RecyclerView recyclerView = findViewById(R.id.recyc_logboek);
-        final LoboekItemListAdapter logboekAdapter = new LoboekItemListAdapter(this);
+        final LogboekItemListAdapter logboekAdapter = new LogboekItemListAdapter(this);
         recyclerView.setAdapter(logboekAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -64,6 +98,54 @@ public class Logboek extends AppCompatActivity {
                     SpecificData.NO_LOGBOEKITEMS_YET,
                     Toast.LENGTH_LONG).show();
         }
+
+        // selection listener activeren, moet gebueren nadat de adapter gekoppeld is aan de spinner !!
+        // TODO: Manier 1 om de selectie per spinner te kunnen capteren
+        rubriekFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        //TODO: Manier2 om de selectie per spinner te kunnen captern
+        oItemFilterSpinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
+
+    }
+
+    // Als er iets geselecteerd is in de spinner
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // TODO: Hoe weet je in welke spinner geselecteerd werd ? via view ?
+        if (parent.getItemAtPosition(position) != null){
+            // TODO: Kijken in welke view geselecteerd werd
+            if (view.getId() == R.id.spinr_oitem){
+
+            }
+/*
+            // Bepalen wat geselecteerd is
+            ListItemHelper selecRubriek = (ListItemHelper) parent.getItemAtPosition(position);
+            parentRubriekId = selecRubriek.getItemID();
+            if (parentRubriekId.getId() != StaticData.ITEM_NOT_FOUND){
+                Toast.makeText(EditRubriek.this,
+                        "Hoofdrubriek gekozen ...",
+                        Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(EditRubriek.this,
+                        "Geen hoofdrubriek gekozen ...",
+                        Toast.LENGTH_SHORT).show();
+            }
+*/
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 
     private List<ListItemLogboekHelper> buildLogboek(){

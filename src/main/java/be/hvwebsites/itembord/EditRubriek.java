@@ -95,7 +95,6 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                 android.R.layout.simple_spinner_item);
         rubriekItemAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-
         // Vul Scherm in vlgns new/update
         switch (action) {
             case StaticData.ACTION_NEW:
