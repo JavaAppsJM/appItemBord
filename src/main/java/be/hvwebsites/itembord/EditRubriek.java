@@ -35,13 +35,13 @@ import be.hvwebsites.libraryandroid4.adapters.NothingSelectedSpinnerAdapter;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.helpers.ListItemHelper;
 import be.hvwebsites.libraryandroid4.repositories.Cookie;
+import be.hvwebsites.libraryandroid4.repositories.CookieRepository;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
 public class EditRubriek extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private EntitiesViewModel viewModel;
     private List<ListItemHelper> itemList = new ArrayList<>();
-    private Rubriek rubriekInEdit;
     private int iDToUpdate = StaticData.ITEM_NOT_FOUND;
     private String action = StaticData.ACTION_NEW;
     //private TextView parentRubriekView;
@@ -73,7 +73,16 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                     Toast.LENGTH_SHORT).show();
         }
 
-        // Intent bekijken vr action
+        // Cookierepository definieren
+        CookieRepository cookieRepository = new CookieRepository(baseDir);
+
+        // Ophalen cookies : action
+        action = cookieRepository.getCookieValueFromLabel(SpecificData.COOKIE_RETURN_ACTION);
+
+        // Zet calling activity
+        cookieRepository.registerCookie(SpecificData.CALLING_ACTIVITY, SpecificData.ACTIVITY_EDIT_RUBRIEK);
+
+        // Intent bekijken vr action, als er een is wordt die genomen als action
         Intent editIntent = getIntent();
         if (editIntent.hasExtra(StaticData.EXTRA_INTENT_KEY_ACTION)){
             action = editIntent.getStringExtra(StaticData.EXTRA_INTENT_KEY_ACTION);
@@ -109,8 +118,12 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
             case StaticData.ACTION_UPDATE:
                 setTitle(SpecificData.TITLE_UPDATE_RUBRIEK);
                 // ID uit intent halen om te weten welk element moet aangepast worden
-                iDToUpdate = editIntent.getIntExtra(StaticData.EXTRA_INTENT_KEY_ID,
-                        StaticData.ITEM_NOT_FOUND);
+                if (editIntent.hasExtra(StaticData.EXTRA_INTENT_KEY_ID)){
+                    iDToUpdate = editIntent.getIntExtra(StaticData.EXTRA_INTENT_KEY_ID,
+                            StaticData.ITEM_NOT_FOUND);
+                }else {
+                    iDToUpdate = Integer.parseInt(cookieRepository.getCookieValueFromLabel(SpecificData.COOKIE_RETURN_UPDATE_INDEX));
+                }
                 Rubriek rubriekToUpdate = new Rubriek();
                 rubriekToUpdate.setRubriek(viewModel.getRubriekById(new IDNumber(iDToUpdate)));
                 EditText nameView = findViewById(R.id.editNameRubriek);

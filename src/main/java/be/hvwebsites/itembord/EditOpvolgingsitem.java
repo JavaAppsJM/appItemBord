@@ -41,6 +41,7 @@ import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.helpers.ListItemHelper;
+import be.hvwebsites.libraryandroid4.repositories.CookieRepository;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
@@ -99,9 +100,19 @@ public class EditOpvolgingsitem extends AppCompatActivity
                     Toast.LENGTH_SHORT).show();
         }
 
+        // Cookierepository definieren
+        CookieRepository cookieRepository = new CookieRepository(baseDir);
+
+        // Ophalen cookies : action
+        action = cookieRepository.getCookieValueFromLabel(SpecificData.COOKIE_RETURN_ACTION);
+
+        // Zet calling activity
+        cookieRepository.registerCookie(SpecificData.CALLING_ACTIVITY, SpecificData.ACTIVITY_EDIT_OPVITEM);
+
         // Intent bekijken vr action en evt rubriek (indien new opvolgingsitem)
         Intent editIntent = getIntent();
         action = editIntent.getStringExtra(StaticData.EXTRA_INTENT_KEY_ACTION);
+        cookieRepository.registerCookie(SpecificData.COOKIE_RETURN_ACTION, action);
 
         // Als op datum veld geclickt wordt...
         opvolgingsitemLatestDateV.setOnClickListener(new View.OnClickListener() {
@@ -161,6 +172,10 @@ public class EditOpvolgingsitem extends AppCompatActivity
                 opvolgingsitemToUpdate.setOpvolgingsitem(viewModel.getOpvolgingsitemById(new IDNumber(iDToUpdate)));
                 // rubriek uit opvolgingsitem halen
                 rubriekOpvolgingsitem.setRubriek(viewModel.getRubriekById(opvolgingsitemToUpdate.getRubriekId()));
+
+                // rubriek ID in returncookie bewaren
+                cookieRepository.registerCookie(SpecificData.COOKIE_RETURN_UPDATE_INDEX,
+                        String.valueOf(rubriekOpvolgingsitem.getEntityId().getId()));
 
                 // Invullen vn gegevens opvolgingsitem op scherm
                 opvolgingsitemNameV.setText(opvolgingsitemToUpdate.getEntityName());
@@ -270,7 +285,6 @@ public class EditOpvolgingsitem extends AppCompatActivity
                     }else if (frequencyYearV.isChecked()){
                         opvolgingsitemToUpdate.setFrequentieUnit(FrequentieDateUnit.YEARS);
                     }
-                    // TODO: vragen aan opvolgingsitem of de latest date veranderd is
                     boolean latestDateChanged = false;
                     // String newLatestDate = String.valueOf(opvolgingsitemLatestDateV.getText());
                     DateString newLatestDatestring = new DateString(String.valueOf(opvolgingsitemLatestDateV.getText()));

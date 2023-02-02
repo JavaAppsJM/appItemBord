@@ -4,10 +4,11 @@ public class SpecificData {
 
     public static final String NO_STATUSBORDITEMS_YET = "Er zijn nog geen items voor het status bord !";
     public static final String NO_LOGBOEKITEMS_YET = "Er zijn nog geen logs voor het logboek !";
-
     public static final String NO_RUBRIEKEN_YET = "Er zijn nog geen rubrieken !";
     public static final String NO_OPVOLGINGSITEMS_YET = "Er zijn nog geen opvolgingsitems !";
     public static final String NO_LOGS_YET = "Er zijn nog geen logs !";
+
+    public static final String NO_PARENT_RUBRIEK = "Geen hoofdrubriek";
 
     public static final String TITLE_NEW_RUBRIEK = "Rubriek Toevoegen";
     public static final String TITLE_UPDATE_RUBRIEK = "Rubriek Aanpassen";
@@ -24,7 +25,14 @@ public class SpecificData {
     public static final String ID_OPVOLGINGSITEM = "opvolgingsitem ID";
     public static final String ID_LOG = "log ID";
 
+    // Cookie Key Values
+    public static final String COOKIE_RETURN_ENTITY_TYPE = "returnentitytype";
+    public static final String COOKIE_RETURN_ACTION = "returnaction";
+    public static final String COOKIE_RETURN_UPDATE_INDEX = "returnindex";
+
     // Calling Activities
+    public static final String CALLING_ACTIVITY = "callingactivity";
+    public static final String ACTIVITY_MAIN = "MainActivity";
     public static final String ACTIVITY_MANAGE_RUBRIEK = "Manage Rubriek";
     public static final String ACTIVITY_EDIT_RUBRIEK = "Edit Rubriek";
     public static final String ACTIVITY_EDIT_OPVITEM = "Edit Opvolgingsitem";
@@ -41,8 +49,6 @@ public class SpecificData {
     public static final String STYLE_ORANGE = "style orange";
     public static final String STYLE_GREEN = "style green";
     public static final String STYLE_NORMAL = "style normal";
-
-    public static final String NO_PARENT_RUBRIEK = "Geen hoofdrubriek";
 
     public static String setFirstLetterCapital(String name){
         if (!name.equals("")){

@@ -28,8 +28,6 @@
             android:label="Beheer Log Item"
             android:parentActivityName=".Logboek"
             android:windowSoftInputMode="stateHidden">
-
-            <!-- Moet nog aangepast worden nr logboek -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Logboek" />
@@ -37,11 +35,11 @@
         <activity
             android:name=".EditOpvolgingsitem"
             android:label="Beheer Opvolgingsitem"
-            android:parentActivityName=".ManageRubriek"
+            android:parentActivityName=".EditRubriek"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ManageRubriek" />
+                android:value=".EditRubriek" />
         </activity>
         <activity
             android:name=".EditRubriek"

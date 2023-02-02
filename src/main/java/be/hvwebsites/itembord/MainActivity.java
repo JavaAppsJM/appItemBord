@@ -31,6 +31,7 @@ import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
+import be.hvwebsites.libraryandroid4.repositories.CookieRepository;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
@@ -66,6 +67,12 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                     viewModelRetInfo.get(i).getReturnMessage(),
                     Toast.LENGTH_SHORT).show();
         }
+
+        // Cookierepository definieren
+        CookieRepository cookieRepository = new CookieRepository(baseDir);
+
+        // Zet calling activity
+        cookieRepository.registerCookie(SpecificData.CALLING_ACTIVITY, SpecificData.ACTIVITY_MAIN);
 
         // Recyclerview definieren
         recyclerView = findViewById(R.id.recycler_statusbord);
