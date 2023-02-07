@@ -32,6 +32,9 @@ import be.hvwebsites.libraryandroid4.statics.StaticData;
 public class Logboek extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private EntitiesViewModel viewModel;
     private List<ListItemLogboekHelper> logboekList = new ArrayList<>();
+    // Filters
+    private IDNumber filterRubriekID = new IDNumber(StaticData.IDNUMBER_NOT_FOUND.getId());
+    private IDNumber filterOItemID = new IDNumber(StaticData.IDNUMBER_NOT_FOUND.getId());
     // Device
     private final String deviceModel = Build.MODEL;
 
@@ -65,10 +68,10 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
         rubriekFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Rubriekfilter vullen met alle rubrieken
-        rubriekFilterAdapter.addAll(viewModel.getRubriekItemList());
         rubriekFilterAdapter.add(new ListItemHelper(SpecificData.NO_RUBRIEK_FILTER,
                 "",
                 StaticData.IDNUMBER_NOT_FOUND));
+        rubriekFilterAdapter.addAll(viewModel.getRubriekItemList());
         rubriekFilterSpinner.setAdapter(rubriekFilterAdapter);
 
         // Opvolgingsitemfilter Spinner en adapter definieren
@@ -106,19 +109,27 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ListItemHelper selHelper = (ListItemHelper) adapterView.getItemAtPosition(i);
-                IDNumber selID = selHelper.getItemID();
-                if (selID.getId() != StaticData.IDNUMBER_NOT_FOUND.getId()){
-                    Rubriek selRubriek = viewModel.getRubriekById(selID);
+                filterRubriekID = selHelper.getItemID();
+                if (filterRubriekID.getId() != StaticData.IDNUMBER_NOT_FOUND.getId()){
+                    // Clearen van filter opvolgingsitem
+                    filterOItemID = StaticData.IDNUMBER_NOT_FOUND;
+
                     // Spinner selectie zetten
-                    rubriekFilterSpinner.setSelection(i, false);
+                    //rubriekFilterSpinner.setSelection(i, false);
+
                     // Inhoud vd opvolgingsitem filter bepalen adhv gekozen rubriek
                     oItemFilterAdapter.clear();
-                    oItemFilterAdapter.addAll(viewModel.getOpvolgingsItemItemListByRubriekID(selID));
                     oItemFilterAdapter.add(new ListItemHelper(SpecificData.NO_OPVOLGINGSITEM_FILTER,
                             "",
                             StaticData.IDNUMBER_NOT_FOUND));
+                    oItemFilterAdapter.addAll(viewModel.getOpvolgingsItemItemListByRubriekID(filterRubriekID));
                     oItemFilterSpinner.setAdapter(oItemFilterAdapter);
                 }
+                // Inhoud vd logboek bepalen adhv gekozen filters
+                logboekList.clear();
+                logboekList.addAll(buildLogboek(filterRubriekID, filterOItemID));
+                logboekAdapter.setItemList(logboekList);
+                recyclerView.setAdapter(logboekAdapter);
             }
 
             @Override
@@ -131,24 +142,16 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ListItemHelper selHelper = (ListItemHelper) adapterView.getItemAtPosition(i);
-                IDNumber selID = selHelper.getItemID();
-                if (selID.getId() != StaticData.IDNUMBER_NOT_FOUND.getId()){
-                    Opvolgingsitem selOItem = viewModel.getOpvolgingsitemById(selID);
-                    // Spinner selectie zetten
-                    oItemFilterSpinner.setSelection(i, false);
-                    // Inhoud vd logboek bepalen adhv gekozen rubriek
-                    logboekList.clear();
-                    logboekList.addAll(buildLogboek(selOItem.getRubriekId(), selOItem.getEntityId()));
-                    logboekAdapter.setItemList(logboekList);
-                }else {
-                    oItemFilterSpinner.setSelection(i, false);
-                    // Inhoud vd logboek bepalen adhv gekozen rubriek
-                    logboekList.clear();
+                filterOItemID = selHelper.getItemID();
 
-                    // TODO: Wat als rubriek als filter wel gekozen werd !!!!
-                    logboekList.addAll(buildLogboek(selID, selID));
-                    logboekAdapter.setItemList(logboekList);
-                }
+                // Spinner selectie zetten
+                //oItemFilterSpinner.setSelection(i, false);
+
+                // Inhoud vd logboek bepalen adhv gekozen filters
+                logboekList.clear();
+                logboekList.addAll(buildLogboek(filterRubriekID, filterOItemID));
+                logboekAdapter.setItemList(logboekList);
+                recyclerView.setAdapter(logboekAdapter);
             }
 
             @Override
@@ -170,10 +173,10 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
         // Bepaal voor elke logitem dat voldoet, lijn1 & 2
         for (int i = 0; i < viewModel.getLogList().size(); i++) {
             log = viewModel.getLogList().get(i);
-            if (((rubriekID.getId() != StaticData.IDNUMBER_NOT_FOUND.getId())
-                    && (log.getRubriekId().getId() == rubriekID.getId()))
-            && ((oItemID.getId() != StaticData.IDNUMBER_NOT_FOUND.getId())
-            &&(log.getItemId().getId() == oItemID.getId()))){
+            if ((rubriekID.getId() == StaticData.IDNUMBER_NOT_FOUND.getId()
+                    || (log.getRubriekId().getId() == rubriekID.getId()))
+            && (oItemID.getId() == StaticData.IDNUMBER_NOT_FOUND.getId()
+                    || (log.getItemId().getId() == oItemID.getId()))){
                 opvolgingsitem = viewModel.getOpvolgingsitemById(log.getItemId());
                 // Bepaal lijn1
                 item1 = log.getLogDate().getFormatDate()

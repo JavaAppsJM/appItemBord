@@ -67,6 +67,7 @@ public class LogboekItemListAdapter extends RecyclerView.Adapter<LogboekItemList
             Intent logboekIntent = new Intent(mContext, EditLog.class);
             logboekIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
             logboekIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, itemIDToUpdate.getId());
+            logboekIntent.putExtra(StaticData.EXTRA_INTENT_KEY_RETURN, SpecificData.ACTIVITY_LOGBOEK);
             mContext.startActivity(logboekIntent);
         }
     }

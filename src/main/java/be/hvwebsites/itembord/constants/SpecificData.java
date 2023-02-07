@@ -35,6 +35,7 @@ public class SpecificData {
     // Calling Activities
     public static final String CALLING_ACTIVITY = "callingactivity";
     public static final String ACTIVITY_MAIN = "MainActivity";
+    public static final String ACTIVITY_LOGBOEK = "Logboek";
     public static final String ACTIVITY_MANAGE_RUBRIEK = "Manage Rubriek";
     public static final String ACTIVITY_EDIT_RUBRIEK = "Edit Rubriek";
     public static final String ACTIVITY_EDIT_OPVITEM = "Edit Opvolgingsitem";
