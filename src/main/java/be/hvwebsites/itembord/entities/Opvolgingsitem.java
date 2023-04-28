@@ -1,5 +1,7 @@
 package be.hvwebsites.itembord.entities;
 
+import android.widget.EditText;
+
 import java.util.Calendar;
 
 import be.hvwebsites.itembord.constants.FrequentieDateUnit;
@@ -63,12 +65,16 @@ public class Opvolgingsitem extends SuperItem{
         return newDate;
     }
 
+    public void updateItemFromScreen(EditText inItemData){
+
+    }
+
     public void setOpvolgingsitem(Opvolgingsitem inItem){
         setEntityId(inItem.getEntityId());
         setEntityName(inItem.getEntityName());
         setEntityNamePast(inItem.getEntityNamePast());
-        setFrequentieNbr(inItem.getFrequentieNbr());
         setFrequentieUnit(inItem.getFrequentieUnit());
+        setFrequentieNbr(inItem.getFrequentieNbr());
         setLatestDate(inItem.getLatestDate());
         setEventId(inItem.getEventId());
         setRubriekId(inItem.rubriekId);
@@ -149,6 +155,10 @@ public class Opvolgingsitem extends SuperItem{
 
     public void setFrequentieNbr(int frequentieNbr) {
         this.frequentieNbr = frequentieNbr;
+        if (frequentieNbr == 0){
+            // Item zonder frequentie !!
+            setFrequentieUnit(FrequentieDateUnit.NONE);
+        }
     }
 
     public FrequentieDateUnit getFrequentieUnit() {
@@ -172,6 +182,9 @@ public class Opvolgingsitem extends SuperItem{
                 break;
             case "y":
                 this.frequentieUnit = FrequentieDateUnit.YEARS;
+                break;
+            case "n":
+                this.frequentieUnit = FrequentieDateUnit.NONE;
                 break;
         }
     }

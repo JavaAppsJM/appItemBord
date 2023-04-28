@@ -1,7 +1,8 @@
 package be.hvwebsites.itembord.constants;
 
 public enum FrequentieDateUnit {
-    DAYS("d"), WEEKS("w"), MONTHS("m"), YEARS("y");
+    // NONe is voor items zndr frequentie
+    DAYS("d"), WEEKS("w"), MONTHS("m"), YEARS("y"), NONE("n");
 
     private final String letter;
     FrequentieDateUnit(String letter){

@@ -124,13 +124,15 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/labelItemLatestDate"
         app:layout_constraintStart_toEndOf="@+id/labelItemLatestDate" />
 
+<!--    Radiogroup moet onzichtbaar gemaakt worden tenzij frequentie > 0 -->
     <RadioGroup
+        android:id="@+id/radioButtonGroup"
         android:layout_width="312dp"
         android:layout_height="24dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/labelItemFrequ"
         app:layout_constraintTop_toBottomOf="@+id/labelItemFreqa">
 

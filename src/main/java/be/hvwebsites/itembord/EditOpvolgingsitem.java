@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
     private RadioButton frequencyWeekV;
     private RadioButton frequencyMonthV;
     private RadioButton frequencyYearV;
+    private RadioGroup radioGroupFrequency;
     private EditText opvolgingsitemLatestDateV;
     private CalenderService calenderService;
     // Device
@@ -83,6 +85,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
         frequencyWeekV = findViewById(R.id.radioButtonFreqWeek);
         frequencyMonthV = findViewById(R.id.radioButtonFreqMaand);
         frequencyYearV = findViewById(R.id.radioButtonFreqJaar);
+        radioGroupFrequency = findViewById(R.id.radioButtonGroup);
         opvolgingsitemLatestDateV = findViewById(R.id.editItemLatestDate);
 
         // Creer een filebase service (bevat file base en file base directory) obv device en package name
@@ -156,6 +159,19 @@ public class EditOpvolgingsitem extends AppCompatActivity
             }
         });
 
+        opvolgingsitemFrequencyV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                // Checken of frequentieunit moet getoond worden of niet
+                if (Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())) == 0){
+                    // Item zndr frequentie, frequentieeenheid invisible maken
+                    radioGroupFrequency.setVisibility(View.GONE);
+                }else {
+                    radioGroupFrequency.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
         // Vul Scherm in vlgns new/update
         switch (action) {
             case StaticData.ACTION_NEW:
@@ -181,21 +197,27 @@ public class EditOpvolgingsitem extends AppCompatActivity
                 opvolgingsitemNameV.setText(opvolgingsitemToUpdate.getEntityName());
                 opvolgingsitemNamePastV.setText(opvolgingsitemToUpdate.getEntityNamePast());
                 opvolgingsitemFrequencyV.setText(String.valueOf(opvolgingsitemToUpdate.getFrequentieNbr()));
-                switch (opvolgingsitemToUpdate.getFrequentieUnit()){
-                    case DAYS:
-                        setFrequencyDay();
-                        break;
-                    case WEEKS:
-                        setFrequencyWeek();
-                        break;
-                    case MONTHS:
-                        setFrequencyMonth();
-                        break;
-                    case YEARS:
-                        setFrequencyYear();
-                        break;
-                    default:
-                        setFrequencyDay();
+                if (opvolgingsitemToUpdate.getFrequentieNbr() > 0){
+                    radioGroupFrequency.setVisibility(View.VISIBLE);
+
+                    switch (opvolgingsitemToUpdate.getFrequentieUnit()){
+                        case DAYS:
+                            setFrequencyDay();
+                            break;
+                        case WEEKS:
+                            setFrequencyWeek();
+                            break;
+                        case MONTHS:
+                            setFrequencyMonth();
+                            break;
+                        case YEARS:
+                            setFrequencyYear();
+                            break;
+                        default:
+                            setFrequencyDay();
+                    }
+                }else {
+                    radioGroupFrequency.setVisibility(View.GONE);
                 }
                 opvolgingsitemLatestDateV.setText(opvolgingsitemToUpdate.getLatestDate().getFormatDate());
 
@@ -275,7 +297,6 @@ public class EditOpvolgingsitem extends AppCompatActivity
                     // Update opvolgingsitem to update met gegevens vn scherm
                     opvolgingsitemToUpdate.setEntityName(String.valueOf(opvolgingsitemNameV.getText()));
                     opvolgingsitemToUpdate.setEntityNamePast(String.valueOf(opvolgingsitemNamePastV.getText()));
-                    opvolgingsitemToUpdate.setFrequentieNbr(Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())));
                     if (frequencyDayV.isChecked()){
                         opvolgingsitemToUpdate.setFrequentieUnit(FrequentieDateUnit.DAYS);
                     }else if (frequencyWeekV.isChecked()){
@@ -285,6 +306,8 @@ public class EditOpvolgingsitem extends AppCompatActivity
                     }else if (frequencyYearV.isChecked()){
                         opvolgingsitemToUpdate.setFrequentieUnit(FrequentieDateUnit.YEARS);
                     }
+                    // FrequentieNbr moet na FrequentieUnit upgedate worden !!
+                    opvolgingsitemToUpdate.setFrequentieNbr(Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())));
                     boolean latestDateChanged = false;
                     // String newLatestDate = String.valueOf(opvolgingsitemLatestDateV.getText());
                     DateString newLatestDatestring = new DateString(String.valueOf(opvolgingsitemLatestDateV.getText()));
@@ -322,7 +345,6 @@ public class EditOpvolgingsitem extends AppCompatActivity
                     newOItem.setRubriekId(rubriekOpvolgingsitem.getEntityId());
                     newOItem.setEntityName(String.valueOf(opvolgingsitemNameV.getText()));
                     newOItem.setEntityNamePast(String.valueOf(opvolgingsitemNamePastV.getText()));
-                    newOItem.setFrequentieNbr(Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())));
                     if (frequencyDayV.isChecked()){
                         newOItem.setFrequentieUnit(FrequentieDateUnit.DAYS);
                     }else if (frequencyWeekV.isChecked()){
@@ -332,6 +354,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
                     }else if (frequencyYearV.isChecked()){
                         newOItem.setFrequentieUnit(FrequentieDateUnit.YEARS);
                     }
+                    newOItem.setFrequentieNbr(Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())));
                     newOItem.setLatestDate(new DateString(String.valueOf(opvolgingsitemLatestDateV.getText())));
                     // Toevoegen opvolgingsitem aan opvolgingsitemlist
                     viewModel.getOpvolgingsitemList().add(newOItem);
