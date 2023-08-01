@@ -11,4 +11,6 @@ public interface FlexDialogInterface {
     public void onOitemDialogNegativeClick(DialogFragment dialogFragment);
     public void onDateDialogPositiveClick(DialogFragment dialogFragment);
     public void onDateDialogNegativeClick(DialogFragment dialogFragment);
+    public void onSkipDialogPositiveClick(DialogFragment dialogFragment);
+    public void onSkipDialogNegativeClick(DialogFragment dialogFragment);
 }

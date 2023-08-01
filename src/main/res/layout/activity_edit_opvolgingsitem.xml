@@ -75,17 +75,6 @@
         app:layout_constraintTop_toBottomOf="@+id/labelItemNamePast" />
 
     <TextView
-        android:id="@+id/labelItemFrequ"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Eenheid:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelItemFreqa" />
-
-    <TextView
         android:id="@+id/labelItemLatestDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -98,13 +87,14 @@
 
     <EditText
         android:id="@+id/editItemFreqa"
+        android:imeOptions="actionUnspecified"
         android:layout_width="25dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="Frequentie"
-        android:inputType="number"
+        android:inputType="text"
         android:textSize="14sp"
         app:flow_horizontalAlign="center"
         app:layout_constraintBaseline_toBaselineOf="@+id/labelItemFreqa"
@@ -124,7 +114,18 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/labelItemLatestDate"
         app:layout_constraintStart_toEndOf="@+id/labelItemLatestDate" />
 
-<!--    Radiogroup moet onzichtbaar gemaakt worden tenzij frequentie > 0 -->
+    <!--    Label en Radiogroup moet onzichtbaar gemaakt worden tenzij frequentie > 0 -->
+    <TextView
+        android:id="@+id/labelItemFrequ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Eenheid:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelItemFreqa" />
+
     <RadioGroup
         android:id="@+id/radioButtonGroup"
         android:layout_width="312dp"

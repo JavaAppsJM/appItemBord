@@ -24,7 +24,7 @@ public class Log extends SuperItem{
         this.itemId = StaticData.IDNUMBER_NOT_FOUND;
     }
 
-    public Log(String basedir, Opvolgingsitem oItem){
+    public Log(String basedir, Opvolgingsitem oItem, String inLogText){
         super(new IDNumber(basedir, ENTITY_LATEST_ID));
         setLogDate(oItem.getLatestDate());
         setLogDescription(oItem.getEntityNamePast());

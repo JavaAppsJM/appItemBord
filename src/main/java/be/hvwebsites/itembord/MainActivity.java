@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -104,6 +105,42 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                 oitemDialog.show(getSupportFragmentManager(), "oItemDialogFragment");
             }
         });
+
+        // TODO: Als een item in de recyclerview, nr rechts, geswiped wordt, dan wordt deze duedate
+        //  geskipped en wordt de volgende gezet
+        ItemTouchHelper helper = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(0,
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                    @Override
+                    public boolean onMove(@NonNull RecyclerView recyclerView,
+                                          @NonNull RecyclerView.ViewHolder viewHolder,
+                                          @NonNull RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+                    @Override
+                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                        Toast.makeText(MainActivity.this,
+                                " Due date skippen ... ",
+                                Toast.LENGTH_LONG).show();
+                        // Bepalen entity IDNumber to be skipped
+                        int position = viewHolder.getAdapterPosition();
+                        IDNumber idNumberToSkip = itemList.get(position).getItemID();
+
+                        // TODO: Due date item skippen
+
+                        // Hergebruiken van Opvolgingsitem to roll on en index
+                        opvolgingsitemToRollOn = viewModel.getOpvolgingsitemById(idNumberToSkip);
+                        opvolgingsitemToRollOnIndex = viewModel.getItemIndexById(idNumberToSkip);
+
+                        // Via een dialog vragen om te bevestigen om te skippen. Hierbinnen
+                        // wordt het skippen uitgevoerd !
+                        // Create an instance of the dialog fragment and show it
+                        FlexDialogFragment oitemSkipDialog = new FlexDialogFragment();
+                        oitemSkipDialog.setSubjectDialog("Skip");
+                        oitemSkipDialog.show(getSupportFragmentManager(), "oItemDialogFragment");
+                    }
+                });
+        helper.attachToRecyclerView(recyclerView);
     }
 
     private List<ListItemStatusbordHelper> buildStatusbordList(){
@@ -204,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         tempDs.setDateToday();
         opvolgingsitemToRollOn.setLatestDate(tempDs);
         // Doe de verdere verwerking van afvinken
-        processRollOnOItem();
+        processRollOnOItem(opvolgingsitemToRollOn.getEntityNamePast());
     }
 
     @Override
@@ -212,23 +249,32 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         // Opvolgingsitem moet latest date = vervaldatum nemen
         opvolgingsitemToRollOn.setLatestDate(opvolgingsitemToRollOn.getNextDateDS());
         // Doe de verdere verwerking van afvinken
-        processRollOnOItem();
+        processRollOnOItem(opvolgingsitemToRollOn.getEntityNamePast());
     }
 
-    private void processRollOnOItem() {
+    @Override
+    public void onSkipDialogPositiveClick(DialogFragment dialogFragment) {
+        // Doe de verdere verwerking van skippen
+
+        // Skipdate aanpassen en next date herbepalen. Opvolgingsitem in kwestie zit in rollon
+        opvolgingsitemToRollOn.setSkipDate(opvolgingsitemToRollOn.getNextDateDS());
+        processRollOnOItem("Due date geskipped !");
+    }
+
+    @Override
+    public void onSkipDialogNegativeClick(DialogFragment dialogFragment) {
+        // Uitvoering opvolgingsitem moet niet geskipped worden
+    }
+
+    private void processRollOnOItem(String inLogText) {
         // Opvolgingsitem moet afgevinkt worden
+
         // Opvolgingsitem in list aanpassen
         viewModel.getOpvolgingsitemList().get(opvolgingsitemToRollOnIndex).setOpvolgingsitem(opvolgingsitemToRollOn);
 
         // Er moet een log aangemaakt worden vermits het oitem automatisch afgevinkt wordt
-        Log newLog = new Log(viewModel.getBasedir(), opvolgingsitemToRollOn);
-/*
-        newLog.setLogDate(opvolgingsitemToRollOn.getLatestDate());
-        // entityNamePAst gebruiken om log aan te maken
-        newLog.setLogDescription(opvolgingsitemToRollOn.getEntityNamePast());
-        newLog.setRubriekId(opvolgingsitemToRollOn.getRubriekId());
-        newLog.setItemId(opvolgingsitemToRollOn.getEntityId());
-*/
+        Log newLog = new Log(viewModel.getBasedir(), opvolgingsitemToRollOn, inLogText);
+
         // de log moet bewaard worden !
         viewModel.getLogList().add(newLog);
         viewModel.storeLogs();

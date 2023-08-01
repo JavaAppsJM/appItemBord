@@ -9,11 +9,15 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -70,6 +74,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
     Opvolgingsitem opvolgingsitemPastProcess = new Opvolgingsitem();
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +85,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
         EditText opvolgingsitemNameV = findViewById(R.id.editNameItem);
         EditText opvolgingsitemNamePastV = findViewById(R.id.editItemNamePast);
         EditText opvolgingsitemFrequencyV = findViewById(R.id.editItemFreqa);
+        TextView opvolgingsitemLabelFreqUnit = findViewById(R.id.labelItemFrequ);
 
         frequencyDayV = findViewById(R.id.radioButtonFreqDag);
         frequencyWeekV = findViewById(R.id.radioButtonFreqWeek);
@@ -151,23 +157,58 @@ public class EditOpvolgingsitem extends AppCompatActivity
             }
         });
 
+        // Als de naam ingevuld is, wordt de naam uitgevoerd automatisch ingevuld
         opvolgingsitemNameV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                // Suggestie voor name past
-                opvolgingsitemNamePastV.setText(opvolgingsitemNameV.getText() + " uitgevoerd");
+                // Welke view has changed
+                if (view.getId() == opvolgingsitemNameV.getId() && !b){
+                    // Suggestie voor name past
+                    opvolgingsitemNamePastV.setText(opvolgingsitemNameV.getText() + " uitgevoerd");
+                }else if (view.getId() == opvolgingsitemFrequencyV.getId()){
+                    // Checken of er al iets ingevuld is
+                    if (opvolgingsitemFrequencyV.getText() == null){
+                        radioGroupFrequency.setVisibility(View.GONE);
+                        opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
+                    }else {
+                        // Checken of frequentieunit moet getoond worden of niet
+                        if (Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())) == 0) {
+                            // Item zndr frequentie, frequentieeenheid invisible maken
+                            radioGroupFrequency.setVisibility(View.GONE);
+                            opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
+                        } else {
+                            opvolgingsitemLabelFreqUnit.setVisibility(View.VISIBLE);
+                            radioGroupFrequency.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
             }
         });
 
+        // TODO: Detecteren dat de frequency vh opvolgingsitem al of niet op 0 gezet is
+        // Deze oplossing werkt maar nadeel : als je de frequentie van 3 op 0 zet, dan moet je eerst op een
+        // ander veld gaan staan voordat de frequentie-eenheid zichtbaar wordt !!
         opvolgingsitemFrequencyV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                // Checken of frequentieunit moet getoond worden of niet
-                if (Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())) == 0){
-                    // Item zndr frequentie, frequentieeenheid invisible maken
-                    radioGroupFrequency.setVisibility(View.GONE);
-                }else {
-                    radioGroupFrequency.setVisibility(View.VISIBLE);
+                // Welke view has changed
+                if (view.getId() == opvolgingsitemFrequencyV.getId()) {
+                    // Checken of frequentie = 0 of null is, dan moet de eenheid niet getoond worden
+                    if (opvolgingsitemFrequencyV.getText() == null) {
+                        // Er is nog geen waarde als frequentie
+                        radioGroupFrequency.setVisibility(View.GONE);
+                        opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
+                    } else {
+                        // Checken of frequentieunit moet getoond worden of niet
+                        if (Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())) == 0) {
+                            // Item zndr frequentie, frequentieeenheid invisible maken
+                            radioGroupFrequency.setVisibility(View.GONE);
+                            opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
+                        } else {
+                            opvolgingsitemLabelFreqUnit.setVisibility(View.VISIBLE);
+                            radioGroupFrequency.setVisibility(View.VISIBLE);
+                        }
+                    }
                 }
             }
         });
@@ -179,6 +220,9 @@ public class EditOpvolgingsitem extends AppCompatActivity
                 // Bepaal rubriek uit intent
                 IDNumber rubriekId = new IDNumber(editIntent.getIntExtra(SpecificData.ID_RUBRIEK, 0));
                 rubriekOpvolgingsitem.setRubriek(viewModel.getRubriekById(rubriekId));
+                // Frequentie nbr default op 0 zetten
+                opvolgingsitemFrequencyV.setText("0");
+                opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
                 break;
             case StaticData.ACTION_UPDATE:
                 setTitle(SpecificData.TITLE_UPDATE_OPVOLGINGSITEM);
@@ -198,6 +242,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
                 opvolgingsitemNamePastV.setText(opvolgingsitemToUpdate.getEntityNamePast());
                 opvolgingsitemFrequencyV.setText(String.valueOf(opvolgingsitemToUpdate.getFrequentieNbr()));
                 if (opvolgingsitemToUpdate.getFrequentieNbr() > 0){
+                    opvolgingsitemLabelFreqUnit.setVisibility(View.VISIBLE);
                     radioGroupFrequency.setVisibility(View.VISIBLE);
 
                     switch (opvolgingsitemToUpdate.getFrequentieUnit()){
@@ -217,6 +262,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
                             setFrequencyDay();
                     }
                 }else {
+                    opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
                     radioGroupFrequency.setVisibility(View.GONE);
                 }
                 opvolgingsitemLatestDateV.setText(opvolgingsitemToUpdate.getLatestDate().getFormatDate());
@@ -415,7 +461,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
     @Override
     public void onLogDialogPositiveClick(DialogFragment dialogFragment, String subject) {
         // Maak alvast de log aan
-        Log newLog = new Log(viewModel.getBasedir(), opvolgingsitemPastProcess);
+        Log newLog = new Log(viewModel.getBasedir(), opvolgingsitemPastProcess, opvolgingsitemPastProcess.getEntityNamePast());
 /*
         newLog.setLogDate(opvolgingsitemPastProcess.getLatestDate());
         // entityNamePAst gebruiken om log aan te maken
@@ -537,6 +583,16 @@ public class EditOpvolgingsitem extends AppCompatActivity
         // Not used
     }
 
+    @Override
+    public void onSkipDialogPositiveClick(DialogFragment dialogFragment) {
+
+    }
+
+    @Override
+    public void onSkipDialogNegativeClick(DialogFragment dialogFragment) {
+
+    }
+
     public void onRadioButtonClicked(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
@@ -605,5 +661,104 @@ public class EditOpvolgingsitem extends AppCompatActivity
         frequencyMonthV.setChecked(false);
         frequencyYearV.setChecked(true);
     }
+
+
+        /*        opvolgingsitemFrequencyV.dispatchKeyEvent(new KeyEvent())
+        opvolgingsitemFrequencyV.setImeOptions(EditorInfo.IME_ACTION_GO);
+        opvolgingsitemFrequencyV.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                // Wordt niet afgevuurd bij ingeven cijfers !!
+                if (i == EditorInfo.IME_ACTION_DONE){
+                    return true;
+                }
+                if (keyEvent != null) {
+                    String content = String.valueOf(opvolgingsitemFrequencyV.getText());
+                    try {
+                        // Checken of frequentieunit moet getoond worden of niet
+                        if (Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())) == 0) {
+                            // Item zndr frequentie, frequentieeenheid invisible maken
+                            radioGroupFrequency.setVisibility(View.GONE);
+                            opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
+                        } else {
+                            opvolgingsitemLabelFreqUnit.setVisibility(View.VISIBLE);
+                            radioGroupFrequency.setVisibility(View.VISIBLE);
+                        }
+                    }catch (NumberFormatException ex){
+                        radioGroupFrequency.setVisibility(View.GONE);
+                        opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
+                    }
+
+                }
+
+                return false;
+            }
+        });
+
+        opvolgingsitemFrequencyV.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                // Focus zetten
+                //opvolgingsitemFrequencyV.setFocusable(View.FOCUSABLE);
+                String content = String.valueOf(opvolgingsitemFrequencyV.getText());
+                try {
+                    // Checken of frequentieunit moet getoond worden of niet
+                    if (Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())) == 0) {
+                        // Item zndr frequentie, frequentieeenheid invisible maken
+                        radioGroupFrequency.setVisibility(View.GONE);
+                        opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
+                    } else {
+                        opvolgingsitemLabelFreqUnit.setVisibility(View.VISIBLE);
+                        radioGroupFrequency.setVisibility(View.VISIBLE);
+                    }
+                }catch (NumberFormatException ex){
+                    radioGroupFrequency.setVisibility(View.GONE);
+                    opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
+                }
+                return true;
+            }
+
+
+        });
+
+        opvolgingsitemFrequencyV.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                // Wordt niet afgevuurd bij ingeven cijfers !!
+                String content = String.valueOf(opvolgingsitemFrequencyV.getText());
+                try {
+                    // Checken of frequentieunit moet getoond worden of niet
+                    if (Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())) == 0) {
+                        // Item zndr frequentie, frequentieeenheid invisible maken
+                        radioGroupFrequency.setVisibility(View.GONE);
+                        opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
+                    } else {
+                        opvolgingsitemLabelFreqUnit.setVisibility(View.VISIBLE);
+                        radioGroupFrequency.setVisibility(View.VISIBLE);
+                    }
+                }catch (NumberFormatException ex){
+                    radioGroupFrequency.setVisibility(View.GONE);
+                    opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
+                }
+
+                if (content == null){
+                    radioGroupFrequency.setVisibility(View.GONE);
+                    opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
+                }else {
+                    // Checken of frequentieunit moet getoond worden of niet
+                    if (Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())) == 0) {
+                        // Item zndr frequentie, frequentieeenheid invisible maken
+                        radioGroupFrequency.setVisibility(View.GONE);
+                        opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
+                    } else {
+                        opvolgingsitemLabelFreqUnit.setVisibility(View.VISIBLE);
+                        radioGroupFrequency.setVisibility(View.VISIBLE);
+                    }
+                }
+                return false;
+            }
+        });
+
+*/
 
 }

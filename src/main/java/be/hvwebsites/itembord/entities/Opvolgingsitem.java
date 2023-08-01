@@ -14,6 +14,7 @@ public class Opvolgingsitem extends SuperItem{
     private int frequentieNbr;
     private FrequentieDateUnit frequentieUnit;
     private DateString latestDate;
+    private DateString skipDate;
     private long nextDate;
     private long eventId;
     private IDNumber rubriekId;
@@ -29,11 +30,14 @@ public class Opvolgingsitem extends SuperItem{
         setEntityName("");
         entityNamePast = "";
         latestDate = new DateString(DateString.EMPTY_DATESTRING);
+        skipDate = new DateString(DateString.EMPTY_DATESTRING);
         nextDate = 0;
     }
 
     public Opvolgingsitem(String fileLine){
+        this.skipDate = new DateString(DateString.EMPTY_DATESTRING);
         convertFromFileLine(fileLine);
+        this.nextDate = calcNextDate();
     }
 
     private DateString calculateNextDate(DateString inDateString){
@@ -76,6 +80,7 @@ public class Opvolgingsitem extends SuperItem{
         setFrequentieUnit(inItem.getFrequentieUnit());
         setFrequentieNbr(inItem.getFrequentieNbr());
         setLatestDate(inItem.getLatestDate());
+        setSkipDate(inItem.getSkipDate());
         setEventId(inItem.getEventId());
         setRubriekId(inItem.rubriekId);
 
@@ -203,7 +208,30 @@ public class Opvolgingsitem extends SuperItem{
 
     public void setLatestDate(DateString latestDate) {
         this.latestDate = latestDate;
-        this.nextDate = calculateNextDate(latestDate).getDateInMillis();
+        this.nextDate = calcNextDate();
+    }
+
+    public DateString getSkipDate() {
+        return skipDate;
+    }
+
+    public void setSkipDate(DateString skipDate) {
+        this.skipDate = skipDate;
+        this.nextDate = calcNextDate();
+    }
+
+    private long calcNextDate(){
+        if (this.skipDate != null){
+            if ((!this.skipDate.getDateString().equals(DateString.EMPTY_DATESTRING))
+                    && (this.skipDate.getDateInMillis() > this.latestDate.getDateInMillis())){
+                // Skipdate is groter dan wordt die genomen voor de berekening vn nextdate
+                return calculateNextDate(this.skipDate).getDateInMillis();
+            }else{
+                return calculateNextDate(this.latestDate).getDateInMillis();
+            }
+        }else {
+            return calculateNextDate(this.latestDate).getDateInMillis();
+        }
     }
 
     public long getNextDate() {
@@ -237,6 +265,9 @@ public class Opvolgingsitem extends SuperItem{
             if (fileLineContent[i].matches("latest.*")){
                 setLatestDate(new DateString(fileLineContent[i+1].replace(">","")));
             }
+            if (fileLineContent[i].matches("skip.*")){
+                setSkipDate(new DateString(fileLineContent[i+1].replace(">","")));
+            }
             if (fileLineContent[i].matches("event.*")){
                 setEventId(Integer.parseInt(fileLineContent[i+1].replace(">","")));
             }
@@ -253,6 +284,7 @@ public class Opvolgingsitem extends SuperItem{
                 + "><freqa><" + getFrequentieNbr()
                 + "><freqe><" + getFrequentieUnit().getLetter()
                 + "><latest><" + getLatestDate().getDateString()
+                + "><skip><" + getSkipDate().getDateString()
                 + "><event><" + getEventId()
                 + "><rubriek><" + getRubriekId().getIdString() + ">";
     }
