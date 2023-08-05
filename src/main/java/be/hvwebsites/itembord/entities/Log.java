@@ -26,8 +26,9 @@ public class Log extends SuperItem{
 
     public Log(String basedir, Opvolgingsitem oItem, String inLogText){
         super(new IDNumber(basedir, ENTITY_LATEST_ID));
+        
         setLogDate(oItem.getLatestDate());
-        setLogDescription(oItem.getEntityNamePast());
+        setLogDescription(inLogText);
         setRubriekId(oItem.getRubriekId());
         setItemId(oItem.getEntityId());
     }

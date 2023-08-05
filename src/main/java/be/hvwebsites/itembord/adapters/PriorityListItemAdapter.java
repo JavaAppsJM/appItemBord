@@ -3,7 +3,6 @@ package be.hvwebsites.itembord.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,17 +17,17 @@ import java.util.List;
 import be.hvwebsites.itembord.EditOpvolgingsitem;
 import be.hvwebsites.itembord.R;
 import be.hvwebsites.itembord.constants.SpecificData;
-import be.hvwebsites.itembord.helpers.ListItemStatusbordHelper;
+import be.hvwebsites.itembord.helpers.PriorityListItemHelper;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
-public class StatusbordItemListAdapter extends RecyclerView.Adapter<StatusbordItemListAdapter.ListViewHolder> {
+public class PriorityListItemAdapter extends RecyclerView.Adapter<PriorityListItemAdapter.ListViewHolder> {
     private final LayoutInflater inflater;
     private Context mContext;
-    private List<ListItemStatusbordHelper> itemList;
+    private List<PriorityListItemHelper> itemList;
     private ClickListener clickListener;
 
-    public StatusbordItemListAdapter(Context context) {
+    public PriorityListItemAdapter(Context context) {
         this.mContext = context;
         inflater = LayoutInflater.from(context);
     }
@@ -51,8 +50,8 @@ public class StatusbordItemListAdapter extends RecyclerView.Adapter<StatusbordIt
         private ListViewHolder(View itemView){
             super(itemView);
 
-            textItemViewLine1 = itemView.findViewById(R.id.statusbord_item_line1);
-            textItemViewLine2 = itemView.findViewById(R.id.statusbord_item_line2);
+            textItemViewLine1 = itemView.findViewById(R.id.prioritylist_item_line1);
+            textItemViewLine2 = itemView.findViewById(R.id.prioritylist_item_line2);
 
             itemView.setOnClickListener(this);
         }
@@ -75,7 +74,7 @@ public class StatusbordItemListAdapter extends RecyclerView.Adapter<StatusbordIt
     @NonNull
     @Override
     public ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = inflater.inflate(R.layout.list_statusbord_item, parent, false);
+        View itemView = inflater.inflate(R.layout.list_priority_item, parent, false);
 
         return new ListViewHolder(itemView);
     }
@@ -131,11 +130,11 @@ public class StatusbordItemListAdapter extends RecyclerView.Adapter<StatusbordIt
         else return 0;
     }
 
-    public List<ListItemStatusbordHelper> getItemList() {
+    public List<PriorityListItemHelper> getItemList() {
         return itemList;
     }
 
-    public void setItemList(List<ListItemStatusbordHelper> itemList) {
+    public void setItemList(List<PriorityListItemHelper> itemList) {
         this.itemList = itemList;
     }
 }

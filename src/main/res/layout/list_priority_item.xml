@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/statusbord_item_line1"
+        android:id="@+id/prioritylist_item_line1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
@@ -18,7 +18,7 @@
         tools:text="rubriek: opvolgingsitem" />
 
     <TextView
-        android:id="@+id/statusbord_item_line2"
+        android:id="@+id/prioritylist_item_line2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"

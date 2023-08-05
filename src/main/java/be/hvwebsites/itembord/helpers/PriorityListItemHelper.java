@@ -2,13 +2,13 @@ package be.hvwebsites.itembord.helpers;
 
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 
-public class ListItemStatusbordHelper {
+public class PriorityListItemHelper {
     private String itemTextLine1;
     private String itemTextLine2;
     private String itemStyle;
     private IDNumber itemID;
 
-    public ListItemStatusbordHelper(
+    public PriorityListItemHelper(
             String itemtext1,
             String itemtext2,
             String inStyle,
@@ -19,7 +19,7 @@ public class ListItemStatusbordHelper {
         this.itemID = inID;
     }
 
-    public ListItemStatusbordHelper() {
+    public PriorityListItemHelper() {
     }
 
     public IDNumber getItemID() {

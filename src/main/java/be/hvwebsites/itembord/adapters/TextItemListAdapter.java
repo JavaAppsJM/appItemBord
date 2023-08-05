@@ -39,7 +39,7 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
 
         private ListViewHolder(View itemView) {
             super(itemView);
-            textItemView = itemView.findViewById(R.id.manage_entity_item);
+            textItemView = itemView.findViewById(R.id.simple_item);
             itemView.setOnClickListener(this);
         }
 
@@ -99,7 +99,7 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
     @Override
     public ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView;
-        itemView = inflater.inflate(R.layout.list_manage_entity_item, parent, false);
+        itemView = inflater.inflate(R.layout.list_simple_item, parent, false);
         return new ListViewHolder(itemView);
     }
 

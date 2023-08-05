@@ -83,8 +83,6 @@ public class Opvolgingsitem extends SuperItem{
         setSkipDate(inItem.getSkipDate());
         setEventId(inItem.getEventId());
         setRubriekId(inItem.rubriekId);
-
-        boolean tobedeleted = true;
     }
 
     public String getDisplayOpvolgingsitem(){

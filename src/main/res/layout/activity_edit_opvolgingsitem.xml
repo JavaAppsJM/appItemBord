@@ -207,7 +207,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelItemLogboek"
-        tools:listitem="@layout/list_manage_entity_item" />
+        tools:listitem="@layout/list_simple_item" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_edit_item"

@@ -190,6 +190,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                                 } else if (listEntityType.equals(SpecificData.ENTITY_TYPE_LOG)) {
                                     // Delete log
                                     viewModel.deleteLogByID(idNumberToBeDeleted);
+                                    itemList.addAll(viewModel.getLogItemListByRubriekID(rubriekToUpdate.getEntityId()));
                                 }
                                 // Refresh recyclerview
                                 adapter.setEntityType(listEntityType);

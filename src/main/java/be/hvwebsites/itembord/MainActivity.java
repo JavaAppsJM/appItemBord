@@ -20,12 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import be.hvwebsites.itembord.adapters.StatusbordItemListAdapter;
+import be.hvwebsites.itembord.adapters.PriorityListItemAdapter;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Log;
 import be.hvwebsites.itembord.entities.Opvolgingsitem;
 import be.hvwebsites.itembord.fragments.FlexDialogFragment;
-import be.hvwebsites.itembord.helpers.ListItemStatusbordHelper;
+import be.hvwebsites.itembord.helpers.PriorityListItemHelper;
 import be.hvwebsites.itembord.interfaces.FlexDialogInterface;
 import be.hvwebsites.itembord.services.CalenderService;
 import be.hvwebsites.itembord.services.FileBaseService;
@@ -38,12 +38,12 @@ import be.hvwebsites.libraryandroid4.statics.StaticData;
 
 public class MainActivity extends AppCompatActivity implements FlexDialogInterface {
     private EntitiesViewModel viewModel;
-    private List<ListItemStatusbordHelper> itemList = new ArrayList<>();
+    private List<PriorityListItemHelper> itemList = new ArrayList<>();
     private Opvolgingsitem opvolgingsitemToRollOn;
     private int opvolgingsitemToRollOnIndex;
     private RecyclerView recyclerView;
 
-    private StatusbordItemListAdapter statusBordAdapter;
+    private PriorityListItemAdapter statusBordAdapter;
     // Device
     private final String deviceModel = Build.MODEL;
 
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
 
         // Recyclerview definieren
         recyclerView = findViewById(R.id.recycler_statusbord);
-        statusBordAdapter = new StatusbordItemListAdapter(this);
+        statusBordAdapter = new PriorityListItemAdapter(this);
         recyclerView.setAdapter(statusBordAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         }
 
         // Als er lang geklikt is op een oitem, kan dat hier gecapteerd worden
-        statusBordAdapter.setOnItemClickListener(new StatusbordItemListAdapter.ClickListener() {
+        statusBordAdapter.setOnItemClickListener(new PriorityListItemAdapter.ClickListener() {
             @Override
             public void onItemClicked(IDNumber itemID, View v) {
                 // Opvolgingsitem to roll on en index bepalen
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
             }
         });
 
-        // TODO: Als een item in de recyclerview, nr rechts, geswiped wordt, dan wordt deze duedate
+        // Als een item in de recyclerview, nr rechts, geswiped wordt, dan wordt deze duedate
         //  geskipped en wordt de volgende gezet
         ItemTouchHelper helper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(0,
@@ -143,8 +143,8 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         helper.attachToRecyclerView(recyclerView);
     }
 
-    private List<ListItemStatusbordHelper> buildStatusbordList(){
-        List<ListItemStatusbordHelper> statusbordList = new ArrayList<>();
+    private List<PriorityListItemHelper> buildStatusbordList(){
+        List<PriorityListItemHelper> statusbordList = new ArrayList<>();
         String item1;
         String item2;
         Opvolgingsitem opvolgingsitem = new Opvolgingsitem();
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                         " Vorige: " +
                         opvolgingsitem.getLatestDate().getFormatDate();
                 // Creer statusborditem en steek in statusbordlist
-                statusbordList.add(new ListItemStatusbordHelper(item1,
+                statusbordList.add(new PriorityListItemHelper(item1,
                         item2,
                         opvolgingsitem.getDisplayStyle(),
                         opvolgingsitem.getEntityId()));

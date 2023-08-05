@@ -13,4 +13,5 @@
     <string name="head_subrubrieken">Subrubrieken</string>
     <string name="head_opvolgingsitems">Opvolgingsitems</string>
     <string name="label_hoofdrubriek">Hoofdrubriek:</string>
+    <string name="instr_vul_rubriek_in">Vul Rubriek in ...</string>
 </resources>
