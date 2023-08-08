@@ -111,6 +111,9 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
 
             // Onderscheid maken in callingactivity
             switch (callingActivity){
+                case SpecificData.ACTIVITY_STATUSBORD:
+                    holder.textItemView.setTextSize(14);
+                    break;
                 case SpecificData.ACTIVITY_MANAGE_RUBRIEK:
                     break;
                 case SpecificData.ACTIVITY_EDIT_RUBRIEK:
@@ -120,6 +123,7 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
                     holder.textItemView.setTextSize(14);
                     break;
                 default:
+                    break;
             }
 
             // Onderscheid maken in style
@@ -127,7 +131,6 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
             switch (itemList.get(position).getItemStyle()){
                 case SpecificData.STYLE_BOLD:
                     holder.textItemView.setTypeface(null, Typeface.BOLD);
-                    //holder.textItemView.setTextSize(16);
                     break;
                 default:
                     holder.textItemView.setTypeface(null, Typeface.NORMAL);

@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
     private int opvolgingsitemToRollOnIndex;
     private RecyclerView recyclerView;
 
-    private PriorityListItemAdapter statusBordAdapter;
+    private PriorityListItemAdapter priorityListItemAdapter;
     // Device
     private final String deviceModel = Build.MODEL;
 
@@ -77,14 +77,14 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
 
         // Recyclerview definieren
         recyclerView = findViewById(R.id.recycler_statusbord);
-        statusBordAdapter = new PriorityListItemAdapter(this);
-        recyclerView.setAdapter(statusBordAdapter);
+        priorityListItemAdapter = new PriorityListItemAdapter(this);
+        recyclerView.setAdapter(priorityListItemAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Recyclerview invullen met statusbord items
         itemList.clear();
         itemList.addAll(buildStatusbordList());
-        statusBordAdapter.setItemList(itemList);
+        priorityListItemAdapter.setItemList(itemList);
         if (itemList.size() == 0){
             Toast.makeText(this,
                     SpecificData.NO_STATUSBORDITEMS_YET,
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         }
 
         // Als er lang geklikt is op een oitem, kan dat hier gecapteerd worden
-        statusBordAdapter.setOnItemClickListener(new PriorityListItemAdapter.ClickListener() {
+        priorityListItemAdapter.setOnItemClickListener(new PriorityListItemAdapter.ClickListener() {
             @Override
             public void onItemClicked(IDNumber itemID, View v) {
                 // Opvolgingsitem to roll on en index bepalen
@@ -126,8 +126,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                         int position = viewHolder.getAdapterPosition();
                         IDNumber idNumberToSkip = itemList.get(position).getItemID();
 
-                        // TODO: Due date item skippen
-
+                        // Due date item skippen
                         // Hergebruiken van Opvolgingsitem to roll on en index
                         opvolgingsitemToRollOn = viewModel.getOpvolgingsitemById(idNumberToSkip);
                         opvolgingsitemToRollOnIndex = viewModel.getItemIndexById(idNumberToSkip);
@@ -193,14 +192,19 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         /** Menu items definieren */
         Intent mainIntent;
         switch (item.getItemId()) {
-            case R.id.menu_beheer_rubrieken:
+            case R.id.menu_statusbord:
                 // ga naar activity ManageRubriek
-                mainIntent = new Intent(MainActivity.this, ManageRubriek.class);
+                mainIntent = new Intent(MainActivity.this, OItemStatusBord.class);
                 startActivity(mainIntent);
                 return true;
             case R.id.menu_logboek:
                 // ga naar activity Logboek
                 mainIntent = new Intent(MainActivity.this, Logboek.class);
+                startActivity(mainIntent);
+                return true;
+            case R.id.menu_beheer_rubrieken:
+                // ga naar activity ManageRubriek
+                mainIntent = new Intent(MainActivity.this, ManageRubriek.class);
                 startActivity(mainIntent);
                 return true;
             case R.id.menu_exit:
@@ -328,8 +332,8 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         // Recyclerlist refreshen
         itemList.clear();
         itemList.addAll(buildStatusbordList());
-        statusBordAdapter.setItemList(itemList);
-        recyclerView.setAdapter(statusBordAdapter);
+        priorityListItemAdapter.setItemList(itemList);
+        recyclerView.setAdapter(priorityListItemAdapter);
         if (itemList.size() == 0){
             Toast.makeText(this,
                     SpecificData.NO_STATUSBORDITEMS_YET,

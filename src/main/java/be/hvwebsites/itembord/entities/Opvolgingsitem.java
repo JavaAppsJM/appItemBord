@@ -94,6 +94,12 @@ public class Opvolgingsitem extends SuperItem{
                 latestDate.getFormatDate();
     }
 
+    public String getDisplayOitemStatusBord(){
+        return getEntityName()
+                + " laatste uitvoering: "
+                + latestDate.getFormatDate();
+    }
+
     public String getDisplayStyle(){
         if (latestDateIsEmpty()){
             return SpecificData.STYLE_NORMAL;

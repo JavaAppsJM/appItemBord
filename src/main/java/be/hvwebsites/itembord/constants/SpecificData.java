@@ -31,6 +31,7 @@ public class SpecificData {
     public static final String COOKIE_RETURN_ENTITY_TYPE = "returnentitytype";
     public static final String COOKIE_RETURN_ACTION = "returnaction";
     public static final String COOKIE_RETURN_UPDATE_INDEX = "returnindex";
+    public static final String COOKIE_RUBRIEK_FILTER = "rubriekfilterId";
 
     // Calling Activities
     public static final String CALLING_ACTIVITY = "callingactivity";
@@ -40,6 +41,7 @@ public class SpecificData {
     public static final String ACTIVITY_EDIT_RUBRIEK = "Edit Rubriek";
     public static final String ACTIVITY_EDIT_OPVITEM = "Edit Opvolgingsitem";
     public static final String ACTIVITY_EDIT_LOG = "Edit Log";
+    public static final String ACTIVITY_STATUSBORD = "Statusbord";
 
     public static final String DISPLAY_SMALL = "display small";
     public static final String DISPLAY_LARGE = "display large";

@@ -201,6 +201,22 @@ public class EntitiesViewModel extends AndroidViewModel {
         return opvolgingsitems;
     }
 
+    public List<ListItemHelper> getOpvItemList(List<Opvolgingsitem> inList){
+        // bepaalt een lijst met opvolgingsitems namen en ID's obv opvolgingsitemlist
+        return getItemsFromList(inList, null);
+    }
+
+    public List<Opvolgingsitem> getOpvolgingsItemListByRubriekID(IDNumber rubriekID){
+        // bepaalt een lijst met opvolgingsitems obv rubriekID
+        List<Opvolgingsitem> opvolgingsitemList = new ArrayList<>();
+        for (int i = 0; i < itemList.size(); i++) {
+            if (itemList.get(i).getRubriekId().getId() == rubriekID.getId()){
+                opvolgingsitemList.add(itemList.get(i));
+            }
+        }
+        return opvolgingsitemList;
+    }
+
     public List<ListItemHelper> getOpvolgingsItemItemListByRubriekID(IDNumber rubriekID){
         // bepaalt een lijst met opvolgingsitems namen en ID's obv itemlist en rubriekID
         List<ListItemHelper> displayList = new ArrayList<>();

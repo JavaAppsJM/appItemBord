@@ -11,6 +11,10 @@
     -->
 
     <item
+        android:id="@+id/menu_statusbord"
+        android:title="Statusbord" />
+
+    <item
         android:id="@+id/menu_beheer_rubrieken"
         android:title="Beheer Rubrieken" />
 
