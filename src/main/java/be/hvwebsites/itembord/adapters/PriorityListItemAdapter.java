@@ -17,14 +17,14 @@ import java.util.List;
 import be.hvwebsites.itembord.EditOpvolgingsitem;
 import be.hvwebsites.itembord.R;
 import be.hvwebsites.itembord.constants.SpecificData;
-import be.hvwebsites.itembord.helpers.PriorityListItemHelper;
+import be.hvwebsites.itembord.helpers.ListItemTwoLinesHelper;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
 public class PriorityListItemAdapter extends RecyclerView.Adapter<PriorityListItemAdapter.ListViewHolder> {
     private final LayoutInflater inflater;
     private Context mContext;
-    private List<PriorityListItemHelper> itemList;
+    private List<ListItemTwoLinesHelper> itemList;
     private ClickListener clickListener;
 
     public PriorityListItemAdapter(Context context) {
@@ -130,11 +130,11 @@ public class PriorityListItemAdapter extends RecyclerView.Adapter<PriorityListIt
         else return 0;
     }
 
-    public List<PriorityListItemHelper> getItemList() {
+    public List<ListItemTwoLinesHelper> getItemList() {
         return itemList;
     }
 
-    public void setItemList(List<PriorityListItemHelper> itemList) {
+    public void setItemList(List<ListItemTwoLinesHelper> itemList) {
         this.itemList = itemList;
     }
 }

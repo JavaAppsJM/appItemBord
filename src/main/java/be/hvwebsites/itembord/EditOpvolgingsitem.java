@@ -14,10 +14,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -42,6 +39,7 @@ import be.hvwebsites.itembord.interfaces.DatePickerInterface;
 import be.hvwebsites.itembord.interfaces.FlexDialogInterface;
 import be.hvwebsites.itembord.services.CalenderService;
 import be.hvwebsites.itembord.services.FileBaseService;
+import be.hvwebsites.itembord.services.FileBaseServiceOld;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
@@ -95,7 +93,10 @@ public class EditOpvolgingsitem extends AppCompatActivity
         opvolgingsitemLatestDateV = findViewById(R.id.editItemLatestDate);
 
         // Creer een filebase service (bevat file base en file base directory) obv device en package name
-        FileBaseService fileBaseService = new FileBaseService(deviceModel, getPackageName());
+        FileBaseServiceOld fileBaseServiceOld = new FileBaseServiceOld(deviceModel, getPackageName());
+
+        // Creer een filebase service, bepaalt file base directory obv device en Context
+        FileBaseService fileBaseService = new FileBaseService(deviceModel, this);
 
         // Get a viewmodel from the viewmodelproviders
         viewModel = new ViewModelProvider(this).get(EntitiesViewModel.class);

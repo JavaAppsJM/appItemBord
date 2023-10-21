@@ -1,47 +1,23 @@
 package be.hvwebsites.itembord.services;
 
+import android.content.Context;
+
 public class FileBaseService {
-    private String deviceModel;
-    private String packName;
-    private String fileBase;
     private String fileBaseDir;
-    private static final String FILE_BASE_INTERNAL = "base_internal";
-    private static final String FILE_BASE_EXTERNAL = "base_external";
-    // "/storage/emulated/0/Android/data/be.hvwebsites.shopping/files"
-    // "/data/user/0/be.hvwebsites.shopping/files"
 
-    public FileBaseService(String deviceModel, String packageNm) {
-        this.deviceModel = deviceModel;
-        this.packName = packageNm;
+    public FileBaseService(String deviceModel, Context inContext) {
+        // packageNm en path zijn overbodig geworden !!
 
+        // Bepaal filepath
         if (deviceModel.equals("GT-I9100")){
-            fileBase = FILE_BASE_INTERNAL;
-            this.fileBaseDir = "/data/user/0/" + packageNm + "/files";
-        } else {
-            fileBase = FILE_BASE_EXTERNAL;
-            this.fileBaseDir = "/storage/emulated/0/Android/data/" + packageNm + "/files";
-        }
-    }
-
-    public String getDeviceModel() {
-        return deviceModel;
-    }
-
-    public void setDeviceModel(String deviceModel) {
-        this.deviceModel = deviceModel;
-    }
-
-    public String getFileBase() {
-        return fileBase;
-    }
-
-    public void setFileBase(String fileBase) {
-        this.fileBase = fileBase;
-        if (fileBase.equals(FILE_BASE_INTERNAL)){
-            this.fileBaseDir = "/data/user/0/" + packName + "/files";
+            // Internal files
+            this.fileBaseDir = inContext.getFilesDir().getPath();
         }else {
-            this.fileBaseDir = "/storage/emulated/0/Android/data/" + packName + "/files";
+            // External files
+            this.fileBaseDir = inContext.getExternalFilesDir(null).getAbsolutePath();
         }
+
+        boolean debug = true;
     }
 
     public String getFileBaseDir() {

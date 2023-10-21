@@ -20,6 +20,7 @@ import be.hvwebsites.itembord.adapters.TextItemListAdapter;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Opvolgingsitem;
 import be.hvwebsites.itembord.services.FileBaseService;
+import be.hvwebsites.itembord.services.FileBaseServiceOld;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.adapters.NothingSelectedSpinnerAdapter;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
@@ -43,7 +44,10 @@ public class OItemStatusBord extends AppCompatActivity {
         setTitle("Opvolgingsitems Status Bord");
 
         // Creer een filebase service (bevat file base en file base directory) obv device en package name
-        FileBaseService fileBaseService = new FileBaseService(deviceModel, getPackageName());
+        FileBaseServiceOld fileBaseServiceOld = new FileBaseServiceOld(deviceModel, getPackageName());
+
+        // Creer een filebase service, bepaalt file base directory obv device en Context
+        FileBaseService fileBaseService = new FileBaseService(deviceModel, this);
 
         // Data ophalen
         // Get a viewmodel from the viewmodelproviders

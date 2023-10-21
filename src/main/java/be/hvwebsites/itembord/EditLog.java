@@ -24,6 +24,7 @@ import be.hvwebsites.itembord.entities.Rubriek;
 import be.hvwebsites.itembord.fragments.DatePickerFragment;
 import be.hvwebsites.itembord.interfaces.DatePickerInterface;
 import be.hvwebsites.itembord.services.FileBaseService;
+import be.hvwebsites.itembord.services.FileBaseServiceOld;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
@@ -66,7 +67,10 @@ public class EditLog extends AppCompatActivity implements DatePickerInterface {
         logitemDateV = findViewById(R.id.editItemLogDate);
 
         // Creer een filebase service (bevat file base en file base directory) obv device en package name
-        FileBaseService fileBaseService = new FileBaseService(deviceModel, getPackageName());
+        FileBaseServiceOld fileBaseServiceOld = new FileBaseServiceOld(deviceModel, getPackageName());
+
+        // Creer een filebase service, bepaalt file base directory obv device en Context
+        FileBaseService fileBaseService = new FileBaseService(deviceModel, this);
 
         // Get a viewmodel from the viewmodelproviders
         viewModel = new ViewModelProvider(this).get(EntitiesViewModel.class);

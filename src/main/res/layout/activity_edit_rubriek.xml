@@ -14,7 +14,8 @@
         android:layout_marginTop="16dp"
         android:text="@string/instruction_edit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="16dp" />
 
     <TextView
         android:id="@+id/labelNameRubriek"
@@ -24,7 +25,8 @@
         android:layout_marginTop="24dp"
         android:text="@string/label_rubriek"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelHoofdrubriek" />
+        app:layout_constraintTop_toBottomOf="@+id/labelHoofdrubriek"
+        android:layout_marginLeft="16dp" />
 
     <EditText
         android:id="@+id/editNameRubriek"
@@ -38,16 +40,19 @@
         android:minHeight="48dp"
         android:textSize="14sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/labelNameRubriek"
-        app:layout_constraintStart_toEndOf="@id/labelNameRubriek" />
+        app:layout_constraintStart_toEndOf="@id/labelNameRubriek"
+        android:layout_marginLeft="16dp" />
 
     <Button
         android:id="@+id/buttonSaveRubriek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/button_bewaren"
-        app:layout_constraintBaseline_toBaselineOf="@+id/editNameRubriek"
-        app:layout_constraintStart_toEndOf="@+id/editNameRubriek" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editNameRubriek" />
 
     <TextView
         android:id="@+id/labelSubrubriek"
@@ -55,10 +60,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="16dp"
         android:text="@string/head_subrubrieken"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editNameRubriek" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonSaveRubriek" />
 
     <TextView
         android:id="@+id/labelNameItemList"
@@ -66,6 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/head_opvolgingsitems"
+        android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/labelSubrubriek"
         app:layout_constraintEnd_toStartOf="@+id/labelNameLogList"
         app:layout_constraintStart_toEndOf="@+id/labelSubrubriek" />
@@ -77,8 +85,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="@string/head_logboek"
+        android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/labelNameItemList"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginRight="16dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_edit_rubriek"
@@ -105,7 +115,8 @@
         android:contentDescription="Druk om toe te voegen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_baseline_add_24" />
+        app:srcCompat="@drawable/ic_baseline_add_24"
+        android:layout_marginRight="16dp" />
 
     <TextView
         android:id="@+id/labelHoofdrubriek"
@@ -115,11 +126,12 @@
         android:layout_marginTop="24dp"
         android:text="@string/label_hoofdrubriek"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginLeft="16dp"
         app:layout_constraintTop_toBottomOf="@+id/instructionEditRubriek" />
 
     <Spinner
         android:id="@+id/spinnerParentRubriek"
-        android:layout_width="180dp"
+        android:layout_width="125dp"
         android:layout_height="22dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"

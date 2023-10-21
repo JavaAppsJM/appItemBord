@@ -30,11 +30,10 @@ import be.hvwebsites.itembord.adapters.TextItemListAdapter;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Rubriek;
 import be.hvwebsites.itembord.services.FileBaseService;
+import be.hvwebsites.itembord.services.FileBaseServiceOld;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
-import be.hvwebsites.libraryandroid4.adapters.NothingSelectedSpinnerAdapter;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.helpers.ListItemHelper;
-import be.hvwebsites.libraryandroid4.repositories.Cookie;
 import be.hvwebsites.libraryandroid4.repositories.CookieRepository;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
@@ -59,7 +58,10 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
         setContentView(R.layout.activity_edit_rubriek);
 
         // Creer een filebase service (bevat file base en file base directory) obv device en package name
-        FileBaseService fileBaseService = new FileBaseService(deviceModel, getPackageName());
+        FileBaseServiceOld fileBaseServiceOld = new FileBaseServiceOld(deviceModel, getPackageName());
+
+        // Creer een filebase service, bepaalt file base directory obv device en Context
+        FileBaseService fileBaseService = new FileBaseService(deviceModel, this);
 
         // Get a viewmodel from the viewmodelproviders
         viewModel = new ViewModelProvider(this).get(EntitiesViewModel.class);
@@ -358,6 +360,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                 } else { // New
                     Rubriek newRubriek = new Rubriek(viewModel.getBasedir(), false);
                     newRubriek.setEntityName(String.valueOf(nameView.getText()));
+                    // TODO: parentRubriekID invullen met leeg
                     newRubriek.setParentId(parentRubriekId);
                     viewModel.getRubriekList().add(newRubriek);
                 }

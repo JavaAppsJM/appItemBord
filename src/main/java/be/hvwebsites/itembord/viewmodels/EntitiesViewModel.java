@@ -47,12 +47,19 @@ public class EntitiesViewModel extends AndroidViewModel {
         List<ReturnInfo> returninfo = new ArrayList<>();
         this.basedir = basedir;
         // Filedefinities
-        rubriekFile = new File(basedir, RUBRIEK_FILE);
-        itemFile = new File(basedir, ITEM_FILE);
-        logFile = new File(basedir, LOG_FILE);
+        try {
+            rubriekFile = new File(basedir, RUBRIEK_FILE);
+            itemFile = new File(basedir, ITEM_FILE);
+            logFile = new File(basedir, LOG_FILE);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         // Ophalen rubrieken
-        repository = new FlexiRepository(rubriekFile);
-        rubriekList.addAll(getRubriekenFromDataList(repository.getDataList()));
+        if (rubriekFile.exists()){
+            repository = new FlexiRepository(rubriekFile);
+            rubriekList.addAll(getRubriekenFromDataList(repository.getDataList()));
+        }
         if (rubriekList.size() == 0){
             returninfo.add(new ReturnInfo(100, SpecificData.NO_RUBRIEKEN_YET));
         } else {
@@ -326,13 +333,25 @@ public class EntitiesViewModel extends AndroidViewModel {
 
     public void storeRubrieken(){
         // Bewaart de rubrieklist
+        // Als dit de eerste rubriek is die wordt bewaard, moet de repository geinitieerd worden !
+        if (!rubriekFile.exists()){
+            repository = new FlexiRepository(rubriekFile);
+        }
+
         // Eerst de rubrieklist alfabetisch sorteren
         sortRubriekList(rubriekList);
+
+        // Bewaren
         repository.storeData(rubriekFile, convertEntityListinDataList(rubriekList));
     }
 
     public void storeItems(){
         // Bewaart de opvolgingsitems
+        // Als dit de eerste is die wordt bewaard, moet de repository geinitieerd worden !
+        if (!itemFile.exists()){
+            repository = new FlexiRepository(itemFile);
+        }
+
         // Eerst alfabetisch sorteren
         if (itemList.size() > 1){
             sortItemList(itemList);
@@ -342,6 +361,11 @@ public class EntitiesViewModel extends AndroidViewModel {
 
     public void storeLogs(){
         // Bewaart de loglist
+        // Als dit de eerste is die wordt bewaard, moet de repository geinitieerd worden !
+        if (!logFile.exists()){
+            repository = new FlexiRepository(logFile);
+        }
+
         // logs omgekeerd chronologisch sorteren
         if (logList.size() > 1){
             sortLogs();

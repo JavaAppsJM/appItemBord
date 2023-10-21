@@ -20,9 +20,9 @@ import be.hvwebsites.itembord.adapters.LogboekItemListAdapter;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Log;
 import be.hvwebsites.itembord.entities.Opvolgingsitem;
-import be.hvwebsites.itembord.entities.Rubriek;
-import be.hvwebsites.itembord.helpers.ListItemLogboekHelper;
+import be.hvwebsites.itembord.helpers.ListItemTwoLinesHelper;
 import be.hvwebsites.itembord.services.FileBaseService;
+import be.hvwebsites.itembord.services.FileBaseServiceOld;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.helpers.ListItemHelper;
@@ -31,7 +31,7 @@ import be.hvwebsites.libraryandroid4.statics.StaticData;
 
 public class Logboek extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private EntitiesViewModel viewModel;
-    private List<ListItemLogboekHelper> logboekList = new ArrayList<>();
+    private List<ListItemTwoLinesHelper> logboekList = new ArrayList<>();
     // Filters
     private IDNumber filterRubriekID = new IDNumber(StaticData.IDNUMBER_NOT_FOUND.getId());
     private IDNumber filterOItemID = new IDNumber(StaticData.IDNUMBER_NOT_FOUND.getId());
@@ -44,7 +44,10 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
         setContentView(R.layout.activity_logboek);
 
         // Creer een filebase service (bevat file base en file base directory) obv device en package name
-        FileBaseService fileBaseService = new FileBaseService(deviceModel, getPackageName());
+        FileBaseServiceOld fileBaseServiceOld = new FileBaseServiceOld(deviceModel, getPackageName());
+
+        // Creer een filebase service, bepaalt file base directory obv device en Context
+        FileBaseService fileBaseService = new FileBaseService(deviceModel, this);
 
         // Data ophalen
         // Get a viewmodel from the viewmodelproviders
@@ -162,8 +165,8 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
 
     }
 
-    private List<ListItemLogboekHelper> buildLogboek(IDNumber rubriekID, IDNumber oItemID){
-        List<ListItemLogboekHelper> logboekList = new ArrayList<>();
+    private List<ListItemTwoLinesHelper> buildLogboek(IDNumber rubriekID, IDNumber oItemID){
+        List<ListItemTwoLinesHelper> logboekList = new ArrayList<>();
         String item1;
         String item2;
         Log log;
@@ -191,7 +194,7 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
                 // Vul tweede lijn in
                 item2 = log.getLogDescTrunc(70);
                 // Creer logboekitem en steek in list
-                logboekList.add(new ListItemLogboekHelper(item1,
+                logboekList.add(new ListItemTwoLinesHelper(item1,
                         item2,
                         "",
                         log.getEntityId(),
@@ -201,7 +204,7 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
         }
 
         // Logboeklist sorteren op rubriek, datum
-        ListItemLogboekHelper temp = new ListItemLogboekHelper();
+        ListItemTwoLinesHelper temp = new ListItemTwoLinesHelper();
         int sortf11, sortf12 ,sortf21, sortf22;
         for (int i = logboekList.size() ; i > 0 ; i--) {
             for (int j = 1 ; j < i ; j++) {

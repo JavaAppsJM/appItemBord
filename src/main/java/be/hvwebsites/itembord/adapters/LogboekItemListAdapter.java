@@ -17,14 +17,14 @@ import java.util.List;
 import be.hvwebsites.itembord.EditLog;
 import be.hvwebsites.itembord.R;
 import be.hvwebsites.itembord.constants.SpecificData;
-import be.hvwebsites.itembord.helpers.ListItemLogboekHelper;
+import be.hvwebsites.itembord.helpers.ListItemTwoLinesHelper;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
 public class LogboekItemListAdapter extends RecyclerView.Adapter<LogboekItemListAdapter.ListViewHolder> {
     private final LayoutInflater inflater;
     private Context mContext;
-    private List<ListItemLogboekHelper> itemList;
+    private List<ListItemTwoLinesHelper> itemList;
     private ClickListener clickListener;
 
     public LogboekItemListAdapter(Context context) {
@@ -133,11 +133,11 @@ public class LogboekItemListAdapter extends RecyclerView.Adapter<LogboekItemList
         else return 0;
     }
 
-    public List<ListItemLogboekHelper> getItemList() {
+    public List<ListItemTwoLinesHelper> getItemList() {
         return itemList;
     }
 
-    public void setItemList(List<ListItemLogboekHelper> itemList) {
+    public void setItemList(List<ListItemTwoLinesHelper> itemList) {
         this.itemList = itemList;
     }
 }

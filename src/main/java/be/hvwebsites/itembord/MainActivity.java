@@ -25,10 +25,11 @@ import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Log;
 import be.hvwebsites.itembord.entities.Opvolgingsitem;
 import be.hvwebsites.itembord.fragments.FlexDialogFragment;
-import be.hvwebsites.itembord.helpers.PriorityListItemHelper;
+import be.hvwebsites.itembord.helpers.ListItemTwoLinesHelper;
 import be.hvwebsites.itembord.interfaces.FlexDialogInterface;
 import be.hvwebsites.itembord.services.CalenderService;
 import be.hvwebsites.itembord.services.FileBaseService;
+import be.hvwebsites.itembord.services.FileBaseServiceOld;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
@@ -38,7 +39,7 @@ import be.hvwebsites.libraryandroid4.statics.StaticData;
 
 public class MainActivity extends AppCompatActivity implements FlexDialogInterface {
     private EntitiesViewModel viewModel;
-    private List<PriorityListItemHelper> itemList = new ArrayList<>();
+    private List<ListItemTwoLinesHelper> itemList = new ArrayList<>();
     private Opvolgingsitem opvolgingsitemToRollOn;
     private int opvolgingsitemToRollOnIndex;
     private RecyclerView recyclerView;
@@ -53,12 +54,16 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         setContentView(R.layout.activity_main);
 
         // Creer een filebase service (bevat file base en file base directory) obv device en package name
-        FileBaseService fileBaseService = new FileBaseService(deviceModel, getPackageName());
+        //FileBaseServiceOld fileBaseServiceOld = new FileBaseServiceOld(deviceModel, getPackageName());
+
+        // Creer een filebase service, bepaalt file base directory obv device en Context
+        FileBaseService fileBaseService = new FileBaseService(deviceModel, this);
 
         // Data ophalen
         // Get a viewmodel from the viewmodelproviders
         viewModel = new ViewModelProvider(this).get(EntitiesViewModel.class);
         // Basis directory definitie
+        //String baseDir = fileBaseServiceOld.getFileBaseDir();
         String baseDir = fileBaseService.getFileBaseDir();
         // Initialize viewmodel mt basis directory (data wordt opgehaald in viewmodel)
         List<ReturnInfo> viewModelRetInfo = viewModel.initializeViewModel(baseDir);
@@ -142,8 +147,8 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         helper.attachToRecyclerView(recyclerView);
     }
 
-    private List<PriorityListItemHelper> buildStatusbordList(){
-        List<PriorityListItemHelper> statusbordList = new ArrayList<>();
+    private List<ListItemTwoLinesHelper> buildStatusbordList(){
+        List<ListItemTwoLinesHelper> statusbordList = new ArrayList<>();
         String item1;
         String item2;
         Opvolgingsitem opvolgingsitem = new Opvolgingsitem();
@@ -167,10 +172,12 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                         " Vorige: " +
                         opvolgingsitem.getLatestDate().getFormatDate();
                 // Creer statusborditem en steek in statusbordlist
-                statusbordList.add(new PriorityListItemHelper(item1,
-                        item2,
-                        opvolgingsitem.getDisplayStyle(),
-                        opvolgingsitem.getEntityId()));
+                statusbordList.add(new ListItemTwoLinesHelper(item1
+                        ,item2
+                        ,opvolgingsitem.getDisplayStyle()
+                        ,opvolgingsitem.getEntityId()
+                        , 0
+                        , 0));
             }
         }
         return statusbordList;
@@ -204,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                 return true;
             case R.id.menu_beheer_rubrieken:
                 // ga naar activity ManageRubriek
-                mainIntent = new Intent(MainActivity.this, ManageRubriek.class);
+                mainIntent = new Intent(MainActivity.this, ManageRub2.class);
                 startActivity(mainIntent);
                 return true;
             case R.id.menu_exit:
