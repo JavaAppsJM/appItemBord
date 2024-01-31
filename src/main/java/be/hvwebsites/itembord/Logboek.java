@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +45,6 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logboek);
-
-        // Creer een filebase service (bevat file base en file base directory) obv device en package name
-        FileBaseServiceOld fileBaseServiceOld = new FileBaseServiceOld(deviceModel, getPackageName());
 
         // Creer een filebase service, bepaalt file base directory obv device en Context
         FileBaseService fileBaseService = new FileBaseService(deviceModel, this);
@@ -106,6 +106,21 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
                     SpecificData.NO_LOGBOEKITEMS_YET,
                     Toast.LENGTH_LONG).show();
         }
+
+/*
+        FloatingActionButton fab = findViewById(R.id.fabLogList);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Logboek.this,
+                        EditLog.class);
+                intent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_NEW);
+                intent.putExtra(StaticData.EXTRA_INTENT_KEY_RETURN, SpecificData.ACTIVITY_LOGBOEK);
+                intent.putExtra(SpecificData.ID_RUBRIEK, StaticData.ITEM_NOT_FOUND);
+                startActivity(intent);
+            }
+        });
+*/
 
         // selection listener activeren, moet gebueren nadat de adapter gekoppeld is aan de spinner !!
         rubriekFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

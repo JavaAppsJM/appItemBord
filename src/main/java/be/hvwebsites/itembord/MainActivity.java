@@ -1,9 +1,11 @@
 package be.hvwebsites.itembord;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,14 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import be.hvwebsites.itembord.adapters.PriorityListItemAdapter;
+import be.hvwebsites.itembord.adapters.PriorityListAdapter;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Log;
 import be.hvwebsites.itembord.entities.Opvolgingsitem;
@@ -29,10 +30,8 @@ import be.hvwebsites.itembord.helpers.ListItemTwoLinesHelper;
 import be.hvwebsites.itembord.interfaces.FlexDialogInterface;
 import be.hvwebsites.itembord.services.CalenderService;
 import be.hvwebsites.itembord.services.FileBaseService;
-import be.hvwebsites.itembord.services.FileBaseServiceOld;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
-import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.repositories.CookieRepository;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
@@ -43,18 +42,15 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
     private Opvolgingsitem opvolgingsitemToRollOn;
     private int opvolgingsitemToRollOnIndex;
     private RecyclerView recyclerView;
-
-    private PriorityListItemAdapter priorityListItemAdapter;
+    private PriorityListAdapter priorityListItemAdapter;
     // Device
     private final String deviceModel = Build.MODEL;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Creer een filebase service (bevat file base en file base directory) obv device en package name
-        //FileBaseServiceOld fileBaseServiceOld = new FileBaseServiceOld(deviceModel, getPackageName());
 
         // Creer een filebase service, bepaalt file base directory obv device en Context
         FileBaseService fileBaseService = new FileBaseService(deviceModel, this);
@@ -63,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         // Get a viewmodel from the viewmodelproviders
         viewModel = new ViewModelProvider(this).get(EntitiesViewModel.class);
         // Basis directory definitie
-        //String baseDir = fileBaseServiceOld.getFileBaseDir();
         String baseDir = fileBaseService.getFileBaseDir();
         // Initialize viewmodel mt basis directory (data wordt opgehaald in viewmodel)
         List<ReturnInfo> viewModelRetInfo = viewModel.initializeViewModel(baseDir);
@@ -81,10 +76,18 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         cookieRepository.registerCookie(SpecificData.CALLING_ACTIVITY, SpecificData.ACTIVITY_MAIN);
 
         // Recyclerview definieren
-        recyclerView = findViewById(R.id.recycler_statusbord);
-        priorityListItemAdapter = new PriorityListItemAdapter(this);
+        recyclerView = findViewById(R.id.recyc_priorbord);
+        //priorityListItemAdapter = new PriorityListItemAdapter(this);
+        priorityListItemAdapter = new PriorityListAdapter(this);
         recyclerView.setAdapter(priorityListItemAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        priorityListItemAdapter.setOnLongItemClickListener(new PriorityListAdapter.OnLongItemClickListener() {
+            @Override
+            public void itemLongClicked(View v, int position) {
+
+                v.showContextMenu();
+            }
+        });
 
         // Recyclerview invullen met statusbord items
         itemList.clear();
@@ -96,7 +99,11 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                     Toast.LENGTH_LONG).show();
         }
 
-        // Als er lang geklikt is op een oitem, kan dat hier gecapteerd worden
+        // TODO: een floating context menu koppelen aan alle items uit de recyclerview
+        //registerForContextMenu(recyclerView);
+
+/*
+        // Als er lang geklikt is op een oitem, kan dat hier gecapteerd worden vanuit de adapter
         priorityListItemAdapter.setOnItemClickListener(new PriorityListItemAdapter.ClickListener() {
             @Override
             public void onItemClicked(IDNumber itemID, View v) {
@@ -110,7 +117,9 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                 oitemDialog.show(getSupportFragmentManager(), "oItemDialogFragment");
             }
         });
+*/
 
+/*
         // Als een item in de recyclerview, nr rechts, geswiped wordt, dan wordt deze duedate
         //  geskipped en wordt de volgende gezet
         ItemTouchHelper helper = new ItemTouchHelper(
@@ -145,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                     }
                 });
         helper.attachToRecyclerView(recyclerView);
+*/
     }
 
     private List<ListItemTwoLinesHelper> buildStatusbordList(){
@@ -184,6 +194,32 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.menu_context_oitem, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        CharSequence title = item.getTitle();
+        if (SpecificData.CONTEXTMENU_EDIT.equals(title)) {
+            Toast.makeText(getApplicationContext(), "Bewerken gekozen",
+                    Toast.LENGTH_SHORT).show();
+            //editNote(info.id);
+            return true;
+        } else if (SpecificData.CONTEXTMENU_DELAY.equals(title)) {
+            Toast.makeText(getApplicationContext(), "Uitstellen gekozen",
+                    Toast.LENGTH_SHORT).show();
+            //editNote(info.id);
+            return true;
+        } else if (SpecificData.CONTEXTMENU_ROLLON.equals(title)) {//deleteNote(info.id);
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -200,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         Intent mainIntent;
         switch (item.getItemId()) {
             case R.id.menu_statusbord:
-                // ga naar activity ManageRubriek
+                // ga naar activity OItemStatusBord
                 mainIntent = new Intent(MainActivity.this, OItemStatusBord.class);
                 startActivity(mainIntent);
                 return true;

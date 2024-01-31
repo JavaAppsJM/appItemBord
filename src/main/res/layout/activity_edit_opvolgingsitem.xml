@@ -90,7 +90,6 @@
         android:imeOptions="actionUnspecified"
         android:layout_width="25dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="Frequentie"
@@ -98,13 +97,13 @@
         android:textSize="14sp"
         app:flow_horizontalAlign="center"
         app:layout_constraintBaseline_toBaselineOf="@+id/labelItemFreqa"
-        app:layout_constraintStart_toEndOf="@+id/labelItemFreqa" />
+        app:layout_constraintStart_toEndOf="@+id/labelItemFreqa"
+        android:layout_marginLeft="16dp" />
 
     <EditText
         android:id="@+id/editItemLatestDate"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="Datum"
@@ -112,7 +111,8 @@
         android:textSize="14sp"
         app:flow_horizontalAlign="center"
         app:layout_constraintBaseline_toBaselineOf="@+id/labelItemLatestDate"
-        app:layout_constraintStart_toEndOf="@+id/labelItemLatestDate" />
+        app:layout_constraintStart_toEndOf="@+id/labelItemLatestDate"
+        android:layout_marginLeft="16dp" />
 
     <!--    Label en Radiogroup moet onzichtbaar gemaakt worden tenzij frequentie > 0 -->
     <TextView
@@ -130,12 +130,12 @@
         android:id="@+id/radioButtonGroup"
         android:layout_width="312dp"
         android:layout_height="24dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
         android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/labelItemFrequ"
-        app:layout_constraintTop_toBottomOf="@+id/labelItemFreqa">
+        app:layout_constraintTop_toBottomOf="@+id/labelItemFreqa"
+        android:layout_marginLeft="8dp">
 
         <LinearLayout
             android:layout_width="220dp"
@@ -187,19 +187,20 @@
         android:id="@+id/labelItemLogboek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/head_logboek"
         android:textStyle="bold"
         style="@style/Headings"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelItemLatestDate" />
+        app:layout_constraintTop_toBottomOf="@+id/labelItemLatestDate"
+        android:layout_marginLeft="16dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_edit_item"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
@@ -207,7 +208,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelItemLogboek"
-        tools:listitem="@layout/list_simple_item" />
+        tools:listitem="@layout/list_simple_item"
+        android:layout_marginRight="8dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_edit_item"

@@ -56,7 +56,8 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
             // Voor elk vn deze moet je naar een andere activity
             if (entityType == SpecificData.ENTITY_TYPE_RUBRIEK){
                 intent = new Intent(mContext, EditRubriek.class);
-            }else if (entityType == SpecificData.ENTITY_TYPE_OPVOLGINGSITEM){
+            }else if ((entityType == SpecificData.ENTITY_TYPE_OPVOLGINGSITEM)
+            ||(callingActivity == SpecificData.ACTIVITY_STATUSBORD)){
                 intent = new Intent(mContext, EditOpvolgingsitem.class);
             }else if (entityType == SpecificData.ENTITY_TYPE_LOG){
                 intent = new Intent(mContext, EditLog.class);

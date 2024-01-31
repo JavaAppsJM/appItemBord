@@ -92,9 +92,6 @@ public class EditOpvolgingsitem extends AppCompatActivity
         radioGroupFrequency = findViewById(R.id.radioButtonGroup);
         opvolgingsitemLatestDateV = findViewById(R.id.editItemLatestDate);
 
-        // Creer een filebase service (bevat file base en file base directory) obv device en package name
-        FileBaseServiceOld fileBaseServiceOld = new FileBaseServiceOld(deviceModel, getPackageName());
-
         // Creer een filebase service, bepaalt file base directory obv device en Context
         FileBaseService fileBaseService = new FileBaseService(deviceModel, this);
 

@@ -15,13 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ItemBord"
         tools:targetApi="31">
-        <activity
-            android:name=".ManageRub2"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+
         <activity
             android:name=".OItemStatusBord"
             android:label="Item Status Bord"
@@ -59,14 +53,14 @@
         <activity
             android:name=".EditRubriek"
             android:label="Beheer Rubriek"
-            android:parentActivityName=".ManageRubriek"
+            android:parentActivityName=".ManageRub2"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ManageRubriek" />
+                android:value=".ManageRub2" />
         </activity>
         <activity
-            android:name=".ManageRubriek"
+            android:name=".ManageRub2"
             android:label="Beheer Rubrieken"
             android:parentActivityName=".MainActivity">
             <meta-data

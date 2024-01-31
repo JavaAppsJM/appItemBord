@@ -18,6 +18,12 @@ public class Rubriek extends SuperItem{
         parentId = StaticData.IDNUMBER_NOT_FOUND;
     }
 
+    public Rubriek(IDNumber idNumber){
+        super(idNumber);
+        setEntityName("");
+        parentId = StaticData.IDNUMBER_NOT_FOUND;
+    }
+
     public Rubriek(String fileLine){
         convertFromFileLine(fileLine);
     }

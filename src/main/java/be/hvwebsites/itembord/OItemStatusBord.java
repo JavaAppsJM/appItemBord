@@ -43,9 +43,6 @@ public class OItemStatusBord extends AppCompatActivity {
         setContentView(R.layout.activity_item_status_bord);
         setTitle("Opvolgingsitems Status Bord");
 
-        // Creer een filebase service (bevat file base en file base directory) obv device en package name
-        FileBaseServiceOld fileBaseServiceOld = new FileBaseServiceOld(deviceModel, getPackageName());
-
         // Creer een filebase service, bepaalt file base directory obv device en Context
         FileBaseService fileBaseService = new FileBaseService(deviceModel, this);
 

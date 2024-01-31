@@ -66,9 +66,6 @@ public class EditLog extends AppCompatActivity implements DatePickerInterface {
 
         logitemDateV = findViewById(R.id.editItemLogDate);
 
-        // Creer een filebase service (bevat file base en file base directory) obv device en package name
-        FileBaseServiceOld fileBaseServiceOld = new FileBaseServiceOld(deviceModel, getPackageName());
-
         // Creer een filebase service, bepaalt file base directory obv device en Context
         FileBaseService fileBaseService = new FileBaseService(deviceModel, this);
 
@@ -104,10 +101,14 @@ public class EditLog extends AppCompatActivity implements DatePickerInterface {
                 setTitle(SpecificData.TITLE_NEW_LOG);
                 // Bepaal rubriek uit intent
                 IDNumber rubriekId = new IDNumber(editIntent.getIntExtra(SpecificData.ID_RUBRIEK, 0));
-                rubriekLogitem.setRubriek(viewModel.getRubriekById(rubriekId));
+                if (rubriekId.getId() != StaticData.ITEM_NOT_FOUND ){
+                    rubriekLogitem.setRubriek(viewModel.getRubriekById(rubriekId));
+                }else {
+                    rubriekLogitem.setRubriek(new Rubriek(rubriekId));
+                }
                 // Bepaal opvolgingsitem uit intent indien meegegeven
                 if (String.valueOf(editIntent.getStringExtra(StaticData.EXTRA_INTENT_KEY_RETURN))
-                        .equals(String.valueOf(SpecificData.ENTITY_TYPE_OPVOLGINGSITEM))){
+                        .equals(String.valueOf(SpecificData.ACTIVITY_EDIT_OPVITEM))){
                     IDNumber opvolgingsitemId = new IDNumber(editIntent.getIntExtra(SpecificData.ID_OPVOLGINGSITEM, 0));
                     opvolgingsitemLogitem.setOpvolgingsitem(viewModel.getOpvolgingsitemById(opvolgingsitemId));
                 }

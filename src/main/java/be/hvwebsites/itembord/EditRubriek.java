@@ -57,9 +57,6 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_rubriek);
 
-        // Creer een filebase service (bevat file base en file base directory) obv device en package name
-        FileBaseServiceOld fileBaseServiceOld = new FileBaseServiceOld(deviceModel, getPackageName());
-
         // Creer een filebase service, bepaalt file base directory obv device en Context
         FileBaseService fileBaseService = new FileBaseService(deviceModel, this);
 
@@ -365,7 +362,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                     viewModel.getRubriekList().add(newRubriek);
                 }
                 viewModel.storeRubrieken();
-                Intent replyIntent = new Intent(EditRubriek.this, ManageRubriek.class);
+                Intent replyIntent = new Intent(EditRubriek.this, ManageRub2.class);
                 startActivity(replyIntent);
             }
         });
