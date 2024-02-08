@@ -32,6 +32,7 @@ import be.hvwebsites.itembord.services.CalenderService;
 import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
+import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.repositories.CookieRepository;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
@@ -41,8 +42,11 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
     private List<ListItemTwoLinesHelper> itemList = new ArrayList<>();
     private Opvolgingsitem opvolgingsitemToRollOn;
     private int opvolgingsitemToRollOnIndex;
+    private Opvolgingsitem opvolgingsitemFromContextMenu;
+    private int opvolgingsitemIndexFromContextMenu;
     private RecyclerView recyclerView;
     private PriorityListAdapter priorityListItemAdapter;
+    private ContextMenu.ContextMenuInfo contextMenuInfo;
     // Device
     private final String deviceModel = Build.MODEL;
 
@@ -81,13 +85,20 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         priorityListItemAdapter = new PriorityListAdapter(this);
         recyclerView.setAdapter(priorityListItemAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        priorityListItemAdapter.setOnLongItemClickListener(new PriorityListAdapter.OnLongItemClickListener() {
+/*
+        priorityListItemAdapter.setOnLongItemClickListener(new PriorityListAdapter.LongClickListener() {
             @Override
-            public void itemLongClicked(View v, int position) {
-
+            public void onItemLongClicked(View v, int position) {
+                // Bepaal geselecteerd opvolgingsitem
+                opvolgingsitemIndexFromContextMenu = position;
+                if (itemList.get(position).getItemID().getId() != StaticData.ITEM_NOT_FOUND){
+                    opvolgingsitemFromContextMenu = viewModel.getOpvolgingsitemById(itemList.get(position).getItemID());
+                }
                 v.showContextMenu();
+                boolean debug = true;
             }
         });
+*/
 
         // Recyclerview invullen met statusbord items
         itemList.clear();
@@ -98,26 +109,6 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                     SpecificData.NO_STATUSBORDITEMS_YET,
                     Toast.LENGTH_LONG).show();
         }
-
-        // TODO: een floating context menu koppelen aan alle items uit de recyclerview
-        //registerForContextMenu(recyclerView);
-
-/*
-        // Als er lang geklikt is op een oitem, kan dat hier gecapteerd worden vanuit de adapter
-        priorityListItemAdapter.setOnItemClickListener(new PriorityListItemAdapter.ClickListener() {
-            @Override
-            public void onItemClicked(IDNumber itemID, View v) {
-                // Opvolgingsitem to roll on en index bepalen
-                opvolgingsitemToRollOn = viewModel.getOpvolgingsitemById(itemID);
-                opvolgingsitemToRollOnIndex = viewModel.getItemIndexById(itemID);
-                // Via een dialog vragen om te bevestigen om oitem af te vinken
-                // Create an instance of the dialog fragment and show it
-                FlexDialogFragment oitemDialog = new FlexDialogFragment();
-                oitemDialog.setSubjectDialog("Oitem");
-                oitemDialog.show(getSupportFragmentManager(), "oItemDialogFragment");
-            }
-        });
-*/
 
 /*
         // Als een item in de recyclerview, nr rechts, geswiped wordt, dan wordt deze duedate
@@ -156,65 +147,48 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         helper.attachToRecyclerView(recyclerView);
 */
     }
-
-    private List<ListItemTwoLinesHelper> buildStatusbordList(){
-        List<ListItemTwoLinesHelper> statusbordList = new ArrayList<>();
-        String item1;
-        String item2;
-        Opvolgingsitem opvolgingsitem = new Opvolgingsitem();
-        int indexhelp;
-
-        // Bepaal voor elk opvolgingsitem dat een frequentie en een laatste opvolgingsdatum heeft, de rubriek
-        for (int i = 0; i < viewModel.getOpvolgingsitemList().size(); i++) {
-            // Bepaal opvolgingsitem
-            opvolgingsitem.setOpvolgingsitem(viewModel.getOpvolgingsitemList().get(i));
-            if ((opvolgingsitem.getFrequentieNbr() > 0) &&
-                    (opvolgingsitem.getLatestDate() != null)){
-                // Bepaal rubriek
-                indexhelp = viewModel.getRubriekIndexById(opvolgingsitem.getRubriekId());
-                // Vul eerste lijn in
-                item1 = viewModel.getRubriekList().get(indexhelp).getEntityName() +
-                        ": " +
-                        opvolgingsitem.getEntityName();
-                // Vul tweede lijn in
-                item2 = "Vervaldatum: " +
-                        opvolgingsitem.getNextDateDS().getFormatDate() +
-                        " Vorige: " +
-                        opvolgingsitem.getLatestDate().getFormatDate();
-                // Creer statusborditem en steek in statusbordlist
-                statusbordList.add(new ListItemTwoLinesHelper(item1
-                        ,item2
-                        ,opvolgingsitem.getDisplayStyle()
-                        ,opvolgingsitem.getEntityId()
-                        , 0
-                        , 0));
-            }
-        }
-        return statusbordList;
-    }
-
+/*
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.menu_context_oitem, menu);
-    }
+//            super.onCreateContextMenu(menu, v, menuInfo);
+//            getMenuInflater().inflate(R.menu.menu_context_oitem, menu);
 
+        menu.setHeaderTitle("Kies een actie");
+        menu.add(0, v.getId(), 0, SpecificData.CONTEXTMENU_EDIT);
+        menu.add(0, v.getId(), 0, SpecificData.CONTEXTMENU_DELAY);//groupId, itemId, order, title
+        menu.add(0, v.getId(), 0, SpecificData.CONTEXTMENU_ROLLON);
+
+    }
+*/
+
+    /*   @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+//        getMenuInflater().inflate(R.menu.menu_context_oitem, menu);
+    }
+*/
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        CharSequence title = item.getTitle();
-        if (SpecificData.CONTEXTMENU_EDIT.equals(title)) {
-            Toast.makeText(getApplicationContext(), "Bewerken gekozen",
-                    Toast.LENGTH_SHORT).show();
-            //editNote(info.id);
-            return true;
-        } else if (SpecificData.CONTEXTMENU_DELAY.equals(title)) {
-            Toast.makeText(getApplicationContext(), "Uitstellen gekozen",
-                    Toast.LENGTH_SHORT).show();
-            //editNote(info.id);
-            return true;
-        } else if (SpecificData.CONTEXTMENU_ROLLON.equals(title)) {//deleteNote(info.id);
-            return true;
+        ContextMenu.ContextMenuInfo contextMenuInfo1 = item.getMenuInfo();
+        // Is er een opvolgingsitem gekend
+        if (priorityListItemAdapter.getSelectionId() != StaticData.ITEM_NOT_FOUND){
+            opvolgingsitemFromContextMenu = viewModel.getOpvolgingsitemById(
+                    new IDNumber(priorityListItemAdapter.getSelectionId()));
+            CharSequence title = item.getTitle();
+            if (SpecificData.CONTEXTMENU_EDIT.equals(title)) {
+                Toast.makeText(getApplicationContext(), "Bewerken gekozen",
+                        Toast.LENGTH_SHORT).show();
+                opvolgingsitemFromContextMenu.getRubriekId();
+                return true;
+            } else if (SpecificData.CONTEXTMENU_DELAY.equals(title)) {
+                Toast.makeText(getApplicationContext(), "Uitstellen gekozen",
+                        Toast.LENGTH_SHORT).show();
+                //editNote(info.id);
+                return true;
+            } else if (SpecificData.CONTEXTMENU_ROLLON.equals(title)) {//deleteNote(info.id);
+                return true;
+            }
         }
         return super.onContextItemSelected(item);
     }
@@ -257,6 +231,42 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                 // Do nothing
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private List<ListItemTwoLinesHelper> buildStatusbordList(){
+        List<ListItemTwoLinesHelper> statusbordList = new ArrayList<>();
+        String item1;
+        String item2;
+        Opvolgingsitem opvolgingsitem = new Opvolgingsitem();
+        int indexhelp;
+
+        // Bepaal voor elk opvolgingsitem dat een frequentie en een laatste opvolgingsdatum heeft, de rubriek
+        for (int i = 0; i < viewModel.getOpvolgingsitemList().size(); i++) {
+            // Bepaal opvolgingsitem
+            opvolgingsitem.setOpvolgingsitem(viewModel.getOpvolgingsitemList().get(i));
+            if ((opvolgingsitem.getFrequentieNbr() > 0) &&
+                    (opvolgingsitem.getLatestDate() != null)){
+                // Bepaal rubriek
+                indexhelp = viewModel.getRubriekIndexById(opvolgingsitem.getRubriekId());
+                // Vul eerste lijn in
+                item1 = viewModel.getRubriekList().get(indexhelp).getEntityName() +
+                        ": " +
+                        opvolgingsitem.getEntityName();
+                // Vul tweede lijn in
+                item2 = "Vervaldatum: " +
+                        opvolgingsitem.getNextDateDS().getFormatDate() +
+                        " Vorige: " +
+                        opvolgingsitem.getLatestDate().getFormatDate();
+                // Creer statusborditem en steek in statusbordlist
+                statusbordList.add(new ListItemTwoLinesHelper(item1
+                        ,item2
+                        ,opvolgingsitem.getDisplayStyle()
+                        ,opvolgingsitem.getEntityId()
+                        , 0
+                        , 0));
+            }
+        }
+        return statusbordList;
     }
 
     @Override
