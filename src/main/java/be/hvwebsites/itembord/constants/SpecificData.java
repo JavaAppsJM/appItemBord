@@ -28,7 +28,7 @@ public class SpecificData {
     public static final String ID_LOG = "log ID";
 
     // Context menu items text constants Priority List
-    public static final String CONTEXTMENU_EDIT = "Item Bewerken";
+    public static final String CONTEXTMENU_EDIT = "Item Aanpassen";
     public static final String CONTEXTMENU_ROLLON = "Item Rollon";
     public static final String CONTEXTMENU_DELAY = "Item Uitstellen";
 

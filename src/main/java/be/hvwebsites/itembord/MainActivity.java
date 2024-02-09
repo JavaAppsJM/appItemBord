@@ -43,10 +43,10 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
     private Opvolgingsitem opvolgingsitemToRollOn;
     private int opvolgingsitemToRollOnIndex;
     private Opvolgingsitem opvolgingsitemFromContextMenu;
-    private int opvolgingsitemIndexFromContextMenu;
+    //private int opvolgingsitemIndexFromContextMenu;
     private RecyclerView recyclerView;
     private PriorityListAdapter priorityListItemAdapter;
-    private ContextMenu.ContextMenuInfo contextMenuInfo;
+    //private ContextMenu.ContextMenuInfo contextMenuInfo;
     // Device
     private final String deviceModel = Build.MODEL;
 
@@ -170,21 +170,30 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        ContextMenu.ContextMenuInfo contextMenuInfo1 = item.getMenuInfo();
         // Is er een opvolgingsitem gekend
         if (priorityListItemAdapter.getSelectionId() != StaticData.ITEM_NOT_FOUND){
             opvolgingsitemFromContextMenu = viewModel.getOpvolgingsitemById(
                     new IDNumber(priorityListItemAdapter.getSelectionId()));
             CharSequence title = item.getTitle();
             if (SpecificData.CONTEXTMENU_EDIT.equals(title)) {
-                Toast.makeText(getApplicationContext(), "Bewerken gekozen",
+                Toast.makeText(getApplicationContext(), "Aanpassen gekozen",
                         Toast.LENGTH_SHORT).show();
                 opvolgingsitemFromContextMenu.getRubriekId();
+
+                // Opstarten activity EditOpvolgingsitem met het opvolgingsitem in kwestie
+                Intent main2Intent = new Intent(MainActivity.this, EditOpvolgingsitem.class);
+                main2Intent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
+                main2Intent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, opvolgingsitemFromContextMenu.getEntityId().getId());
+                startActivity(main2Intent);
+
                 return true;
             } else if (SpecificData.CONTEXTMENU_DELAY.equals(title)) {
                 Toast.makeText(getApplicationContext(), "Uitstellen gekozen",
                         Toast.LENGTH_SHORT).show();
-                //editNote(info.id);
+
+                // Uitstellen van het opvolgingsitem
+
+
                 return true;
             } else if (SpecificData.CONTEXTMENU_ROLLON.equals(title)) {//deleteNote(info.id);
                 return true;
