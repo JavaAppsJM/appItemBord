@@ -5,10 +5,8 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,12 +39,10 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
     private EntitiesViewModel viewModel;
     private List<ListItemTwoLinesHelper> itemList = new ArrayList<>();
     private Opvolgingsitem opvolgingsitemToRollOn;
-    private int opvolgingsitemToRollOnIndex;
+    private int indexOpvolgingsitem;
     private Opvolgingsitem opvolgingsitemFromContextMenu;
-    //private int opvolgingsitemIndexFromContextMenu;
     private RecyclerView recyclerView;
     private PriorityListAdapter priorityListItemAdapter;
-    //private ContextMenu.ContextMenuInfo contextMenuInfo;
     // Device
     private final String deviceModel = Build.MODEL;
 
@@ -81,10 +77,20 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
 
         // Recyclerview definieren
         recyclerView = findViewById(R.id.recyc_priorbord);
-        //priorityListItemAdapter = new PriorityListItemAdapter(this);
         priorityListItemAdapter = new PriorityListAdapter(this);
         recyclerView.setAdapter(priorityListItemAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Recyclerview invullen met statusbord items
+        itemList.clear();
+        itemList.addAll(buildPriorityList());
+        priorityListItemAdapter.setItemList(itemList);
+        if (itemList.size() == 0){
+            Toast.makeText(this,
+                    SpecificData.NO_STATUSBORDITEMS_YET,
+                    Toast.LENGTH_LONG).show();
+        }
+
 /*
         priorityListItemAdapter.setOnLongItemClickListener(new PriorityListAdapter.LongClickListener() {
             @Override
@@ -99,17 +105,6 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
             }
         });
 */
-
-        // Recyclerview invullen met statusbord items
-        itemList.clear();
-        itemList.addAll(buildStatusbordList());
-        priorityListItemAdapter.setItemList(itemList);
-        if (itemList.size() == 0){
-            Toast.makeText(this,
-                    SpecificData.NO_STATUSBORDITEMS_YET,
-                    Toast.LENGTH_LONG).show();
-        }
-
 /*
         // Als een item in de recyclerview, nr rechts, geswiped wordt, dan wordt deze duedate
         //  geskipped en wordt de volgende gezet
@@ -147,38 +142,24 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         helper.attachToRecyclerView(recyclerView);
 */
     }
-/*
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//            super.onCreateContextMenu(menu, v, menuInfo);
-//            getMenuInflater().inflate(R.menu.menu_context_oitem, menu);
 
-        menu.setHeaderTitle("Kies een actie");
-        menu.add(0, v.getId(), 0, SpecificData.CONTEXTMENU_EDIT);
-        menu.add(0, v.getId(), 0, SpecificData.CONTEXTMENU_DELAY);//groupId, itemId, order, title
-        menu.add(0, v.getId(), 0, SpecificData.CONTEXTMENU_ROLLON);
-
-    }
-*/
-
-    /*   @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-//        getMenuInflater().inflate(R.menu.menu_context_oitem, menu);
-    }
-*/
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         // Is er een opvolgingsitem gekend
         if (priorityListItemAdapter.getSelectionId() != StaticData.ITEM_NOT_FOUND){
+            // Bepaal de gegevens van het opvolgingsitem
             opvolgingsitemFromContextMenu = viewModel.getOpvolgingsitemById(
                     new IDNumber(priorityListItemAdapter.getSelectionId()));
+            indexOpvolgingsitem =
+                    viewModel.getItemIndexById(new IDNumber(priorityListItemAdapter.getSelectionId()));
+
+            // Welke actie moet er op het opvolgingsitem gebeuren
             CharSequence title = item.getTitle();
             if (SpecificData.CONTEXTMENU_EDIT.equals(title)) {
+                // Het opvolgingsitem moet geëditeerd worden
                 Toast.makeText(getApplicationContext(), "Aanpassen gekozen",
                         Toast.LENGTH_SHORT).show();
-                opvolgingsitemFromContextMenu.getRubriekId();
+                //opvolgingsitemFromContextMenu.getRubriekId();
 
                 // Opstarten activity EditOpvolgingsitem met het opvolgingsitem in kwestie
                 Intent main2Intent = new Intent(MainActivity.this, EditOpvolgingsitem.class);
@@ -188,14 +169,45 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
 
                 return true;
             } else if (SpecificData.CONTEXTMENU_DELAY.equals(title)) {
+                // Het opvolgingsitem moet uitgesteld worden (skippen)
                 Toast.makeText(getApplicationContext(), "Uitstellen gekozen",
                         Toast.LENGTH_SHORT).show();
+                if (opvolgingsitemFromContextMenu.getFrequentieNbr() == 0){
+                    Toast.makeText(getApplicationContext(), "Opvolgingsitem heeft geen frequentie en kan dus niet worden uitgesteld !",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Uitstellen van het opvolgingsitem, index bepalen
+                    //opvolgingsitemToRollOn = opvolgingsitemFromContextMenu;
+                    indexOpvolgingsitem =
+                            viewModel.getItemIndexById(new IDNumber(priorityListItemAdapter.getSelectionId()));
 
-                // Uitstellen van het opvolgingsitem
-
+                    // Via een dialog vragen om te bevestigen om te skippen. Hierbinnen
+                    // wordt het skippen uitgevoerd !
+                    // Create an instance of the dialog fragment and show it
+                    FlexDialogFragment oitemSkipDialog = new FlexDialogFragment();
+                    oitemSkipDialog.setSubjectDialog("Oitem");
+                    oitemSkipDialog.show(getSupportFragmentManager(), "oItemDialogFragment");
+                }
 
                 return true;
-            } else if (SpecificData.CONTEXTMENU_ROLLON.equals(title)) {//deleteNote(info.id);
+            } else if (SpecificData.CONTEXTMENU_ROLLON.equals(title)) {
+                Toast.makeText(getApplicationContext(), "Roll on gekozen",
+                        Toast.LENGTH_SHORT).show();
+                if (opvolgingsitemFromContextMenu.getFrequentieNbr() == 0){
+                    Toast.makeText(getApplicationContext(), "Opvolgingsitem heeft geen frequentie en kan dus niet worden door gerold !",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Doorrollen of afvinken of uitgevoerd behandelen van het opvolgingsitem
+                    indexOpvolgingsitem =
+                            viewModel.getItemIndexById(new IDNumber(priorityListItemAdapter.getSelectionId()));
+
+                    // Via een dialog vragen om te bevestigen om te skippen. Hierbinnen
+                    // wordt het skippen uitgevoerd !
+                    // Create an instance of the dialog fragment and show it
+                    FlexDialogFragment oitemSkipDialog = new FlexDialogFragment();
+                    oitemSkipDialog.setSubjectDialog("Skip");
+                    oitemSkipDialog.show(getSupportFragmentManager(), "skipDialogFragment");
+                }
                 return true;
             }
         }
@@ -242,8 +254,8 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         return super.onOptionsItemSelected(item);
     }
 
-    private List<ListItemTwoLinesHelper> buildStatusbordList(){
-        List<ListItemTwoLinesHelper> statusbordList = new ArrayList<>();
+    private List<ListItemTwoLinesHelper> buildPriorityList(){
+        List<ListItemTwoLinesHelper> priorityList = new ArrayList<>();
         String item1;
         String item2;
         Opvolgingsitem opvolgingsitem = new Opvolgingsitem();
@@ -266,8 +278,8 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                         opvolgingsitem.getNextDateDS().getFormatDate() +
                         " Vorige: " +
                         opvolgingsitem.getLatestDate().getFormatDate();
-                // Creer statusborditem en steek in statusbordlist
-                statusbordList.add(new ListItemTwoLinesHelper(item1
+                // Creer item en steek in list
+                priorityList.add(new ListItemTwoLinesHelper(item1
                         ,item2
                         ,opvolgingsitem.getDisplayStyle()
                         ,opvolgingsitem.getEntityId()
@@ -275,16 +287,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                         , 0));
             }
         }
-        return statusbordList;
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        // Bewaar Instance State (bvb: fileBase, smsStatus, entityType, enz..)
-        outState.putString(StaticData.FILE_BASE_DIR, viewModel.getBasedir());
-
+        return priorityList;
     }
 
     @Override
@@ -305,17 +308,17 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         // Opvolgingsitem moet latest date = vandaag nemen
         DateString tempDs = new DateString();
         tempDs.setDateToday();
-        opvolgingsitemToRollOn.setLatestDate(tempDs);
+        opvolgingsitemFromContextMenu.setLatestDate(tempDs);
         // Doe de verdere verwerking van afvinken
-        processRollOnOItem(opvolgingsitemToRollOn.getEntityNamePast());
+        processChangedOItem(opvolgingsitemFromContextMenu.getEntityNamePast());
     }
 
     @Override
     public void onDateDialogNegativeClick(DialogFragment dialogFragment) {
         // Opvolgingsitem moet latest date = vervaldatum nemen
-        opvolgingsitemToRollOn.setLatestDate(opvolgingsitemToRollOn.getNextDateDS());
+        opvolgingsitemFromContextMenu.setLatestDate(opvolgingsitemFromContextMenu.getNextDateDS());
         // Doe de verdere verwerking van afvinken
-        processRollOnOItem(opvolgingsitemToRollOn.getEntityNamePast());
+        processChangedOItem(opvolgingsitemFromContextMenu.getEntityNamePast());
     }
 
     @Override
@@ -323,8 +326,8 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         // Doe de verdere verwerking van skippen
 
         // Skipdate aanpassen en next date herbepalen. Opvolgingsitem in kwestie zit in rollon
-        opvolgingsitemToRollOn.setSkipDate(opvolgingsitemToRollOn.getNextDateDS());
-        processRollOnOItem("Due date geskipped !");
+        opvolgingsitemFromContextMenu.setSkipDate(opvolgingsitemFromContextMenu.getNextDateDS());
+        processChangedOItem("Due date geskipped !");
     }
 
     @Override
@@ -332,16 +335,16 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         // Uitvoering opvolgingsitem moet niet geskipped worden
     }
 
-    private void processRollOnOItem(String inLogText) {
-        // Opvolgingsitem moet afgevinkt worden
+    private void processChangedOItem(String inLogText) {
+        // Gewijzigd opvolgingsitem afhandelen
 
         // Opvolgingsitem in list aanpassen
-        viewModel.getOpvolgingsitemList().get(opvolgingsitemToRollOnIndex).setOpvolgingsitem(opvolgingsitemToRollOn);
+        viewModel.getOpvolgingsitemList().get(indexOpvolgingsitem).setOpvolgingsitem(opvolgingsitemFromContextMenu);
 
-        // Er moet een log aangemaakt worden vermits het oitem automatisch afgevinkt wordt
-        Log newLog = new Log(viewModel.getBasedir(), opvolgingsitemToRollOn, inLogText);
+        // Er moet een log aangemaakt worden
+        Log newLog = new Log(viewModel.getBasedir(), opvolgingsitemFromContextMenu, inLogText);
 
-        // de log moet bewaard worden !
+        // De log moet bewaard worden !
         viewModel.getLogList().add(newLog);
         viewModel.storeLogs();
 
@@ -350,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
 
         // Er moet agenda event gewijzigd worden. We doen dit enkel als er al een agenda event was
         // Als er een event op de vorige datum was, dan moet dit verwijderd worden
-        if (opvolgingsitemToRollOn.getEventId() != StaticData.ITEM_NOT_FOUND) {
+        if (opvolgingsitemFromContextMenu.getEventId() != StaticData.ITEM_NOT_FOUND) {
             // CalenderService activeren
             CalenderService calenderService = new CalenderService();
 
@@ -364,11 +367,11 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                     cr);
 
             // Bestaand event verwijderen
-            calenderService.deleteEventInMyCalendar(cr, opvolgingsitemToRollOn.getEventId());
+            calenderService.deleteEventInMyCalendar(cr, opvolgingsitemFromContextMenu.getEventId());
 
             // Nieuw event aanmaken op de nieuwe vervaldatum
             // Bepaal nieuwe vervaldatum
-            long eventDateMs = opvolgingsitemToRollOn.getNextDate();
+            long eventDateMs = opvolgingsitemFromContextMenu.getNextDate();
 
             // Maak een event in de agenda
             final long eventId = calenderService.createEventInMyCalendar(
@@ -376,11 +379,11 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                     calID,
                     eventDateMs,
                     eventDateMs,
-                    opvolgingsitemToRollOn.getEntityName());
+                    opvolgingsitemFromContextMenu.getEntityName());
 
             // eventId bewaren in opvolgingsitemlist
             // opvolgingsitemToRollOn.setEventId(eventId);
-            viewModel.getOpvolgingsitemList().get(opvolgingsitemToRollOnIndex).setEventId(eventId);
+            viewModel.getOpvolgingsitemList().get(indexOpvolgingsitem).setEventId(eventId);
 
             // Reminder creeren voor het event
             calenderService.createReminderForEvent(cr, eventId);
@@ -393,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
 
         // Recyclerlist refreshen
         itemList.clear();
-        itemList.addAll(buildStatusbordList());
+        itemList.addAll(buildPriorityList());
         priorityListItemAdapter.setItemList(itemList);
         recyclerView.setAdapter(priorityListItemAdapter);
         if (itemList.size() == 0){
@@ -422,4 +425,34 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
     public void onEventDialogNegativeClick(DialogFragment dialogFragment) {
         //Not used
     }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Bewaar Instance State (bvb: fileBase, smsStatus, entityType, enz..)
+        outState.putString(StaticData.FILE_BASE_DIR, viewModel.getBasedir());
+
+    }
+
+    /*
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//            super.onCreateContextMenu(menu, v, menuInfo);
+//            getMenuInflater().inflate(R.menu.menu_context_oitem, menu);
+
+        menu.setHeaderTitle("Kies een actie");
+        menu.add(0, v.getId(), 0, SpecificData.CONTEXTMENU_EDIT);
+        menu.add(0, v.getId(), 0, SpecificData.CONTEXTMENU_DELAY);//groupId, itemId, order, title
+        menu.add(0, v.getId(), 0, SpecificData.CONTEXTMENU_ROLLON);
+
+    }
+*/
+
+    /*   @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+//        getMenuInflater().inflate(R.menu.menu_context_oitem, menu);
+    }
+*/
 }

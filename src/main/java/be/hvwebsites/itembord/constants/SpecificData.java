@@ -49,6 +49,7 @@ public class SpecificData {
     public static final String ACTIVITY_EDIT_LOG = "Edit Log";
     public static final String ACTIVITY_STATUSBORD = "Statusbord";
 
+    // Styles
     public static final String DISPLAY_SMALL = "display small";
     public static final String DISPLAY_LARGE = "display large";
     public static final String DISPLAY_OVERDUE = "display overdue";
@@ -61,6 +62,7 @@ public class SpecificData {
     public static final String STYLE_GREEN = "style green";
     public static final String STYLE_NORMAL = "style normal";
 
+    // Common Method
     public static String setFirstLetterCapital(String name){
         if (!name.equals("")){
             String nameCapitalized = name.toUpperCase();

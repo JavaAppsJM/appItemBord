@@ -25,9 +25,9 @@ public class PriorityListAdapter extends RecyclerView.Adapter<PriorityListAdapte
     private final LayoutInflater inflater;
     private Context mContext;
     private List<ListItemTwoLinesHelper> itemList;
-    //private LongClickListener longClickListener;
     private int selectionId = StaticData.ITEM_NOT_FOUND;
     //private ClickListener clickListener;
+    //private LongClickListener longClickListener;
 
     public PriorityListAdapter(Context context) {
         this.mContext = context;
