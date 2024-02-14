@@ -185,13 +185,13 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                     // wordt het skippen uitgevoerd !
                     // Create an instance of the dialog fragment and show it
                     FlexDialogFragment oitemSkipDialog = new FlexDialogFragment();
-                    oitemSkipDialog.setSubjectDialog("Oitem");
+                    oitemSkipDialog.setSubjectDialog("Skip");
                     oitemSkipDialog.show(getSupportFragmentManager(), "oItemDialogFragment");
                 }
 
                 return true;
             } else if (SpecificData.CONTEXTMENU_ROLLON.equals(title)) {
-                Toast.makeText(getApplicationContext(), "Roll on gekozen",
+                Toast.makeText(getApplicationContext(), "Afvinken gekozen",
                         Toast.LENGTH_SHORT).show();
                 if (opvolgingsitemFromContextMenu.getFrequentieNbr() == 0){
                     Toast.makeText(getApplicationContext(), "Opvolgingsitem heeft geen frequentie en kan dus niet worden door gerold !",
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                     // wordt het skippen uitgevoerd !
                     // Create an instance of the dialog fragment and show it
                     FlexDialogFragment oitemSkipDialog = new FlexDialogFragment();
-                    oitemSkipDialog.setSubjectDialog("Skip");
+                    oitemSkipDialog.setSubjectDialog("Oitem");
                     oitemSkipDialog.show(getSupportFragmentManager(), "skipDialogFragment");
                 }
                 return true;

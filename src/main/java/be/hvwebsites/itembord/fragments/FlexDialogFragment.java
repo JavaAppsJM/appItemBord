@@ -138,7 +138,7 @@ public class FlexDialogFragment extends DialogFragment {
                 this.msgDialog = "Click VANDAAG of VERVALDATUM: ";
                 break;
             case "Skip":
-                this.titleDialog = "Wenst u de uitvoering van het opvolgingsitem te skippen ?";
+                this.titleDialog = "Wenst u de uitvoering van het opvolgingsitem uit te stellen ?";
                 this.msgDialog = "Click JA of NEE: ";
                 break;
             default:

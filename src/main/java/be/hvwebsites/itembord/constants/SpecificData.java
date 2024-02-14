@@ -29,7 +29,7 @@ public class SpecificData {
 
     // Context menu items text constants Priority List
     public static final String CONTEXTMENU_EDIT = "Item Aanpassen";
-    public static final String CONTEXTMENU_ROLLON = "Item Rollon";
+    public static final String CONTEXTMENU_ROLLON = "Item Afvinken";
     public static final String CONTEXTMENU_DELAY = "Item Uitstellen";
 
 
