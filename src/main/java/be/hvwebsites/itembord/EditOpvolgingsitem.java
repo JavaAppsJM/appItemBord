@@ -266,7 +266,10 @@ public class EditOpvolgingsitem extends AppCompatActivity
                 opvolgingsitemLatestDateV.setText(opvolgingsitemToUpdate.getLatestDate().getFormatDate());
 
                 // Recyclerview voor logboek definieren
+                TextView labelLogboek = findViewById(R.id.labelItemLogboek);
+                labelLogboek.setVisibility(View.VISIBLE);
                 RecyclerView recyclerView = findViewById(R.id.recycler_edit_item);
+                recyclerView.setVisibility(View.VISIBLE);
                 final TextItemListAdapter adapter = new TextItemListAdapter(this);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -310,6 +313,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
 
                 // FloatingActionButton om een logitem toe te voegen
                 FloatingActionButton fab = findViewById(R.id.fab_edit_item);
+                fab.setVisibility(View.VISIBLE);
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -322,6 +326,8 @@ public class EditOpvolgingsitem extends AppCompatActivity
                         startActivity(manIntent);
                     }
                 });
+                break;
+            default:
                 break;
         }
         if (rubriekOpvolgingsitem.getEntityId() != null) {
@@ -399,7 +405,15 @@ public class EditOpvolgingsitem extends AppCompatActivity
                         newOItem.setFrequentieUnit(FrequentieDateUnit.YEARS);
                     }
                     newOItem.setFrequentieNbr(Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())));
-                    newOItem.setLatestDate(new DateString(String.valueOf(opvolgingsitemLatestDateV.getText())));
+                    // Controleer of latestDate ingevuld is
+                    String latestDateString = String.valueOf(opvolgingsitemLatestDateV.getText());
+                    if (!latestDateString.equals("")){
+                        // LatestDate ingevuld
+                        newOItem.setLatestDate(new DateString(String.valueOf(opvolgingsitemLatestDateV.getText())));
+                    } else {
+                        // latestDate niet ingevuld
+                        newOItem.setLatestDate(new DateString(DateString.EMPTY_DATESTRING));
+                    }
                     // Toevoegen opvolgingsitem aan opvolgingsitemlist
                     viewModel.getOpvolgingsitemList().add(newOItem);
                     // Als er een laatste opvolgingsdatum is ...
