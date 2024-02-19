@@ -336,12 +336,6 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
 
         // selection listener activeren, moet gebueren nadat de adapter gekoppeld is aan de spinner !!
         hoofdRubriekSpinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
-/*
-        // als er niets te tonen is in de spinner
-        hoofdRubriekSpinner.setAdapter(new NothingSelectedSpinnerAdapter(
-                rubriekItemAdapter, R.layout.contact_spinner_row_nothing_selected, this
-        ));
-*/
 
         Button saveButton = findViewById(R.id.buttonSaveRubriek);
         // Als button ingedrukt wordt...

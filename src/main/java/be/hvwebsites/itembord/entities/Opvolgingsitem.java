@@ -19,7 +19,7 @@ public class Opvolgingsitem extends SuperItem{
     private long eventId;
     private IDNumber rubriekId;
     public static final String ENTITY_LATEST_ID = "opvolgingsitemlatestid";
-    public static final long ONE_WEEK_IN_MILLISEC = 7 * 24 * 60 * 60 * 1000;
+    public static final long ONE_WEEK_IN_MILLISEC = 7L * 24 * 60 * 60 * 1000;
 
     public Opvolgingsitem() {
         super();
@@ -82,7 +82,7 @@ public class Opvolgingsitem extends SuperItem{
         setLatestDate(inItem.getLatestDate());
         setSkipDate(inItem.getSkipDate());
         setEventId(inItem.getEventId());
-        setRubriekId(inItem.rubriekId);
+        setRubriekId(inItem.getRubriekId());
     }
 
     public String getDisplayOpvolgingsitem(){
@@ -139,6 +139,22 @@ public class Opvolgingsitem extends SuperItem{
 
         // Due
         return todayInMilliSec >= nextDateInMilliSec - ONE_WEEK_IN_MILLISEC;
+    }
+
+    public boolean hasPriority(){
+        // Today
+        Calendar calendarDateToday = Calendar.getInstance();
+
+        long long1 = calendarDateToday.getTimeInMillis();
+
+        long long2 = Math.addExact(long1, (25L * 365 * 24 * 60 * 60 * 1000));
+
+        if ((this.getFrequentieNbr() > 0)
+            && (this.getNextDate() < long2)){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     public long getEventId() {

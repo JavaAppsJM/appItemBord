@@ -265,8 +265,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         for (int i = 0; i < viewModel.getOpvolgingsitemList().size(); i++) {
             // Bepaal opvolgingsitem
             opvolgingsitem.setOpvolgingsitem(viewModel.getOpvolgingsitemList().get(i));
-            if ((opvolgingsitem.getFrequentieNbr() > 0) &&
-                    (opvolgingsitem.getLatestDate() != null)){
+            if (opvolgingsitem.hasPriority()){
                 // Bepaal rubriek
                 indexhelp = viewModel.getRubriekIndexById(opvolgingsitem.getRubriekId());
                 // Vul eerste lijn in
