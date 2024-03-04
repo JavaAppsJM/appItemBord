@@ -25,6 +25,7 @@ import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.helpers.ListItemHelper;
 import be.hvwebsites.libraryandroid4.returninfo.ReturnInfo;
+import be.hvwebsites.libraryandroid4.statics.StaticData;
 
 public class ManageRub2 extends AppCompatActivity {
     // Activiteit om rubrieken te beheren (toevoegen, aanpassen, deleten)
@@ -61,7 +62,8 @@ public class ManageRub2 extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ManageRub2.this,
                         EditRubriek.class);
-//                intent.putExtra(MCall.INTENT_CALL_LOG_PHONE_NUMBER, phoneNumber);
+                intent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_NEW);
+                intent.putExtra(StaticData.EXTRA_INTENT_KEY_RETURN, SpecificData.ACTIVITY_MANAGE_RUBRIEK);
                 startActivity(intent);
             }
         });
