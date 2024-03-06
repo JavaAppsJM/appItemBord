@@ -43,7 +43,6 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
     private List<ListItemHelper> itemList = new ArrayList<>();
     private int iDToUpdate = StaticData.ITEM_NOT_FOUND;
     private String action = StaticData.ACTION_NEW;
-    //private TextView parentRubriekView;
     private TextView labelSubrubriekView;
     private TextView labelOpvolgingsitemView;
     private TextView labelLogboekView;
@@ -75,16 +74,19 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
         // Cookierepository definieren
         CookieRepository cookieRepository = new CookieRepository(baseDir);
 
-        // Ophalen cookies : action
-        action = cookieRepository.getCookieValueFromLabel(SpecificData.COOKIE_RETURN_ACTION);
-
         // Zet calling activity
         cookieRepository.registerCookie(SpecificData.CALLING_ACTIVITY, SpecificData.ACTIVITY_EDIT_RUBRIEK);
 
-        // Intent bekijken vr action, als er een is wordt die genomen als action
+        // Intent bekijken vr action, als er een is wordt die genomen als action anders cookie
         Intent editIntent = getIntent();
+        String tabSelection = SpecificData.COOKIE_TAB_SUBRUB;
         if (editIntent.hasExtra(StaticData.EXTRA_INTENT_KEY_ACTION)){
             action = editIntent.getStringExtra(StaticData.EXTRA_INTENT_KEY_ACTION);
+            tabSelection = editIntent.getStringExtra(SpecificData.COOKIE_TAB_SELECTION);
+        }else {
+            // Ophalen cookies : action
+            action = cookieRepository.getCookieValueFromLabel(SpecificData.COOKIE_RETURN_ACTION);
+            tabSelection = cookieRepository.getCookieValueFromLabel(SpecificData.COOKIE_TAB_SELECTION);
         }
 
         // Hoofdrubriek Spinner en adapter definieren
@@ -308,6 +310,19 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                         adapter.setItemList(itemList);
                     }
                 });
+
+                // Selectief Header verkiezen afhankelijk vn tabselection
+                switch (tabSelection){
+                    case SpecificData.COOKIE_TAB_OITEM:
+                        labelOpvolgingsitemView.performClick();
+                        break;
+                    case SpecificData.COOKIE_TAB_LOG:
+                        labelLogboekView.performClick();
+                        break;
+                    default:
+                        labelSubrubriekView.performClick();
+                }
+
                 // FloatingActionButton
                 FloatingActionButton fab = findViewById(R.id.fab_edit_rubriek);
                 fab.setOnClickListener(new View.OnClickListener() {

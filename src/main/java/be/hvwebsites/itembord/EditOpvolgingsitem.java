@@ -121,6 +121,11 @@ public class EditOpvolgingsitem extends AppCompatActivity
         action = editIntent.getStringExtra(StaticData.EXTRA_INTENT_KEY_ACTION);
         cookieRepository.registerCookie(SpecificData.COOKIE_RETURN_ACTION, action);
 
+        // Terugkeer nr editrubriek cookies voorzien
+        // Rubriek index moet later als terugkeer cookie bewaard worden !!
+        cookieRepository.registerCookie(SpecificData.COOKIE_RETURN_ACTION, StaticData.ACTION_UPDATE);
+        cookieRepository.registerCookie(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_OITEM);
+
         // Als op datum veld geclickt wordt...
         opvolgingsitemLatestDateV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,7 +188,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
             }
         });
 
-        // TODO: Detecteren dat de frequency vh opvolgingsitem al of niet op 0 gezet is
+        // Detecteren dat de frequency vh opvolgingsitem al of niet op 0 gezet is
         // Deze oplossing werkt maar nadeel : als je de frequentie van 3 op 0 zet, dan moet je eerst op een
         // ander veld gaan staan voordat de frequentie-eenheid zichtbaar wordt !!
         opvolgingsitemFrequencyV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -218,6 +223,10 @@ public class EditOpvolgingsitem extends AppCompatActivity
                 // Bepaal rubriek uit intent
                 IDNumber rubriekId = new IDNumber(editIntent.getIntExtra(SpecificData.ID_RUBRIEK, 0));
                 rubriekOpvolgingsitem.setRubriek(viewModel.getRubriekById(rubriekId));
+
+                // Terugkeer cookie voor rubriek maken
+                cookieRepository.registerCookie(SpecificData.COOKIE_RETURN_UPDATE_INDEX,
+                        String.valueOf(viewModel.getRubriekIndexById(rubriekId)));
                 // Frequentie nbr default op 0 zetten
                 opvolgingsitemFrequencyV.setText("0");
                 opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);

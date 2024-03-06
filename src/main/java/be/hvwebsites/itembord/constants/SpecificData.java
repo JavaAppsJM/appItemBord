@@ -38,6 +38,10 @@ public class SpecificData {
     public static final String COOKIE_RETURN_ACTION = "returnaction";
     public static final String COOKIE_RETURN_UPDATE_INDEX = "returnindex";
     public static final String COOKIE_RUBRIEK_FILTER = "rubriekfilterId";
+    public static final String COOKIE_TAB_SELECTION = "tabselection";
+    public static final String COOKIE_TAB_OITEM = "tabopvolgingsitem";
+    public static final String COOKIE_TAB_SUBRUB = "tabsubrubriek";
+    public static final String COOKIE_TAB_LOG = "tablogboek";
 
     // Calling Activities
     public static final String CALLING_ACTIVITY = "callingactivity";

@@ -63,6 +63,7 @@ public class ManageRub2 extends AppCompatActivity {
                 Intent intent = new Intent(ManageRub2.this,
                         EditRubriek.class);
                 intent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_NEW);
+                intent.putExtra(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_SUBRUB);
                 intent.putExtra(StaticData.EXTRA_INTENT_KEY_RETURN, SpecificData.ACTIVITY_MANAGE_RUBRIEK);
                 startActivity(intent);
             }

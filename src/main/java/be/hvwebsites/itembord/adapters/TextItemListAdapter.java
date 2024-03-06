@@ -56,6 +56,7 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
             // Voor elk vn deze moet je naar een andere activity
             if (entityType == SpecificData.ENTITY_TYPE_RUBRIEK){
                 intent = new Intent(mContext, EditRubriek.class);
+                intent.putExtra(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_SUBRUB);
             }else if ((entityType == SpecificData.ENTITY_TYPE_OPVOLGINGSITEM)
             ||(callingActivity == SpecificData.ACTIVITY_STATUSBORD)){
                 intent = new Intent(mContext, EditOpvolgingsitem.class);
@@ -64,7 +65,6 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
             }
 
             intent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
-            //intent.putExtra(StaticData.EXTRA_INTENT_KEY_SELECTION, "currentItem");
             intent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, itemIDToUpdate.getId());
             intent.putExtra(StaticData.EXTRA_INTENT_KEY_RETURN, callingActivity);
             mContext.startActivity(intent);
