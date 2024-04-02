@@ -109,19 +109,18 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
         if (itemList != null) {
             String currentLine = itemList.get(position).getItemtext();
             holder.textItemView.setText(currentLine);
+            holder.textItemView.setTextSize(14);
 
             // Onderscheid maken in callingactivity
             switch (callingActivity){
                 case SpecificData.ACTIVITY_STATUSBORD:
-                    holder.textItemView.setTextSize(14);
                     break;
                 case SpecificData.ACTIVITY_MANAGE_RUBRIEK:
+                    holder.textItemView.setTextSize(18);
                     break;
                 case SpecificData.ACTIVITY_EDIT_RUBRIEK:
-                    holder.textItemView.setTextSize(14);
                     break;
                 case SpecificData.ACTIVITY_EDIT_OPVITEM:
-                    holder.textItemView.setTextSize(14);
                     break;
                 default:
                     break;
@@ -131,6 +130,10 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
             holder.textItemView.setTypeface(null, Typeface.NORMAL);
             switch (itemList.get(position).getItemStyle()){
                 case SpecificData.STYLE_BOLD:
+                    holder.textItemView.setTypeface(null, Typeface.BOLD);
+                    break;
+                case SpecificData.STYLE_STATUSBORD:
+                    holder.textItemView.setTextSize(14);
                     holder.textItemView.setTypeface(null, Typeface.BOLD);
                     break;
                 default:

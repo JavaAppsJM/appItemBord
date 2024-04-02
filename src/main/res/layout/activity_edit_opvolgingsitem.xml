@@ -107,7 +107,7 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="Datum"
-        android:inputType="date"
+        android:inputType="text"
         android:textSize="14sp"
         app:flow_horizontalAlign="center"
         app:layout_constraintBaseline_toBaselineOf="@+id/labelItemLatestDate"

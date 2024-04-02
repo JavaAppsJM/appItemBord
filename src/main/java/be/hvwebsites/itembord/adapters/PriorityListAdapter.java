@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,7 +17,6 @@ import java.util.List;
 import be.hvwebsites.itembord.R;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.helpers.ListItemTwoLinesHelper;
-import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
 public class PriorityListAdapter extends RecyclerView.Adapter<PriorityListAdapter.ListViewHolder> {
@@ -34,16 +32,6 @@ public class PriorityListAdapter extends RecyclerView.Adapter<PriorityListAdapte
         inflater = LayoutInflater.from(context);
     }
 
-/*
-    public void setOnLongItemClickListener(LongClickListener lClickListener) {
-        longClickListener = lClickListener;
-    }
-
-    public interface LongClickListener {
-        void onItemLongClicked(View v, int position);
-    }
-*/
-
     class ListViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
         private final TextView textItemViewLine1;
         private final TextView textItemViewLine2;
@@ -51,8 +39,8 @@ public class PriorityListAdapter extends RecyclerView.Adapter<PriorityListAdapte
         private ListViewHolder(View itemView){
             super(itemView);
 
-            textItemViewLine1 = itemView.findViewById(R.id.prioritylist_item_line1);
-            textItemViewLine2 = itemView.findViewById(R.id.prioritylist_item_line2);
+            textItemViewLine1 = itemView.findViewById(R.id.twoline_item_line1);
+            textItemViewLine2 = itemView.findViewById(R.id.twoline_item_line2);
 
             //textItemViewLine1.setOnLongClickListener((View.OnLongClickListener) this);
 
@@ -77,28 +65,12 @@ public class PriorityListAdapter extends RecyclerView.Adapter<PriorityListAdapte
 
             boolean debug = true;
         }
-
-/*
-        @Override
-        public void onClick(View v) {
-            // er is geclicked op een item, dit betekent dat er nr detail vd item vr evt update wordt gegaan
-            // daarvoor gaan we nr de update activity
-            int positionToUpdate = getAdapterPosition();
-            // Bepaal de ID vh currentitem
-            IDNumber itemIDToUpdate = itemList.get(positionToUpdate).getItemID();
-
-            Intent statusBordIntent = new Intent(mContext, EditOpvolgingsitem.class);
-            statusBordIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
-            statusBordIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, itemIDToUpdate.getId());
-            mContext.startActivity(statusBordIntent);
-        }
-*/
     }
 
     @NonNull
     @Override
     public ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = inflater.inflate(R.layout.list_priority_item, parent, false);
+        View itemView = inflater.inflate(R.layout.list_twoline_item, parent, false);
 
         return new ListViewHolder(itemView);
     }
@@ -128,25 +100,6 @@ public class PriorityListAdapter extends RecyclerView.Adapter<PriorityListAdapte
                     break;
                 default:
             }
-
-/*
-            // Long click voorzien
-            holder.textItemViewLine1.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    // er is lang geklikt,
-                    int positionToUpdate = holder.getAdapterPosition();
-                    // Bepaal de ID vh currentitem
-                    selectionId = itemList.get(positionToUpdate).getItemID().getId();
-
-                    // clicklistener mt properties doorgeven nr activity
-                    longClickListener.onItemLongClicked(view, positionToUpdate);
-                    //clickListener.onItemClicked(itemIDToUpdate, view);
-                    //return true;
-                    return false;
-                }
-            });
-*/
 
         }else {
             holder.textItemViewLine1.setText("No data !");

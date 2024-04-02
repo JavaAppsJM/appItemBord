@@ -25,22 +25,10 @@ public class LogboekItemListAdapter extends RecyclerView.Adapter<LogboekItemList
     private final LayoutInflater inflater;
     private Context mContext;
     private List<ListItemTwoLinesHelper> itemList;
-    private ClickListener clickListener;
 
     public LogboekItemListAdapter(Context context) {
         this.mContext = context;
         inflater = LayoutInflater.from(context);
-    }
-
-    public void setOnItemClickListener(ClickListener clickListener){
-        // Methode om de clicklistener property vd adapter in te vullen met het
-        // bewaren vd tobuy
-        this.clickListener = clickListener;
-    }
-
-    public interface ClickListener{
-        // Interface om een clicklistener door te geven nr de activity
-        void onItemClicked(IDNumber itemID, View v);
     }
 
     class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -50,8 +38,8 @@ public class LogboekItemListAdapter extends RecyclerView.Adapter<LogboekItemList
         private ListViewHolder(View itemView){
             super(itemView);
 
-            textItemViewLine1 = itemView.findViewById(R.id.logboek_item_line1);
-            textItemViewLine2 = itemView.findViewById(R.id.logboek_item_line2);
+            textItemViewLine1 = itemView.findViewById(R.id.twoline_item_line1);
+            textItemViewLine2 = itemView.findViewById(R.id.twoline_item_line2);
 
             itemView.setOnClickListener(this);
         }
@@ -75,7 +63,7 @@ public class LogboekItemListAdapter extends RecyclerView.Adapter<LogboekItemList
     @NonNull
     @Override
     public ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = inflater.inflate(R.layout.list_logboek_item, parent, false);
+        View itemView = inflater.inflate(R.layout.list_twoline_item, parent, false);
 
         return new ListViewHolder(itemView);
     }
@@ -105,23 +93,6 @@ public class LogboekItemListAdapter extends RecyclerView.Adapter<LogboekItemList
                     break;
                 default:
             }
-
-/*
-            // Long click voorzien
-            holder.textItemViewLine1.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    // er is lang geklikt, het corresponderend oitem moet automatisch afgevinkt worden
-                    int positionToUpdate = holder.getAdapterPosition();
-                    // Bepaal de ID vh currentitem
-                    IDNumber itemIDToUpdate = itemList.get(positionToUpdate).getItemID();
-
-                    // clicklistener mt properties doorgeven nr activity
-                    clickListener.onItemClicked(itemIDToUpdate, view);
-                    return true;
-                }
-            });
-*/
         }else {
             holder.textItemViewLine1.setText("No data !");
         }

@@ -32,11 +32,10 @@ public class SpecificData {
     public static final String CONTEXTMENU_ROLLON = "Item Afvinken";
     public static final String CONTEXTMENU_DELAY = "Item Uitstellen";
 
-
     // Cookie Key Values
     public static final String COOKIE_RETURN_ENTITY_TYPE = "returnentitytype";
     public static final String COOKIE_RETURN_ACTION = "returnaction";
-    public static final String COOKIE_RETURN_UPDATE_INDEX = "returnindex";
+    public static final String COOKIE_RETURN_UPDATE_ID = "return Id";
     public static final String COOKIE_RUBRIEK_FILTER = "rubriekfilterId";
     public static final String COOKIE_TAB_SELECTION = "tabselection";
     public static final String COOKIE_TAB_OITEM = "tabopvolgingsitem";
@@ -65,6 +64,7 @@ public class SpecificData {
     public static final String STYLE_ORANGE = "style orange";
     public static final String STYLE_GREEN = "style green";
     public static final String STYLE_NORMAL = "style normal";
+    public static final String STYLE_STATUSBORD = "style status";
 
     // Common Method
     public static String setFirstLetterCapital(String name){

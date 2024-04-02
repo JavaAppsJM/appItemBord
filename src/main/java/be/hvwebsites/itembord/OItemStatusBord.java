@@ -72,6 +72,7 @@ public class OItemStatusBord extends AppCompatActivity {
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerAdapter.setCallingActivity(SpecificData.ACTIVITY_STATUSBORD);
+        recyclerAdapter.setEntityType(SpecificData.ENTITY_TYPE_OPVOLGINGSITEM);
 
         // Rubriekfilter Spinner en adapter definieren
         Spinner rubriekFilterSpinner = (Spinner) findViewById(R.id.spinrStatusBordRubriek);
@@ -132,6 +133,7 @@ public class OItemStatusBord extends AppCompatActivity {
                 oItemList.clear();
                 oItemList = buildStatusbord(viewModel.getOpvolgingsItemListByRubriekID(filterRubriekID));
                 recyclerAdapter.setItemList(oItemList);
+                recyclerAdapter.setEntityType(SpecificData.ENTITY_TYPE_OPVOLGINGSITEM);
                 recyclerView.setAdapter(recyclerAdapter);
             }
 
@@ -147,8 +149,8 @@ public class OItemStatusBord extends AppCompatActivity {
         for (int i = 0; i < inList.size() ; i++) {
             listStatusBord.add(new ListItemHelper(
                     inList.get(i).getDisplayOitemStatusBord()
-                    , ""
-                    , inList.get(i).getRubriekId()
+                    , SpecificData.STYLE_STATUSBORD
+                    , inList.get(i).getEntityId()
             ));
         }
         return listStatusBord;

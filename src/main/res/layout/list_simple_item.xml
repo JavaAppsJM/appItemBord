@@ -7,12 +7,14 @@
 
     <TextView
         android:id="@+id/simple_item"
-        android:layout_width="392dp"
-        android:layout_height="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="8dp"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="list item" />
+        tools:text="list item"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="8dp" />
 
 </android.widget.LinearLayout>

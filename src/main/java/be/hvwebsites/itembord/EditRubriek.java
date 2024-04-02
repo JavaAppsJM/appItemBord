@@ -30,7 +30,6 @@ import be.hvwebsites.itembord.adapters.TextItemListAdapter;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Rubriek;
 import be.hvwebsites.itembord.services.FileBaseService;
-import be.hvwebsites.itembord.services.FileBaseServiceOld;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.helpers.ListItemHelper;
@@ -106,13 +105,17 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                         "",
                         StaticData.IDNUMBER_NOT_FOUND));
                 hoofdRubriekSpinner.setAdapter(rubriekItemAdapter);
-                // Als parentId in intent zit ...
-                // parentRubriekView = findViewById(R.id.nameHoofrubriek);
+
+                // Er is geen parentrubriek, spinner positioneren van boven
+                int positionAA = rubriekItemAdapter.getCount() - 1;
+                hoofdRubriekSpinner.setSelection(positionAA, false);
+/*
                 if (editIntent.hasExtra(SpecificData.ID_RUBRIEK)) {
                     parentRubriekId = new IDNumber(editIntent.getIntExtra(SpecificData.ID_RUBRIEK, 0));
                     hoofdRubriekSpinner.setSelection(
                             viewModel.getRubriekIndexById(parentRubriekId), false);
                 }
+*/
 
                 break;
             case StaticData.ACTION_UPDATE:
@@ -122,7 +125,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                     iDToUpdate = editIntent.getIntExtra(StaticData.EXTRA_INTENT_KEY_ID,
                             StaticData.ITEM_NOT_FOUND);
                 }else {
-                    iDToUpdate = Integer.parseInt(cookieRepository.getCookieValueFromLabel(SpecificData.COOKIE_RETURN_UPDATE_INDEX));
+                    iDToUpdate = Integer.parseInt(cookieRepository.getCookieValueFromLabel(SpecificData.COOKIE_RETURN_UPDATE_ID));
                 }
                 Rubriek rubriekToUpdate = new Rubriek();
                 rubriekToUpdate.setRubriek(viewModel.getRubriekById(new IDNumber(iDToUpdate)));
@@ -152,8 +155,8 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                             false);
                 }else {
                     // Er is geen parentrubriek, spinner positioneren van boven
-                    int positionAA = rubriekItemAdapter.getCount() - 1;
-                    hoofdRubriekSpinner.setSelection(positionAA, false);
+                    int positionSpinner = rubriekItemAdapter.getCount() - 1;
+                    hoofdRubriekSpinner.setSelection(positionSpinner, false);
                 }
 
                 // Recyclerview voor opvolgingsitems/logboek definieren

@@ -39,7 +39,6 @@ import be.hvwebsites.itembord.interfaces.DatePickerInterface;
 import be.hvwebsites.itembord.interfaces.FlexDialogInterface;
 import be.hvwebsites.itembord.services.CalenderService;
 import be.hvwebsites.itembord.services.FileBaseService;
-import be.hvwebsites.itembord.services.FileBaseServiceOld;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
@@ -60,6 +59,8 @@ public class EditOpvolgingsitem extends AppCompatActivity
     private RadioButton frequencyYearV;
     private RadioGroup radioGroupFrequency;
     private EditText opvolgingsitemLatestDateV;
+    private RecyclerView recyclerView;
+    private TextItemListAdapter adapter;
     private CalenderService calenderService;
     // Device
     private final String deviceModel = Build.MODEL;
@@ -116,7 +117,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
         // Zet calling activity
         cookieRepository.registerCookie(SpecificData.CALLING_ACTIVITY, SpecificData.ACTIVITY_EDIT_OPVITEM);
 
-        // Intent bekijken vr action en evt rubriek (indien new opvolgingsitem)
+        // Intent bekijken vr action
         Intent editIntent = getIntent();
         action = editIntent.getStringExtra(StaticData.EXTRA_INTENT_KEY_ACTION);
         cookieRepository.registerCookie(SpecificData.COOKIE_RETURN_ACTION, action);
@@ -190,20 +191,22 @@ public class EditOpvolgingsitem extends AppCompatActivity
 
         // Detecteren dat de frequency vh opvolgingsitem al of niet op 0 gezet is
         // Deze oplossing werkt maar nadeel : als je de frequentie van 3 op 0 zet, dan moet je eerst op een
-        // ander veld gaan staan voordat de frequentie-eenheid zichtbaar wordt !!
+        // ander veld gaan staan voordat de frequentie-eenheid onzichtbaar wordt !!
         opvolgingsitemFrequencyV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 // Welke view has changed
                 if (view.getId() == opvolgingsitemFrequencyV.getId()) {
                     // Checken of frequentie = 0 of null is, dan moet de eenheid niet getoond worden
-                    if (opvolgingsitemFrequencyV.getText() == null) {
+                    String frequentieNbrStr = String.valueOf(opvolgingsitemFrequencyV.getText());
+                    if ((frequentieNbrStr == null)
+                    || (frequentieNbrStr.equals(""))) {
                         // Er is nog geen waarde als frequentie
                         radioGroupFrequency.setVisibility(View.GONE);
                         opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
                     } else {
                         // Checken of frequentieunit moet getoond worden of niet
-                        if (Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())) == 0) {
+                        if (Integer.parseInt(frequentieNbrStr) == 0) {
                             // Item zndr frequentie, frequentieeenheid invisible maken
                             radioGroupFrequency.setVisibility(View.GONE);
                             opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
@@ -212,6 +215,19 @@ public class EditOpvolgingsitem extends AppCompatActivity
                             radioGroupFrequency.setVisibility(View.VISIBLE);
                         }
                     }
+                }
+            }
+        });
+
+        // TODO: Als focus op latestdate komt, moet de softkeyboard worden afgezet
+        opvolgingsitemLatestDateV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                // Welke view has changed
+                if (view.getId() == opvolgingsitemLatestDateV.getId()) {
+                    // Toon DatePickerInterface
+                    showDatePicker(view);
+                    // TODO:  Softkeyboard afzetten ?
                 }
             }
         });
@@ -225,24 +241,29 @@ public class EditOpvolgingsitem extends AppCompatActivity
                 rubriekOpvolgingsitem.setRubriek(viewModel.getRubriekById(rubriekId));
 
                 // Terugkeer cookie voor rubriek maken
-                cookieRepository.registerCookie(SpecificData.COOKIE_RETURN_UPDATE_INDEX,
-                        String.valueOf(viewModel.getRubriekIndexById(rubriekId)));
+                cookieRepository.registerCookie(SpecificData.COOKIE_RETURN_UPDATE_ID,
+                        String.valueOf(rubriekId.getId()));
+                cookieRepository.registerCookie(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_OITEM);
+
                 // Frequentie nbr default op 0 zetten
                 opvolgingsitemFrequencyV.setText("0");
                 opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
                 break;
             case StaticData.ACTION_UPDATE:
                 setTitle(SpecificData.TITLE_UPDATE_OPVOLGINGSITEM);
+
                 // ID uit intent halen om te weten welk element moet aangepast worden
                 iDToUpdate = editIntent.getIntExtra(StaticData.EXTRA_INTENT_KEY_ID,
                         StaticData.ITEM_NOT_FOUND);
-                opvolgingsitemToUpdate.setOpvolgingsitem(viewModel.getOpvolgingsitemById(new IDNumber(iDToUpdate)));
+                opvolgingsitemToUpdate = viewModel.getOpvolgingsitemById(new IDNumber(iDToUpdate));
+
                 // rubriek uit opvolgingsitem halen
                 rubriekOpvolgingsitem.setRubriek(viewModel.getRubriekById(opvolgingsitemToUpdate.getRubriekId()));
 
                 // rubriek ID in returncookie bewaren
-                cookieRepository.registerCookie(SpecificData.COOKIE_RETURN_UPDATE_INDEX,
+                cookieRepository.registerCookie(SpecificData.COOKIE_RETURN_UPDATE_ID,
                         String.valueOf(rubriekOpvolgingsitem.getEntityId().getId()));
+                cookieRepository.registerCookie(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_OITEM);
 
                 // Invullen vn gegevens opvolgingsitem op scherm
                 opvolgingsitemNameV.setText(opvolgingsitemToUpdate.getEntityName());
@@ -277,14 +298,16 @@ public class EditOpvolgingsitem extends AppCompatActivity
                 // Recyclerview voor logboek definieren
                 TextView labelLogboek = findViewById(R.id.labelItemLogboek);
                 labelLogboek.setVisibility(View.VISIBLE);
-                RecyclerView recyclerView = findViewById(R.id.recycler_edit_item);
+                recyclerView = findViewById(R.id.recycler_edit_item);
                 recyclerView.setVisibility(View.VISIBLE);
-                final TextItemListAdapter adapter = new TextItemListAdapter(this);
+                adapter = new TextItemListAdapter(this);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                itemList.clear();
+
                 // Opvullen recycler list met logitems vr opvolgingsitem in kwestie
+                itemList.clear();
                 itemList.addAll(viewModel.getLogItemListByOItemID(opvolgingsitemToUpdate.getEntityId()));
+
                 // om te kunnen swipen in de recyclerview ; swippen == deleten
                 ItemTouchHelper helper = new ItemTouchHelper(
                         new ItemTouchHelper.SimpleCallback(0,
@@ -398,6 +421,9 @@ public class EditOpvolgingsitem extends AppCompatActivity
                             createLogSaveDialog();
                         }
                     }
+                    // Refreshen logboek
+                    itemList.addAll(viewModel.getLogItemListByOItemID(opvolgingsitemToUpdate.getEntityId()));
+                    adapter.setItemList(itemList);
                 } else { // New
                     // Creer een nieuw opvolgingsitem en vul met gegevens vn scherm
                     Opvolgingsitem newOItem = new Opvolgingsitem(viewModel.getBasedir(), false);
@@ -438,6 +464,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
                         Toast.LENGTH_SHORT).show();
 
                 // Teruggaan nr EditRubriek weggehaald
+                //cookieRepository.bestaatCookie(SpecificData.COOKIE_RETURN_UPDATE_INDEX);
             }
         });
     }
@@ -568,6 +595,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
         Intent replyIntent = new Intent(EditOpvolgingsitem.this, EditRubriek.class);
         replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
         replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
+        replyIntent.putExtra(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_OITEM);
         startActivity(replyIntent);
     }
 
@@ -581,6 +609,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
         Intent replyIntent = new Intent(EditOpvolgingsitem.this, EditRubriek.class);
         replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
         replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
+        replyIntent.putExtra(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_OITEM);
         startActivity(replyIntent);
     }
 
