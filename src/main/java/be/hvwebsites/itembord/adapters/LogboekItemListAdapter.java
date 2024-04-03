@@ -89,7 +89,8 @@ public class LogboekItemListAdapter extends RecyclerView.Adapter<LogboekItemList
                             R.color.orange));
                     break;
                 case SpecificData.STYLE_GREEN:
-                    holder.textItemViewLine1.setTextColor(colores.getColor(R.color.green, null));
+                    holder.textItemViewLine1.setTextColor(ContextCompat.getColor(mContext,
+                            R.color.green));
                     break;
                 default:
             }

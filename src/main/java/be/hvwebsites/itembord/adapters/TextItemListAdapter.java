@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,7 @@ import java.util.List;
 import be.hvwebsites.itembord.EditLog;
 import be.hvwebsites.itembord.EditOpvolgingsitem;
 import be.hvwebsites.itembord.EditRubriek;
+import be.hvwebsites.itembord.ManageRub2;
 import be.hvwebsites.itembord.R;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
@@ -109,11 +111,13 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
         if (itemList != null) {
             String currentLine = itemList.get(position).getItemtext();
             holder.textItemView.setText(currentLine);
-            holder.textItemView.setTextSize(14);
+            //holder.textItemView.setTextSize(14);
 
             // Onderscheid maken in callingactivity
             switch (callingActivity){
                 case SpecificData.ACTIVITY_STATUSBORD:
+                    holder.textItemView.setTextSize(16);
+                    holder.textItemView.setTypeface(null, Typeface.BOLD);
                     break;
                 case SpecificData.ACTIVITY_MANAGE_RUBRIEK:
                     holder.textItemView.setTextSize(18);
@@ -130,10 +134,6 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
             holder.textItemView.setTypeface(null, Typeface.NORMAL);
             switch (itemList.get(position).getItemStyle()){
                 case SpecificData.STYLE_BOLD:
-                    holder.textItemView.setTypeface(null, Typeface.BOLD);
-                    break;
-                case SpecificData.STYLE_STATUSBORD:
-                    holder.textItemView.setTextSize(14);
                     holder.textItemView.setTypeface(null, Typeface.BOLD);
                     break;
                 default:
