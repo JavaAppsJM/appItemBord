@@ -78,7 +78,7 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
 
         // Intent bekijken vr action, als er een is wordt die genomen als action anders cookie
         Intent editIntent = getIntent();
-        String tabSelection = SpecificData.COOKIE_TAB_SUBRUB;
+        String tabSelection;
         if (editIntent.hasExtra(StaticData.EXTRA_INTENT_KEY_ACTION)){
             action = editIntent.getStringExtra(StaticData.EXTRA_INTENT_KEY_ACTION);
             tabSelection = editIntent.getStringExtra(SpecificData.COOKIE_TAB_SELECTION);
@@ -88,8 +88,12 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
             tabSelection = cookieRepository.getCookieValueFromLabel(SpecificData.COOKIE_TAB_SELECTION);
         }
 
+        // Views definieren
+        FloatingActionButton fab = findViewById(R.id.fab_edit_rubriek);
+
+
         // Hoofdrubriek Spinner en adapter definieren
-        Spinner hoofdRubriekSpinner = (Spinner) findViewById(R.id.spinnerParentRubriek);
+        Spinner hoofdRubriekSpinner = findViewById(R.id.spinnerParentRubriek);
         // rubriekItemAdapter obv ListItemHelper
         ArrayAdapter<ListItemHelper> rubriekItemAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item);
@@ -99,6 +103,10 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
         switch (action) {
             case StaticData.ACTION_NEW:
                 setTitle(SpecificData.TITLE_NEW_RUBRIEK);
+
+                // fab invisible zetten
+                fab.setVisibility(View.INVISIBLE);
+
                 // Spinner vullen met alle rubrieken
                 rubriekItemAdapter.addAll(viewModel.getRubriekItemList());
                 rubriekItemAdapter.add(new ListItemHelper(SpecificData.NO_PARENT_RUBRIEK,
@@ -120,6 +128,10 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                 break;
             case StaticData.ACTION_UPDATE:
                 setTitle(SpecificData.TITLE_UPDATE_RUBRIEK);
+
+                // fab visible zetten
+                fab.setVisibility(View.VISIBLE);
+
                 // ID uit intent halen om te weten welk element moet aangepast worden
                 if (editIntent.hasExtra(StaticData.EXTRA_INTENT_KEY_ID)){
                     iDToUpdate = editIntent.getIntExtra(StaticData.EXTRA_INTENT_KEY_ID,
@@ -327,20 +339,24 @@ public class EditRubriek extends AppCompatActivity implements AdapterView.OnItem
                 }
 
                 // FloatingActionButton
-                FloatingActionButton fab = findViewById(R.id.fab_edit_rubriek);
+                //FloatingActionButton fab = findViewById(R.id.fab_edit_rubriek);
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent();
                         // ofwel wil je een subrubriek, een opvolgingsitem toevoegen ofwel een log
-                        if (listEntityType.equals(SpecificData.ENTITY_TYPE_OPVOLGINGSITEM)) {
-                            intent = new Intent(EditRubriek.this, EditOpvolgingsitem.class);
-                        } else if (listEntityType.equals(SpecificData.ENTITY_TYPE_LOG)) {
-                            // intent voor editlogitem
-                            intent = new Intent(EditRubriek.this, EditLog.class);
-                        } else if (listEntityType.equals(SpecificData.ENTITY_TYPE_RUBRIEK)) {
-                            // Intent voor editsubrubriek
-                            intent = new Intent(EditRubriek.this, EditRubriek.class);
+                        switch (listEntityType) {
+                            case SpecificData.ENTITY_TYPE_OPVOLGINGSITEM:
+                                intent = new Intent(EditRubriek.this, EditOpvolgingsitem.class);
+                                break;
+                            case SpecificData.ENTITY_TYPE_LOG:
+                                // intent voor editlogitem
+                                intent = new Intent(EditRubriek.this, EditLog.class);
+                                break;
+                            case SpecificData.ENTITY_TYPE_RUBRIEK:
+                                // Intent voor editsubrubriek
+                                intent = new Intent(EditRubriek.this, EditRubriek.class);
+                                break;
                         }
                         intent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_NEW);
                         intent.putExtra(SpecificData.ID_RUBRIEK, rubriekToUpdate.getEntityId().getId());

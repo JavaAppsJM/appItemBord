@@ -59,7 +59,6 @@ public class EditOpvolgingsitem extends AppCompatActivity
     private RadioButton frequencyYearV;
     private RadioGroup radioGroupFrequency;
     private EditText opvolgingsitemLatestDateV;
-    private RecyclerView recyclerView;
     private TextItemListAdapter adapter;
     private CalenderService calenderService;
     // Device
@@ -199,8 +198,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
                 if (view.getId() == opvolgingsitemFrequencyV.getId()) {
                     // Checken of frequentie = 0 of null is, dan moet de eenheid niet getoond worden
                     String frequentieNbrStr = String.valueOf(opvolgingsitemFrequencyV.getText());
-                    if ((frequentieNbrStr == null)
-                    || (frequentieNbrStr.equals(""))) {
+                    if (frequentieNbrStr.equals("")) {
                         // Er is nog geen waarde als frequentie
                         radioGroupFrequency.setVisibility(View.GONE);
                         opvolgingsitemLabelFreqUnit.setVisibility(View.GONE);
@@ -298,7 +296,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
                 // Recyclerview voor logboek definieren
                 TextView labelLogboek = findViewById(R.id.labelItemLogboek);
                 labelLogboek.setVisibility(View.VISIBLE);
-                recyclerView = findViewById(R.id.recycler_edit_item);
+                RecyclerView recyclerView = findViewById(R.id.recycler_edit_item);
                 recyclerView.setVisibility(View.VISIBLE);
                 adapter = new TextItemListAdapter(this);
                 recyclerView.setAdapter(adapter);
@@ -440,6 +438,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
                         newOItem.setFrequentieUnit(FrequentieDateUnit.YEARS);
                     }
                     newOItem.setFrequentieNbr(Integer.parseInt(String.valueOf(opvolgingsitemFrequencyV.getText())));
+
                     // Controleer of latestDate ingevuld is
                     String latestDateString = String.valueOf(opvolgingsitemLatestDateV.getText());
                     if (!latestDateString.equals("")){
@@ -449,8 +448,10 @@ public class EditOpvolgingsitem extends AppCompatActivity
                         // latestDate niet ingevuld
                         newOItem.setLatestDate(new DateString(DateString.EMPTY_DATESTRING));
                     }
+
                     // Toevoegen opvolgingsitem aan opvolgingsitemlist
                     viewModel.getOpvolgingsitemList().add(newOItem);
+
                     // Als er een laatste opvolgingsdatum is ...
                     if (!newOItem.getLatestDate().isEmpty()){
                         // Voorstellen om een log aan te maken
@@ -531,6 +532,13 @@ public class EditOpvolgingsitem extends AppCompatActivity
             // let op eventId in opvolgingsitem moet nog aangepast wordeninvullen
             createEventSaveDialog();
         }
+
+        // Teruggaan nr EditRubriek
+        Intent replyIntent = new Intent(EditOpvolgingsitem.this, EditRubriek.class);
+        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
+        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
+        replyIntent.putExtra(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_OITEM);
+        startActivity(replyIntent);
     }
 
     @Override
@@ -547,6 +555,13 @@ public class EditOpvolgingsitem extends AppCompatActivity
             // Vraag stellen om in agenda te registreren,
             createEventSaveDialog();
         }
+
+        // Teruggaan nr EditRubriek
+        Intent replyIntent = new Intent(EditOpvolgingsitem.this, EditRubriek.class);
+        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
+        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
+        replyIntent.putExtra(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_OITEM);
+        startActivity(replyIntent);
     }
 
     private void createEventSaveDialog(){

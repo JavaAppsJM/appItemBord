@@ -101,7 +101,7 @@ public class ManageRub2 extends AppCompatActivity {
                         itemList.clear();
                         // Delete
                         viewModel.deleteRubriekByID(idNumberToBeDeleted);
-                        itemList.addAll(viewModel.getRubriekItemList());
+                        itemList.addAll(viewModel.getRubriekItemsInStyle());
                         // Refresh recyclerview
                         adapter.setEntityType(SpecificData.ENTITY_TYPE_RUBRIEK);
                         adapter.setCallingActivity(SpecificData.ACTIVITY_MANAGE_RUBRIEK);

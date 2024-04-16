@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Objects;
 
 import be.hvwebsites.itembord.EditLog;
 import be.hvwebsites.itembord.EditOpvolgingsitem;
@@ -56,13 +57,13 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
             Intent intent = null;
             // Je komt hier terecht vanuit de lijst met rubrieken, opvolgingsitems en logs
             // Voor elk vn deze moet je naar een andere activity
-            if (entityType == SpecificData.ENTITY_TYPE_RUBRIEK){
+            if (entityType.equals(SpecificData.ENTITY_TYPE_RUBRIEK)){
                 intent = new Intent(mContext, EditRubriek.class);
                 intent.putExtra(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_SUBRUB);
-            }else if ((entityType == SpecificData.ENTITY_TYPE_OPVOLGINGSITEM)
-            ||(callingActivity == SpecificData.ACTIVITY_STATUSBORD)){
+            }else if ((entityType.equals(SpecificData.ENTITY_TYPE_OPVOLGINGSITEM))
+            ||(callingActivity.equals(SpecificData.ACTIVITY_STATUSBORD))){
                 intent = new Intent(mContext, EditOpvolgingsitem.class);
-            }else if (entityType == SpecificData.ENTITY_TYPE_LOG){
+            }else if (entityType.equals(SpecificData.ENTITY_TYPE_LOG)){
                 intent = new Intent(mContext, EditLog.class);
             }
 
