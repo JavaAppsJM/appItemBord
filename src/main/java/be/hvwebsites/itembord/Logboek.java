@@ -23,6 +23,7 @@ import be.hvwebsites.itembord.adapters.LogboekItemListAdapter;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Log;
 import be.hvwebsites.itembord.entities.Opvolgingsitem;
+import be.hvwebsites.itembord.entities.Rubriek;
 import be.hvwebsites.itembord.helpers.ListItemTwoLinesHelper;
 import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.services.FileBaseServiceOld;
@@ -65,6 +66,7 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
 
         // Rubriekfilter Spinner en adapter definieren
         Spinner rubriekFilterSpinner = (Spinner) findViewById(R.id.spinr_rubriek);
+
         // rubriekfilterAdapter obv ListItemHelper
         ArrayAdapter<ListItemHelper> rubriekFilterAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item);
@@ -79,13 +81,13 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
 
         // Opvolgingsitemfilter Spinner en adapter definieren
         Spinner oItemFilterSpinner = (Spinner) findViewById(R.id.spinr_oitem);
+
         // OpvolgingsitemfilterAdapter obv ListItemHelper
         ArrayAdapter<ListItemHelper> oItemFilterAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item);
         oItemFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Opvolgingsitemfilter invullen
-        //rubriekFilterAdapter.addAll(viewModel.getRubriekItemList());
         oItemFilterAdapter.add(new ListItemHelper(SpecificData.NO_OPVOLGINGSITEM_FILTER,
                 "",
                 StaticData.IDNUMBER_NOT_FOUND));
@@ -97,7 +99,7 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
         recyclerView.setAdapter(logboekAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Recyclerview invullen met statusbord items
+        // Recyclerview invullen met logboek items
         logboekList.clear();
         logboekList.addAll(buildLogboek(StaticData.IDNUMBER_NOT_FOUND, StaticData.IDNUMBER_NOT_FOUND));
         logboekAdapter.setItemList(logboekList);
@@ -107,27 +109,14 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
                     Toast.LENGTH_LONG).show();
         }
 
-/*
-        FloatingActionButton fab = findViewById(R.id.fabLogList);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Logboek.this,
-                        EditLog.class);
-                intent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_NEW);
-                intent.putExtra(StaticData.EXTRA_INTENT_KEY_RETURN, SpecificData.ACTIVITY_LOGBOEK);
-                intent.putExtra(SpecificData.ID_RUBRIEK, StaticData.ITEM_NOT_FOUND);
-                startActivity(intent);
-            }
-        });
-*/
-
         // selection listener activeren, moet gebueren nadat de adapter gekoppeld is aan de spinner !!
         rubriekFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ListItemHelper selHelper = (ListItemHelper) adapterView.getItemAtPosition(i);
                 filterRubriekID = selHelper.getItemID();
+
+                // Als er een rubriekID geselecteerd
                 if (filterRubriekID.getId() != StaticData.IDNUMBER_NOT_FOUND.getId()){
                     // Clearen van filter opvolgingsitem
                     filterOItemID = StaticData.IDNUMBER_NOT_FOUND;
@@ -174,10 +163,8 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
-
     }
 
     private List<ListItemTwoLinesHelper> buildLogboek(IDNumber rubriekID, IDNumber oItemID){
@@ -185,7 +172,10 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
         String item1;
         String item2;
         Log log;
-        Opvolgingsitem opvolgingsitem;
+        Rubriek rubriekLog;
+        Opvolgingsitem opvolgingsitemLog;
+        String rubriekLogName = "";
+        String oItemLogName = "";
         int indexhelp;
 
         // Bepaal voor elke logitem dat voldoet, lijn1 & 2
@@ -195,15 +185,25 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
                     || (log.getRubriekId().getId() == rubriekID.getId()))
             && (oItemID.getId() == StaticData.IDNUMBER_NOT_FOUND.getId()
                     || (log.getItemId().getId() == oItemID.getId()))){
-                opvolgingsitem = viewModel.getOpvolgingsitemById(log.getItemId());
+                // Ophalen rubriek en opvolgingsitem
+                rubriekLog = viewModel.getRubriekById(log.getRubriekId());
+                opvolgingsitemLog = viewModel.getOpvolgingsitemById(log.getItemId());
+
                 // Bepaal lijn1
-                item1 = log.getLogDate().getFormatDate()
-                        + ": "
-                        + viewModel.getRubriekById(log.getRubriekId()).getEntityName();
+                item1 = log.getLogDate().getFormatDate() + ": ";
+
+                // Als rubriek filter niet ingevuld is, moet rubriek name in lijn 1 gezet worden
+                if ((rubriekLog != null)
+                        && (rubriekID.getId() == StaticData.IDNUMBER_NOT_FOUND.getId())){
+                    rubriekLogName = rubriekLog.getEntityName();
+                    item1 = item1.concat(rubriekLogName).concat(": ");
+                }
 
                 // Opvolgingsitem kan null zijn !
-                if (opvolgingsitem != null){
-                    item1 = item1 + ": " + opvolgingsitem.getEntityName();
+                if ((opvolgingsitemLog != null)
+                        && (oItemID.getId() == StaticData.IDNUMBER_NOT_FOUND.getId())){
+                    oItemLogName = opvolgingsitemLog.getEntityName();
+                    item1 = item1.concat(oItemLogName);
                 }
 
                 // Vul tweede lijn in
@@ -213,22 +213,28 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
                         item2,
                         "",
                         log.getEntityId(),
-                        log.getRubriekId().getId(),
+                        rubriekLogName,
+                        oItemLogName,
                         log.getLogDate().getIntDate()));
             }
         }
 
-        // Logboeklist sorteren op rubriek, datum
+        // Logboeklist sorteren op rubriek, oitem en datum
+        // Er wordt gesorteerd op de rubriekId en de opvolgingsitemId ipv op naam !!
         ListItemTwoLinesHelper temp = new ListItemTwoLinesHelper();
-        int sortf11, sortf12 ,sortf21, sortf22;
+        String sortf11, sortf12 ,sortf21, sortf22;
+        int sortf31, sortf32;
         for (int i = logboekList.size() ; i > 0 ; i--) {
             for (int j = 1 ; j < i ; j++) {
                 sortf11 = logboekList.get(j-1).getSortField1();
                 sortf12 = logboekList.get(j).getSortField1();
                 sortf21 = logboekList.get(j-1).getSortField2();
                 sortf22 = logboekList.get(j).getSortField2();
-                if ((sortf11 > sortf12)
-                        || ((sortf11 == sortf12) && (sortf21 < sortf22))) {
+                sortf31 = logboekList.get(j-1).getSortField3();
+                sortf32 = logboekList.get(j).getSortField3();
+                if ((sortf11.compareToIgnoreCase(sortf12) == 1)
+                        || ((sortf11.compareToIgnoreCase(sortf12) == 0) && (sortf21.compareToIgnoreCase(sortf22) == 1))
+                        || ((sortf11.compareToIgnoreCase(sortf12) == 0) && (sortf21.compareToIgnoreCase(sortf22) == 0) && (sortf31 > sortf32))) {
                     // wisselen
                     temp.setLogItem(logboekList.get(j));
                     logboekList.get(j).setLogItem(logboekList.get(j-1));

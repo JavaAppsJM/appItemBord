@@ -6,6 +6,7 @@ import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 public class SuperItem {
     private IDNumber entityId;
     private String entityName;
+    private int nameSortNbr;
 
     public SuperItem() {
     }
@@ -16,6 +17,7 @@ public class SuperItem {
 
     public void setEntityName(String entName) {
         this.entityName = SpecificData.setFirstLetterCapital(entName);
+        this.nameSortNbr = 0;
     }
 
     public IDNumber getEntityId() {

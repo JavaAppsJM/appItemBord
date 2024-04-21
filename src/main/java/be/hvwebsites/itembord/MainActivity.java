@@ -282,7 +282,8 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
                         ,item2
                         ,opvolgingsitem.getDisplayStyle()
                         ,opvolgingsitem.getEntityId()
-                        , 0
+                        , ""
+                        , ""
                         , 0));
             }
         }

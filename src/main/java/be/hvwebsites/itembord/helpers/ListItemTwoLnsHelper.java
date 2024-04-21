@@ -2,22 +2,22 @@ package be.hvwebsites.itembord.helpers;
 
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 
-public class ListItemTwoLinesHelper {
+public class ListItemTwoLnsHelper {
     private String itemTextLine1;
     private String itemTextLine2;
     private String itemStyle;
     private IDNumber itemID;
-    private String sortField1;
-    private String sortField2;
+    private int sortField1;
+    private int sortField2;
     private int sortField3;
 
-    public ListItemTwoLinesHelper(
+    public ListItemTwoLnsHelper(
             String itemtext1,
             String itemtext2,
             String inStyle,
             IDNumber inID,
-            String sortf1,
-            String sortf2,
+            int sortf1,
+            int sortf2,
             int sortf3) {
         this.itemTextLine1 = itemtext1;
         this.itemTextLine2 = itemtext2;
@@ -28,10 +28,10 @@ public class ListItemTwoLinesHelper {
         this.sortField3 = sortf3;
     }
 
-    public ListItemTwoLinesHelper() {
+    public ListItemTwoLnsHelper() {
     }
 
-    public void setLogItem(ListItemTwoLinesHelper inItem){
+    public void setLogItem(ListItemTwoLnsHelper inItem){
         this.itemTextLine1 = inItem.getItemTextLine1();
         this.itemTextLine2 = inItem.getItemTextLine2();
         this.itemStyle = inItem.getItemStyle();
@@ -73,12 +73,20 @@ public class ListItemTwoLinesHelper {
         this.itemStyle = itemStyle;
     }
 
-    public String getSortField1() {
+    public int getSortField1() {
         return sortField1;
     }
 
-    public String getSortField2() {
+    public void setSortField1(int sortField1) {
+        this.sortField1 = sortField1;
+    }
+
+    public int getSortField2() {
         return sortField2;
+    }
+
+    public void setSortField2(int sortField2) {
+        this.sortField2 = sortField2;
     }
 
     public int getSortField3() {
