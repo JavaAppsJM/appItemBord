@@ -1,10 +1,5 @@
 package be.hvwebsites.itembord;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +8,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,6 @@ import be.hvwebsites.itembord.entities.Rubriek;
 import be.hvwebsites.itembord.fragments.DatePickerFragment;
 import be.hvwebsites.itembord.interfaces.DatePickerInterface;
 import be.hvwebsites.itembord.services.FileBaseService;
-import be.hvwebsites.itembord.services.FileBaseServiceOld;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
 import be.hvwebsites.libraryandroid4.helpers.DateString;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;

@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements FlexDialogInterfa
         recyclerView.setAdapter(priorityListItemAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Recyclerview invullen met statusbord items
+        // Recyclerview invullen met priority items
         itemList.clear();
         itemList.addAll(buildPriorityList());
         priorityListItemAdapter.setItemList(itemList);
