@@ -224,6 +224,7 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
         ListItemTwoLinesHelper temp = new ListItemTwoLinesHelper();
         String sortf11, sortf12 ,sortf21, sortf22;
         int sortf31, sortf32;
+        int testint1, testint2;
         for (int i = logboekList.size() ; i > 0 ; i--) {
             for (int j = 1 ; j < i ; j++) {
                 sortf11 = logboekList.get(j-1).getSortField1();
@@ -232,9 +233,11 @@ public class Logboek extends AppCompatActivity implements AdapterView.OnItemSele
                 sortf22 = logboekList.get(j).getSortField2();
                 sortf31 = logboekList.get(j-1).getSortField3();
                 sortf32 = logboekList.get(j).getSortField3();
-                if ((sortf11.compareToIgnoreCase(sortf12) == 1)
-                        || ((sortf11.compareToIgnoreCase(sortf12) == 0) && (sortf21.compareToIgnoreCase(sortf22) == 1))
-                        || ((sortf11.compareToIgnoreCase(sortf12) == 0) && (sortf21.compareToIgnoreCase(sortf22) == 0) && (sortf31 > sortf32))) {
+                testint1 = sortf11.compareToIgnoreCase(sortf12);
+                testint2 = sortf21.compareToIgnoreCase(sortf22);
+                if ((sortf11.compareToIgnoreCase(sortf12) > 0)
+                        || ((sortf11.compareToIgnoreCase(sortf12) == 0) && (sortf21.compareToIgnoreCase(sortf22) > 0))
+                        || ((sortf11.compareToIgnoreCase(sortf12) == 0) && (sortf21.compareToIgnoreCase(sortf22) == 0) && (sortf31 < sortf32))) {
                     // wisselen
                     temp.setLogItem(logboekList.get(j));
                     logboekList.get(j).setLogItem(logboekList.get(j-1));
