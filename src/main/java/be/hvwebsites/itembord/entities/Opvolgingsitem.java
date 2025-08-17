@@ -103,18 +103,32 @@ public class Opvolgingsitem extends SuperItem{
     public String getDisplayStyle(){
         if (latestDateIsEmpty()){
             return SpecificData.STYLE_NORMAL;
-        }else if(isOverDue(getNextDateDS())){
+        }else if(isWayOverDue(getNextDateDS())){
             return SpecificData.STYLE_RED;
-        }else if (isDue(getNextDateDS())){
+        }else if(isOverDue(getNextDateDS())){
             return SpecificData.STYLE_ORANGE;
-        }else {
+        }else if (isDue(getNextDateDS())){
             return SpecificData.STYLE_GREEN;
+        }else {
+            return SpecificData.STYLE_GREY;
         }
     }
 
     private boolean latestDateIsEmpty() {
         // Bepaalt of de latestdate empty is
         return latestDate.getDateString().equals(DateString.EMPTY_DATESTRING);
+    }
+
+    private boolean isWayOverDue(DateString inDateString) {
+        // Today
+        Calendar calendarDateToday = Calendar.getInstance();
+        long todayInMilliSec = calendarDateToday.getTimeInMillis();
+
+        // next Date
+        long nextDateInMilliSec = inDateString.getDateInMillis();
+
+        // Overdue
+        return todayInMilliSec > nextDateInMilliSec + ONE_WEEK_IN_MILLISEC;
     }
 
     private boolean isOverDue(DateString inDateString) {

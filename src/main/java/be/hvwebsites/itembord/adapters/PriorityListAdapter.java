@@ -96,7 +96,12 @@ public class PriorityListAdapter extends RecyclerView.Adapter<PriorityListAdapte
                             R.color.orange));
                     break;
                 case SpecificData.STYLE_GREEN:
-                    holder.textItemViewLine1.setTextColor(ContextCompat.getColor(mContext, R.color.green));
+                    holder.textItemViewLine1.setTextColor(ContextCompat.getColor(mContext,
+                            R.color.green));
+                    break;
+                case SpecificData.STYLE_GREY:
+                    holder.textItemViewLine1.setTextColor(ContextCompat.getColor(mContext,
+                            R.color.grey));
                     break;
                 default:
             }

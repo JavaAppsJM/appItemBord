@@ -1,5 +1,6 @@
 package be.hvwebsites.itembord;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -16,12 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import be.hvwebsites.itembord.adapters.StatusBordItemListAdapter;
 import be.hvwebsites.itembord.adapters.TextItemListAdapter;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.itembord.entities.Opvolgingsitem;
 import be.hvwebsites.itembord.services.FileBaseService;
 import be.hvwebsites.itembord.viewmodels.EntitiesViewModel;
-import be.hvwebsites.libraryandroid4.adapters.NothingSelectedSpinnerAdapter;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.helpers.ListItemHelper;
 import be.hvwebsites.libraryandroid4.repositories.CookieRepository;
@@ -30,11 +31,14 @@ import be.hvwebsites.libraryandroid4.statics.StaticData;
 
 public class OItemStatusBord extends AppCompatActivity {
     private EntitiesViewModel viewModel;
+    // Opvolgingsitems
     private List<ListItemHelper> oItemList = new ArrayList<>();
     // Filters
     private IDNumber filterRubriekID = new IDNumber(StaticData.IDNUMBER_NOT_FOUND.getId());
     // Device
     private final String deviceModel = Build.MODEL;
+    // Default rubriek index in spinner list
+    private static final int DEFAULT_RUBRIEK_INDEX = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +71,7 @@ public class OItemStatusBord extends AppCompatActivity {
 
         // Recyclerview definieren
         RecyclerView recyclerView = findViewById(R.id.recycStatusBord);
-        final TextItemListAdapter recyclerAdapter = new TextItemListAdapter(this);
+        final StatusBordItemListAdapter recyclerAdapter = new StatusBordItemListAdapter(this);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerAdapter.setCallingActivity(SpecificData.ACTIVITY_STATUSBORD);
@@ -80,35 +84,36 @@ public class OItemStatusBord extends AppCompatActivity {
                 android.R.layout.simple_spinner_item);
         rubriekFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        // Cookie rubriekfilter ophalen
-        if (cookieRepository.bestaatCookie(SpecificData.COOKIE_RUBRIEK_FILTER)
-                != StaticData.ITEM_NOT_FOUND){
+        // Rubriekfilterspinner invullen met rubrieken
+        List<ListItemHelper> spinnerList = new ArrayList<>();
+        spinnerList.addAll(viewModel.getRubriekItemList());
+        rubriekFilterAdapter.addAll(spinnerList);
+
+        // Rubriekfilter bepalen
+        Intent statBordIntent = getIntent();
+        if (statBordIntent.hasExtra(SpecificData.COOKIE_RUBRIEK_FILTER)){
+            filterRubriekID.setId(statBordIntent.getIntExtra(SpecificData.COOKIE_RUBRIEK_FILTER,0));
+        } else if ((cookieRepository.bestaatCookie(SpecificData.COOKIE_RUBRIEK_FILTER)
+                != StaticData.ITEM_NOT_FOUND)) {
             // Er is een rubriekfilter
             filterRubriekID.setId(Integer.parseInt(
-                            cookieRepository.getCookieValueFromLabel(SpecificData.COOKIE_RUBRIEK_FILTER)
-                    ));
-            // Recyclerlist invullen obv rubriekfilter
-            oItemList = buildStatusbord(viewModel.getOpvolgingsItemListByRubriekID(filterRubriekID));
-
-        }else {
-            // Er is nog geen rubriekfilter
-            rubriekFilterSpinner.setAdapter(new NothingSelectedSpinnerAdapter(
-                    rubriekFilterAdapter, R.layout.contact_spinner_row_nothing_selected, this
+                    cookieRepository.getCookieValueFromLabel(SpecificData.COOKIE_RUBRIEK_FILTER)
             ));
-            // Recyclerlist invullen obv alle opvolgingsitems
-            oItemList = buildStatusbord(viewModel.getOpvolgingsitemList());
+        } else {
+            // Er is nog geen rubriekfilter, neem eerste rubriek uit spinnerlist
+            filterRubriekID.setId(spinnerList.get(DEFAULT_RUBRIEK_INDEX).getItemID().getId());
         }
 
-/*
-        // Rubriekspinner vullen met rubrieken
-        rubriekFilterAdapter.add(new ListItemHelper(SpecificData.NO_RUBRIEK_FILTER,
-                "",
-                StaticData.IDNUMBER_NOT_FOUND));
-*/
-        rubriekFilterAdapter.addAll(viewModel.getRubriekItemList());
+        // Gekozen rubriek selecteren in rubriekfilter
+        int rubIndex = DEFAULT_RUBRIEK_INDEX;
+        if (filterRubriekID.getId() != StaticData.IDNUMBER_NOT_FOUND.getId()){
+            rubIndex = determineIndexInList(spinnerList, filterRubriekID);
+        }
         rubriekFilterSpinner.setAdapter(rubriekFilterAdapter);
+        rubriekFilterSpinner.setSelection(rubIndex, false);
 
-        // Recyclerview invullen met opvolgingsitems
+        // Recyclerlist invullen obv rubriekfilter
+        oItemList = buildStatusbord(viewModel.getOpvolgingsItemListByRubriekID(filterRubriekID));
         recyclerAdapter.setItemList(oItemList);
         if (oItemList.size() == 0){
             Toast.makeText(this,
@@ -122,18 +127,19 @@ public class OItemStatusBord extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ListItemHelper selHelper = (ListItemHelper) adapterView.getItemAtPosition(i);
                 filterRubriekID = selHelper.getItemID();
-                if (filterRubriekID.getId() != StaticData.IDNUMBER_NOT_FOUND.getId()){
-
-                    // Spinner selectie zetten
-                    //rubriekFilterSpinner.setSelection(i, false);
-
+                if (viewModel.getRubriekIndexById(filterRubriekID) == StaticData.ITEM_NOT_FOUND){
+                    // De gekozen rubriek bestaat niet !
+                    Toast.makeText(getBaseContext(),
+                            SpecificData.RUBRIEK_UNKNOWN,
+                            Toast.LENGTH_LONG).show();
+                }else {
+                    // Recyclerlist invullen obv rubriekfilter
+                    oItemList.clear();
+                    oItemList = buildStatusbord(viewModel.getOpvolgingsItemListByRubriekID(filterRubriekID));
+                    recyclerAdapter.setItemList(oItemList);
+                    recyclerAdapter.setEntityType(SpecificData.ENTITY_TYPE_OPVOLGINGSITEM);
+                    recyclerView.setAdapter(recyclerAdapter);
                 }
-                // Recyclerlist invullen obv rubriekfilter
-                oItemList.clear();
-                oItemList = buildStatusbord(viewModel.getOpvolgingsItemListByRubriekID(filterRubriekID));
-                recyclerAdapter.setItemList(oItemList);
-                recyclerAdapter.setEntityType(SpecificData.ENTITY_TYPE_OPVOLGINGSITEM);
-                recyclerView.setAdapter(recyclerAdapter);
             }
 
             @Override
@@ -141,6 +147,15 @@ public class OItemStatusBord extends AppCompatActivity {
 
             }
         });
+    }
+
+    private Integer determineIndexInList(List<ListItemHelper> inList, IDNumber inID){
+        for (int i = 0; i < inList.size() ; i++){
+            if (inList.get(i).getItemID().getId() == inID.getId()){
+                return i;
+            }
+        }
+        return StaticData.ITEM_NOT_FOUND;
     }
 
     private List<ListItemHelper> buildStatusbord(List<Opvolgingsitem> inList){

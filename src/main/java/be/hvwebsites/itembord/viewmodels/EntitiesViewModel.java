@@ -221,6 +221,7 @@ public class EntitiesViewModel extends AndroidViewModel {
                 opvolgingsitemList.add(itemList.get(i));
             }
         }
+        sortItemList(opvolgingsitemList, 2);
         return opvolgingsitemList;
     }
 
@@ -354,7 +355,7 @@ public class EntitiesViewModel extends AndroidViewModel {
 
         // Eerst alfabetisch sorteren
         if (itemList.size() > 1){
-            sortItemList(itemList);
+            sortItemList(itemList, 1);
         }
         repository.storeData(itemFile, convertEntityListinDataList(itemList));
     }
@@ -389,15 +390,25 @@ public class EntitiesViewModel extends AndroidViewModel {
         }
     }
 
-    private void sortItemList(List<Opvolgingsitem> inItemList){
-        // Sorteert een opvolgingsitemlist op nextDate chronologisch
+    private void sortItemList(List<Opvolgingsitem> inItemList, int sortType){
+        // Sorteert een opvolgingsitemlist volgens sortType
+        // 1: op nextDate chronologisch
+        // 2: op nextDate omgekeerd chronologisch
         Opvolgingsitem tempItem = new Opvolgingsitem();
         for (int i = inItemList.size() ; i > 0; i--) {
             for (int j = 1; j < i ; j++) {
-                if (inItemList.get(j).getNextDate() < inItemList.get(j-1).getNextDate()){
-                    tempItem.setOpvolgingsitem(inItemList.get(j));
-                    inItemList.get(j).setOpvolgingsitem(inItemList.get(j-1));
-                    inItemList.get(j-1).setOpvolgingsitem(tempItem);
+                if (sortType == 2){
+                    if (inItemList.get(j).getNextDate() > inItemList.get(j-1).getNextDate()){
+                        tempItem.setOpvolgingsitem(inItemList.get(j));
+                        inItemList.get(j).setOpvolgingsitem(inItemList.get(j-1));
+                        inItemList.get(j-1).setOpvolgingsitem(tempItem);
+                    }
+                }else {
+                    if (inItemList.get(j).getNextDate() < inItemList.get(j-1).getNextDate()){
+                        tempItem.setOpvolgingsitem(inItemList.get(j));
+                        inItemList.get(j).setOpvolgingsitem(inItemList.get(j-1));
+                        inItemList.get(j-1).setOpvolgingsitem(tempItem);
+                    }
                 }
             }
         }

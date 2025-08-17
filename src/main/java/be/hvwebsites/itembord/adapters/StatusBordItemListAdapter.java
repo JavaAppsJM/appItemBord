@@ -7,32 +7,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-import java.util.Objects;
 
 import be.hvwebsites.itembord.EditLog;
 import be.hvwebsites.itembord.EditOpvolgingsitem;
 import be.hvwebsites.itembord.EditRubriek;
-import be.hvwebsites.itembord.ManageRub2;
 import be.hvwebsites.itembord.R;
 import be.hvwebsites.itembord.constants.SpecificData;
 import be.hvwebsites.libraryandroid4.helpers.IDNumber;
 import be.hvwebsites.libraryandroid4.helpers.ListItemHelper;
 import be.hvwebsites.libraryandroid4.statics.StaticData;
 
-public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapter.ListViewHolder> {
+public class StatusBordItemListAdapter extends RecyclerView.Adapter<StatusBordItemListAdapter.ListViewHolder> {
     private final LayoutInflater inflater;
     private Context mContext;
     private List<ListItemHelper> itemList;
     private String entityType;
     private String callingActivity;
 
-    public TextItemListAdapter(Context context) {
+    public StatusBordItemListAdapter(Context context) {
         this.mContext = context;
         inflater = LayoutInflater.from(context);
     }
@@ -42,7 +39,7 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
 
         private ListViewHolder(View itemView) {
             super(itemView);
-            textItemView = itemView.findViewById(R.id.simple_item);
+            textItemView = itemView.findViewById(R.id.statusbord_item);
             itemView.setOnClickListener(this);
         }
 
@@ -55,18 +52,8 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
             IDNumber itemIDToUpdate = itemList.get(positionToUpdate).getItemID();
 
             Intent intent = null;
-            // Je komt hier terecht vanuit de lijst met rubrieken, opvolgingsitems en logs
-            // Voor elk vn deze moet je naar een andere activity
-            if (entityType.equals(SpecificData.ENTITY_TYPE_RUBRIEK)){
-                intent = new Intent(mContext, EditRubriek.class);
-                intent.putExtra(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_SUBRUB);
-            }else if ((entityType.equals(SpecificData.ENTITY_TYPE_OPVOLGINGSITEM))
-            ||(callingActivity.equals(SpecificData.ACTIVITY_STATUSBORD))){
-                intent = new Intent(mContext, EditOpvolgingsitem.class);
-            }else if (entityType.equals(SpecificData.ENTITY_TYPE_LOG)){
-                intent = new Intent(mContext, EditLog.class);
-            }
-
+            // Je komt hier enkel vanuit OItemStatusBord
+            intent = new Intent(mContext, EditOpvolgingsitem.class);
             intent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
             intent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, itemIDToUpdate.getId());
             intent.putExtra(StaticData.EXTRA_INTENT_KEY_RETURN, callingActivity);
@@ -103,7 +90,7 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
     @Override
     public ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = null;
-        itemView = inflater.inflate(R.layout.list_simple_item, parent, false);
+        itemView = inflater.inflate(R.layout.list_statusbord_item, parent, false);
         return new ListViewHolder(itemView);
     }
 
@@ -112,36 +99,6 @@ public class TextItemListAdapter extends RecyclerView.Adapter<TextItemListAdapte
         if (itemList != null) {
             String currentLine = itemList.get(position).getItemtext();
             holder.textItemView.setText(currentLine);
-            //holder.textItemView.setTextSize(14);
-
-            // Onderscheid maken in callingactivity
-            switch (callingActivity){
-                case SpecificData.ACTIVITY_STATUSBORD:
-                    holder.textItemView.setTextSize(16);
-                    holder.textItemView.setTypeface(null, Typeface.BOLD);
-                    break;
-                case SpecificData.ACTIVITY_MANAGE_RUBRIEK:
-                    holder.textItemView.setTextSize(18);
-                    break;
-                case SpecificData.ACTIVITY_EDIT_RUBRIEK:
-                    break;
-                case SpecificData.ACTIVITY_EDIT_OPVITEM:
-                    break;
-                default:
-                    break;
-            }
-
-            // Onderscheid maken in style
-            holder.textItemView.setTypeface(null, Typeface.NORMAL);
-            switch (itemList.get(position).getItemStyle()){
-                case SpecificData.STYLE_BOLD:
-                    holder.textItemView.setTypeface(null, Typeface.BOLD);
-                    break;
-                default:
-                    holder.textItemView.setTypeface(null, Typeface.NORMAL);
-            }
-
-
         } else {
             holder.textItemView.setText("No data !");
         }

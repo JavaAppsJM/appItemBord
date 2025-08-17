@@ -53,6 +53,7 @@ public class EditOpvolgingsitem extends AppCompatActivity
     private List<ListItemHelper> itemList = new ArrayList<>();
     private int iDToUpdate = StaticData.ITEM_NOT_FOUND;
     private String action = StaticData.ACTION_NEW;
+    private String callingActivity;
     private RadioButton frequencyDayV;
     private RadioButton frequencyWeekV;
     private RadioButton frequencyMonthV;
@@ -110,21 +111,27 @@ public class EditOpvolgingsitem extends AppCompatActivity
         // Cookierepository definieren
         CookieRepository cookieRepository = new CookieRepository(baseDir);
 
-        // Ophalen cookies : action
+        // Ophalen cookies : action ; calling activity
         action = cookieRepository.getCookieValueFromLabel(SpecificData.COOKIE_RETURN_ACTION);
+        callingActivity = cookieRepository.getCookieValueFromLabel(SpecificData.CALLING_ACTIVITY);
+
+        // Intent bekijken vr action, indien aanwezig zal deze de cookie overschrijven
+        Intent editIntent = getIntent();
+        action = editIntent.getStringExtra(StaticData.EXTRA_INTENT_KEY_ACTION);
 
         // Zet calling activity
         cookieRepository.registerCookie(SpecificData.CALLING_ACTIVITY, SpecificData.ACTIVITY_EDIT_OPVITEM);
 
-        // Intent bekijken vr action
-        Intent editIntent = getIntent();
-        action = editIntent.getStringExtra(StaticData.EXTRA_INTENT_KEY_ACTION);
+        // Terugkeer cookies
         cookieRepository.registerCookie(SpecificData.COOKIE_RETURN_ACTION, action);
-
-        // Terugkeer nr editrubriek cookies voorzien
-        // Rubriek index moet later als terugkeer cookie bewaard worden !!
-        cookieRepository.registerCookie(SpecificData.COOKIE_RETURN_ACTION, StaticData.ACTION_UPDATE);
-        cookieRepository.registerCookie(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_OITEM);
+        if (callingActivity.equals(SpecificData.ACTIVITY_STATUSBORD)){
+            // Terugkeer cookies voor statusbord ?
+        }else{
+            // Terugkeer nr editrubriek cookies voorzien
+            // Rubriek index moet later als terugkeer cookie bewaard worden !!
+            cookieRepository.registerCookie(SpecificData.COOKIE_RETURN_ACTION, StaticData.ACTION_UPDATE);
+            cookieRepository.registerCookie(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_OITEM);
+        }
 
         // Als op datum veld geclickt wordt...
         opvolgingsitemLatestDateV.setOnClickListener(new View.OnClickListener() {
@@ -533,11 +540,17 @@ public class EditOpvolgingsitem extends AppCompatActivity
             createEventSaveDialog();
         }
 
-        // Teruggaan nr EditRubriek
-        Intent replyIntent = new Intent(EditOpvolgingsitem.this, EditRubriek.class);
-        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
-        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
-        replyIntent.putExtra(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_OITEM);
+        // Teruggaan nr Statusbord of EditRubriek
+        Intent replyIntent;
+        if (callingActivity.equals(SpecificData.ACTIVITY_STATUSBORD)){
+            replyIntent = new Intent(EditOpvolgingsitem.this, OItemStatusBord.class);
+            replyIntent.putExtra(SpecificData.COOKIE_RUBRIEK_FILTER, rubriekOpvolgingsitem.getEntityId().getId());
+        }else{
+            replyIntent = new Intent(EditOpvolgingsitem.this, EditRubriek.class);
+            replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
+            replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
+            replyIntent.putExtra(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_OITEM);
+        }
         startActivity(replyIntent);
     }
 
@@ -556,11 +569,17 @@ public class EditOpvolgingsitem extends AppCompatActivity
             createEventSaveDialog();
         }
 
-        // Teruggaan nr EditRubriek
-        Intent replyIntent = new Intent(EditOpvolgingsitem.this, EditRubriek.class);
-        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
-        replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
-        replyIntent.putExtra(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_OITEM);
+        // Teruggaan nr Statusbord of EditRubriek
+        Intent replyIntent;
+        if (callingActivity.equals(SpecificData.ACTIVITY_STATUSBORD)){
+            replyIntent = new Intent(EditOpvolgingsitem.this, OItemStatusBord.class);
+            replyIntent.putExtra(SpecificData.COOKIE_RUBRIEK_FILTER, rubriekOpvolgingsitem.getEntityId().getId());
+        }else{
+            replyIntent = new Intent(EditOpvolgingsitem.this, EditRubriek.class);
+            replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ACTION, StaticData.ACTION_UPDATE);
+            replyIntent.putExtra(StaticData.EXTRA_INTENT_KEY_ID, rubriekOpvolgingsitem.getEntityId().getId());
+            replyIntent.putExtra(SpecificData.COOKIE_TAB_SELECTION, SpecificData.COOKIE_TAB_OITEM);
+        }
         startActivity(replyIntent);
     }
 

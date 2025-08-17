@@ -2,6 +2,7 @@ package be.hvwebsites.itembord.constants;
 
 public class SpecificData {
 
+    // Toast messages
     public static final String NO_STATUSBORDITEMS_YET = "Er zijn nog geen items voor het status bord !";
     public static final String NO_LOGBOEKITEMS_YET = "Er zijn nog geen logs voor het logboek !";
     public static final String NO_RUBRIEKEN_YET = "Er zijn nog geen rubrieken !";
@@ -11,6 +12,7 @@ public class SpecificData {
     public static final String NO_PARENT_RUBRIEK = "Geen hoofdrubriek";
     public static final String NO_RUBRIEK_FILTER = "Geen rubriek filter";
     public static final String NO_OPVOLGINGSITEM_FILTER = "Geen oitem filter";
+    public static final String RUBRIEK_UNKNOWN = "Rubriek onbekend !";
 
     public static final String TITLE_NEW_RUBRIEK = "Rubriek Toevoegen";
     public static final String TITLE_UPDATE_RUBRIEK = "Rubriek Aanpassen";
@@ -63,6 +65,7 @@ public class SpecificData {
     public static final String STYLE_RED = "style red";
     public static final String STYLE_ORANGE = "style orange";
     public static final String STYLE_GREEN = "style green";
+    public static final String STYLE_GREY = "style grey";
     public static final String STYLE_NORMAL = "style normal";
     public static final String STYLE_STATUSBORD = "style status";
 
